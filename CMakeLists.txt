@@ -1,0 +1,112 @@
+cmake_minimum_required(VERSION 3.16...3.18)
+
+if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
+    cmake_policy(SET CMP0135 NEW)
+endif()
+PROJECT(osal VERSION 0.1.0 LANGUAGES CXX C)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+
+include_directories(inc)
+
+# Default settings if this is the main project
+if (CMAKE_PROJECT_NAME STREQUAL osal)
+    message(STATUS "set default settings")
+    include(CTest)
+
+    # Default to release build with debug info
+    if (NOT CMAKE_BUILD_TYPE)
+    set (CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING
+      "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
+      FORCE)
+    endif (NOT CMAKE_BUILD_TYPE)
+
+    # Default to installing in build directory
+    if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX ${OSAL_BINARY_DIR}/install
+      CACHE PATH "Default install path" FORCE)
+    endif()
+
+    message(STATUS "Current build type is: ${CMAKE_BUILD_TYPE}")
+    message(STATUS "Current install path is: ${CMAKE_INSTALL_PREFIX}")
+    message(STATUS "Building for ${CMAKE_SYSTEM_NAME}")
+endif()
+
+set(CMAKE_C_OUTPUT_EXTENSION_REPLACE 1)
+set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE 1)
+
+configure_file(config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/inc/osal/config.h)
+
+file(GLOB_RECURSE OSAL_INCLUDE CONFIGURE_DEPENDS "inc/*.hpp")
+file(GLOB_RECURSE OSAL_TEST CONFIGURE_DEPENDS "test/*.cpp")
+
+include(FetchContent)
+message(STATUS "start googletest download")
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+
+
+
+#enable FreeRTOS
+if (ENABLE_FREERTOS)
+    set(LIB_FREERTOS "freertos_kernel")
+    message(STATUS "start ${LIB_FREERTOS} download")
+
+    subdirs(lib/FreeRTOS-Kernel)
+endif()
+
+if(UNIX)
+    message(STATUS "OSAL for UNIX")
+    file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/unix/*.cpp")
+endif()
+
+
+add_library(${PROJECT_NAME} STATIC ${OSAL_SOURCES} ${OSAL_INCLUDE})
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/headers)
+
+if (CMAKE_PROJECT_NAME STREQUAL osal AND BUILD_TESTING)
+    message(STATUS "buld test")
+
+    add_executable(osal_test ${OSAL_TEST})
+
+    target_link_libraries(osal_test
+                            osal
+                            ${LIB_FREERTOS}
+                            dl
+                            GTest::gtest
+                            GTest::gtest_main
+                            )
+
+endif()
+
+
+# Doxygen configuration
+cmake_policy(SET CMP0057 NEW)
+find_package(Doxygen)
+if (CMAKE_PROJECT_NAME STREQUAL OSAL AND DOXYGEN_FOUND)
+  set(DOXYGEN_OPTIMIZE_OUTPUT_FOR_C YES)
+  set(DOXYGEN_TYPEDEF_HIDES_STRUCT YES)
+  set(DOXYGEN_EXTRACT_STATIC YES)
+  set(DOXYGEN_STRIP_CODE_COMMENTS NO)
+  set(DOXYGEN_MACRO_EXPANSION YES)
+  set(DOXYGEN_EXPAND_ONLY_PREDEF YES)
+  set(DOXYGEN_PREDEFINED OSAL_EXPORT)
+  set(DOXYGEN_EXPAND_AS_DEFINED OSAL_EXPORT)
+  set(DOXYGEN_COLLABORATION_GRAPH NO)
+  set(DOXYGEN_INCLUDE_GRAPH NO)
+  set(DOXYGEN_INCLUDED_BY_GRAPH NO)
+  set(DOXYGEN_RECURSIVE NO)
+  set(DOXYGEN_USE_MDFILE_AS_MAINPAGE README.md)
+  doxygen_add_docs(docs
+    README.md
+    include
+    src
+    )
+endif()

@@ -1,2 +1,2 @@
-# osal
+# OSAL
 OS abstraction layer
