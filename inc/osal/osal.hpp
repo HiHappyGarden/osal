@@ -18,7 +18,28 @@
  ***************************************************************************/
 #pragma once
 
+#include <cinttypes>
+
+#include "sys/osal_sys.hpp"
+
+#include "error.hpp"
+#include "event.hpp"
+#include "log.hpp"
+#include "mutex.hpp"
+#include "queue.hpp"
+#include "semaphore.hpp"
+#include "thread.hpp"
+#include "timer.hpp"
+
 namespace osal
 {
+
+void usleep (uint64_t us) OS_NOEXCEPT;
+uint64_t get_current_time_us (void) OS_NOEXCEPT;
+
+tick tick_current (void) OS_NOEXCEPT;
+tick tick_from_us (uint64_t us) OS_NOEXCEPT;
+void tick_sleep (tick tick) OS_NOEXCEPT;
+
 
 }

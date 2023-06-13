@@ -9,7 +9,7 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-include_directories(inc)
+
 
 # Default settings if this is the main project
 if (CMAKE_PROJECT_NAME STREQUAL osal)
@@ -39,7 +39,16 @@ set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE 1)
 
 configure_file(config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/inc/osal/config.h)
 
-file(GLOB_RECURSE OSAL_INCLUDE CONFIGURE_DEPENDS "inc/*.hpp")
+foreach(i ${CMAKE_CXX_COMPILE_FEATURES})
+  #message("-- ${i}")
+  if( ${i} STREQUAL "cxx_noexcept")
+      message(STATUS "Find noexcept")
+      add_definitions(-DOS_NOEXCEPT=noexcept)
+  else()
+      add_definitions(-DOS_NOEXCEPT)
+  endif()
+endforeach()
+
 file(GLOB_RECURSE OSAL_TEST CONFIGURE_DEPENDS "test/*.cpp")
 
 include(FetchContent)
@@ -62,8 +71,12 @@ if (ENABLE_FREERTOS)
     subdirs(lib/FreeRTOS-Kernel)
 endif()
 
+include_directories(inc)
+
 if(UNIX)
     message(STATUS "OSAL for UNIX")
+    include_directories(src/unix)
+    file(GLOB_RECURSE OSAL_INCLUDE CONFIGURE_DEPENDS "inc/*.hpp" "src/unix/sys/*.hpp")
     file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/unix/*.cpp")
 endif()
 
