@@ -17,11 +17,12 @@
  *
  ***************************************************************************/
 #pragma once
-#include <cinttypes>
+#include <stdint.h>
 
 namespace osal
 {
-
+inline namespace v1
+{
 using tick = uint64_t;
-
+}
 }

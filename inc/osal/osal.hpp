@@ -14,11 +14,11 @@
  * 
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
- * 
- ***************************************************************************/
+ *
+***************************************************************************/
 #pragma once
 
-#include <cinttypes>
+#include <stdint.h>
 
 #include "sys/osal_sys.hpp"
 
@@ -34,12 +34,42 @@
 namespace osal
 {
 
-void usleep (uint64_t us) OS_NOEXCEPT;
-uint64_t get_current_time_us (void) OS_NOEXCEPT;
-
-tick tick_current (void) OS_NOEXCEPT;
-tick tick_from_us (uint64_t us) OS_NOEXCEPT;
-void tick_sleep (tick tick) OS_NOEXCEPT;
+inline namespace v1
+{
 
 
+/**
+ * @brief Suspends the execution of the current thread for a specified number of microseconds.
+ * @param us The number of microseconds to sleep.
+ **/
+void usleep(uint64_t us) OS_NOEXCEPT;
+
+/**
+ * @brief Retrieves the current time in microseconds.
+ * @return The current time in microseconds.
+ **/
+uint64_t get_current_time_us(void) OS_NOEXCEPT;
+
+/**
+
+/**
+ * @brief Retrieves the current tick value.
+ * @return The current tick value.
+ **/
+tick tick_current(void) OS_NOEXCEPT;
+
+/**
+ * @brief Converts a time value in microseconds to a tick value.
+ * @param us The time value in microseconds.
+ * @return The corresponding tick value.
+ **/
+tick tick_from_us(uint64_t us) OS_NOEXCEPT;
+
+/**
+ * @brief Suspends the execution of the current thread for the specified tick duration.
+ * @param tick The tick duration to sleep.
+ **/
+void tick_sleep(tick tick) OS_NOEXCEPT;
+
+}
 }

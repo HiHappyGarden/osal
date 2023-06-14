@@ -44,8 +44,6 @@ foreach(i ${CMAKE_CXX_COMPILE_FEATURES})
   if( ${i} STREQUAL "cxx_noexcept")
       message(STATUS "Find noexcept")
       add_definitions(-DOS_NOEXCEPT=noexcept)
-  else()
-      add_definitions(-DOS_NOEXCEPT)
   endif()
 endforeach()
 
@@ -73,11 +71,13 @@ endif()
 
 include_directories(inc)
 
-if(UNIX)
-    message(STATUS "OSAL for UNIX")
+if(APPLE)
+    message(STATUS "OSAL for macOS")
     include_directories(src/unix)
     file(GLOB_RECURSE OSAL_INCLUDE CONFIGURE_DEPENDS "inc/*.hpp" "src/unix/sys/*.hpp")
     file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/unix/*.cpp")
+elseif(UNIX)
+
 endif()
 
 
