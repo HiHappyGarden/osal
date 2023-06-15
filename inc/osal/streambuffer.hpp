@@ -25,3 +25,5 @@ inline namespace v1
 
 }
 }
+
+namespace os = osal::v1;

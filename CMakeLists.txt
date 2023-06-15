@@ -9,7 +9,8 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-
+include(CheckIPOSupported)
+check_ipo_supported(RESULT supported OUTPUT error)
 
 # Default settings if this is the main project
 if (CMAKE_PROJECT_NAME STREQUAL osal)
@@ -84,6 +85,13 @@ endif()
 add_library(${PROJECT_NAME} STATIC ${OSAL_SOURCES} ${OSAL_INCLUDE})
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/headers)
 
+if( supported )
+    message(STATUS "IPO / LTO enabled for ${PROJECT_NAME}")
+    set_property(TARGET ${PROJECT_NAME} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+else()
+    message(STATUS "IPO / LTO not supported for ${PROJECT_NAME}: <${error}>")
+endif()
+
 if (CMAKE_PROJECT_NAME STREQUAL osal AND BUILD_TESTING)
     message(STATUS "buld test")
 
@@ -96,6 +104,13 @@ if (CMAKE_PROJECT_NAME STREQUAL osal AND BUILD_TESTING)
                             GTest::gtest
                             GTest::gtest_main
                             )
+
+    if( supported )
+        message(STATUS "IPO / LTO enabled for osal_test")
+        set_property(TARGET osal_test PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+    else()
+        message(STATUS "IPO / LTO not supported for osal_test: <${error}>")
+    endif()
 
 endif()
 
@@ -123,3 +138,5 @@ if (CMAKE_PROJECT_NAME STREQUAL OSAL AND DOXYGEN_FOUND)
     src
     )
 endif()
+
+

@@ -21,17 +21,19 @@
 #include <pthread.h>
 #include <string.h>
 
+#ifdef __MACH__
+#include <limits.h>
+#endif
+
 namespace osal
 {
 inline namespace v1
 {
 
-template<size_t size_name>
 class thread_private final : public thread
 {
-    pthread_t thread = {0};
-
-    char name[size_name];
+    pthread_t* t = nullptr;
+    char name[33];
     uint32_t priority;
     size_t stack_size;
     handler h;
@@ -40,24 +42,40 @@ public:
 
     thread_private(const char *name, uint32_t priority, size_t stack_size, handler handler) OS_NOEXCEPT;
 
+    ~thread_private() OS_NOEXCEPT;
+
 
     bool create (void* arg) OS_NOEXCEPT override;
 
+    bool exit() OS_NOEXCEPT override;
+
 };
 
-template<size_t size_name>
-thread_private<size_name>::thread_private(const char *name, uint32_t priority, size_t stack_size, thread::handler handler) OS_NOEXCEPT
+thread_private::thread_private(const char *name, uint32_t priority, size_t stack_size, handler handler) OS_NOEXCEPT
     : priority(priority)
     , stack_size(stack_size)
 {
     if(name)
     {
-        strncpy(this->name, name, sizeof(this->name));
+        strncpy(this->name, name, sizeof(name) - 1);
     }
 }
 
-template<size_t size_name>
-bool thread_private<size_name>::create(void *arg) noexcept
+thread_private::~thread_private() OS_NOEXCEPT
+{
+    if(t)
+    {
+        delete t;
+        t = nullptr;
+    }
+}
+
+#ifdef __MACH__
+bool thread_private::create(void* _Nullable arg = nullptr) OS_NOEXCEPT
+#else
+bool thread_private::create(void* arg = nullptr) OS_NOEXCEPT
+#endif
+
 {
 
     int result;
@@ -65,39 +83,54 @@ bool thread_private<size_name>::create(void *arg) noexcept
     pthread_attr_t attr;
 
     pthread_attr_init (&attr);
-//    pthread_attr_setstacksize (&attr, PTHREAD_STACK_MIN + stack_size);
+    pthread_attr_setstacksize (&attr, PTHREAD_STACK_MIN + stack_size);
 
-//    //#if defined(USE_SCHED_FIFO)
+#if defined(USE_SCHED_FIFO)
 //    CC_STATIC_ASSERT (_POSIX_THREAD_PRIORITY_SCHEDULING > 0);
-//    struct sched_param param = {.sched_priority = priority};
-//    pthread_attr_setinheritsched (&attr, PTHREAD_EXPLICIT_SCHED);
-//    pthread_attr_setschedpolicy (&attr, SCHED_FIFO);
-//    pthread_attr_setschedparam (&attr, &param);
-//    //#endif
+    struct sched_param param = {.sched_priority = static_cast<int>(priority)};
+    pthread_attr_setinheritsched (&attr, PTHREAD_EXPLICIT_SCHED);
+    pthread_attr_setschedpolicy (&attr, SCHED_FIFO);
+    pthread_attr_setschedparam (&attr, &param);
+#endif
 
-//    result = pthread_create (thread, &attr, (void *)entry, arg);
-//    if (result != 0)
-//    {
-//        free (thread);
-//    }
+    result = pthread_create (t, &attr, h, arg);
 
-//    pthread_setname_np (*thread, name);
+#ifndef __MACH__
+    pthread_setname_np (t, name);
+#endif
     return result == 0;
 }
 
-osal::thread* thread::build(const char *name, uint32_t priority, size_t stack_size, thread::handler handler) OS_NOEXCEPT
+bool thread_private::exit() noexcept
 {
-    if(strlen(name) >= 30 )
+    if(t == nullptr)
+    {
+        return false;
+    }
+    pthread_exit(t);
+    return true;
+}
+
+#ifdef __MACH__
+thread* _Nullable thread::build(const char* _Nullable name, uint32_t priority, size_t stack_size, handler handler) OS_NOEXCEPT
+#else
+thread* thread::build(const char* name, uint32_t priority, size_t stack_size, handler handler) OS_NOEXCEPT
+#endif
+
+{
+    if(name == nullptr || handler == nullptr)
     {
         return nullptr;
     }
-    thread* t = dynamic_cast<thread*>(new thread_private<30>(name, priority, stack_size, handler));
+
+    thread* t = dynamic_cast<thread*>(new thread_private(name, priority, stack_size, handler));
     if(t == nullptr)
     {
         return nullptr;
     }
     return t;
 }
+
 
 }
 }

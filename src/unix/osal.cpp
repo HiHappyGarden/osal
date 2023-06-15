@@ -105,7 +105,7 @@ extern "C" int clock_nanosleep(clockid_t clock_id,
 }
 #endif
 
-void usleep (uint64_t usec) OS_NOEXCEPT
+void us_sleep (uint64_t usec) OS_NOEXCEPT
 {
     struct timespec ts;
     struct timespec remain;

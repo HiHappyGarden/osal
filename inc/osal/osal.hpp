@@ -42,15 +42,13 @@ inline namespace v1
  * @brief Suspends the execution of the current thread for a specified number of microseconds.
  * @param us The number of microseconds to sleep.
  **/
-void usleep(uint64_t us) OS_NOEXCEPT;
+void us_sleep(uint64_t us) OS_NOEXCEPT;
 
 /**
  * @brief Retrieves the current time in microseconds.
  * @return The current time in microseconds.
  **/
 uint64_t get_current_time_us(void) OS_NOEXCEPT;
-
-/**
 
 /**
  * @brief Retrieves the current tick value.
@@ -73,3 +71,5 @@ void tick_sleep(tick tick) OS_NOEXCEPT;
 
 }
 }
+
+namespace os = osal::v1;
