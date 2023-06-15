@@ -29,17 +29,15 @@ inline namespace v1
 
 class thread_private final : public thread
 {
-    pthread_t* t = nullptr;
+    pthread_t t = {0};
     char name[33];
     uint32_t priority;
     size_t stack_size;
-    handler h;
+    thread::handler handler;
 
 public:
 
-    thread_private(const char *name, uint32_t priority, size_t stack_size, handler handler) OS_NOEXCEPT;
-
-    ~thread_private() OS_NOEXCEPT;
+    thread_private(const char *name, uint32_t priority, size_t stack_size, thread::handler handler) OS_NOEXCEPT;
 
 
     bool create (void* arg) OS_NOEXCEPT override;
@@ -48,22 +46,14 @@ public:
 
 };
 
-thread_private::thread_private(const char *name, uint32_t priority, size_t stack_size, handler handler) OS_NOEXCEPT
+thread_private::thread_private(const char *name, uint32_t priority, size_t stack_size, thread::handler handler) OS_NOEXCEPT
     : priority(priority)
     , stack_size(stack_size)
+    , handler(handler)
 {
     if(name)
     {
         strncpy(this->name, name, sizeof(name) - 1);
-    }
-}
-
-thread_private::~thread_private() OS_NOEXCEPT
-{
-    if(t)
-    {
-        delete t;
-        t = nullptr;
     }
 }
 
@@ -88,23 +78,24 @@ bool thread_private::create(void* arg = nullptr) OS_NOEXCEPT
     pthread_attr_setinheritsched (&attr, PTHREAD_EXPLICIT_SCHED);
     pthread_attr_setschedpolicy (&attr, SCHED_FIFO);
     pthread_attr_setschedparam (&attr, &param);
+#else
+    priority = 0;
 #endif
 
-    result = pthread_create (t, &attr, h, arg);
+
+
+    result = pthread_create (&t, &attr, handler, arg);
 
 #ifndef __MACH__
-    pthread_setname_np (*t, name);
+    pthread_setname_np (t, name);
 #endif
     return result == 0;
 }
 
 bool thread_private::exit() noexcept
 {
-    if(t == nullptr)
-    {
-        return false;
-    }
-    pthread_exit(t);
+
+    pthread_exit(&t);
     return true;
 }
 
