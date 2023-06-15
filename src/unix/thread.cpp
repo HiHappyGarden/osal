@@ -20,10 +20,7 @@
 
 #include <pthread.h>
 #include <string.h>
-
-#ifdef __MACH__
 #include <limits.h>
-#endif
 
 namespace osal
 {
@@ -96,7 +93,7 @@ bool thread_private::create(void* arg = nullptr) OS_NOEXCEPT
     result = pthread_create (t, &attr, h, arg);
 
 #ifndef __MACH__
-    pthread_setname_np (t, name);
+    pthread_setname_np (*t, name);
 #endif
     return result == 0;
 }

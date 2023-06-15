@@ -78,7 +78,10 @@ if(APPLE)
     file(GLOB_RECURSE OSAL_INCLUDE CONFIGURE_DEPENDS "inc/*.hpp" "src/unix/sys/*.hpp")
     file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/unix/*.cpp")
 elseif(UNIX)
-
+    message(STATUS "OSAL for UNIX")
+    include_directories(src/unix)
+    file(GLOB_RECURSE OSAL_INCLUDE CONFIGURE_DEPENDS "inc/*.hpp" "src/unix/sys/*.hpp")
+    file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/unix/*.cpp")
 endif()
 
 

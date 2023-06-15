@@ -45,9 +45,9 @@ public:
 
 
 #ifdef __MACH__
-    using handler = void * _Nullable (* _Nonnull)(void * _Nullable);
+    using handler = void* _Nullable (* _Nonnull)(void* _Nullable);
 #else
-    using handler = void (*)(void* arg);
+    using handler = void* (*)(void* arg);
 #endif
 
     /**

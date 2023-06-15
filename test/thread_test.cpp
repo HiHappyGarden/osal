@@ -17,7 +17,7 @@ void * _Nullable thread_test(void * _Nullable)
 #else
 void * thread_test(void *)
 {
-
+    check = true;
     return nullptr;
 }
 #endif
