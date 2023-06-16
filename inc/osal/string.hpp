@@ -27,14 +27,16 @@ inline namespace v1
 template <size_t S = 33>
 class string
 {
-    char data[S];
-    size_t data_count;
+    char data[S] = { '\0' };
+    size_t data_count = 0;
 public:
+    string() = default;
     constexpr string(const char(&str)[S]) OS_NOEXCEPT
-        : string(str, S)
+        : string(str, S - 1)
     {}
 
     string(const char* str, size_t size) OS_NOEXCEPT
+        : data_count(size)
     {
         if(str == nullptr)
         {
@@ -53,14 +55,10 @@ public:
         return data_count;
     }
 
-//    friend bool operator==(const string&, const string&) OS_NOEXCEPT;
-
-//    friend bool operator==(const string&, const char*) OS_NOEXCEPT;
-
-//    friend string operator+(const string&, const string&) OS_NOEXCEPT;
-
-//    template <size_t Sa, size_t Sb>
-//    friend string<Sa> operator+(const string<Sa>&, const char(&str)[Sb]) OS_NOEXCEPT;
+    inline const char* c_str() const OS_NOEXCEPT
+    {
+        return data;
+    }
 
     template <size_t Sb>
     string<S> operator+(const char(&b)[Sb]) OS_NOEXCEPT
@@ -83,34 +81,22 @@ public:
     template <size_t Sb>
     inline string<S> operator+=(const char(&b)[Sb]) OS_NOEXCEPT
     {
-
         return (*this) + b;
     }
+
+
+    template <size_t Sb>
+    inline bool operator==(const char(&b)[Sb]) OS_NOEXCEPT
+    {
+        return strncmp(data, b, size()) == 0;
+    }
+
+    template <size_t Sb>
+    inline bool operator!=(const char(&b)[Sb]) OS_NOEXCEPT
+    {
+        return strncmp(data, b, size()) != 0;
+    }
 };
-
-//template <typename T = uint32_t>
-//bool operator==(const string<T>&, const string&) OS_NOEXCEPT;
-
-//bool operator==(const string&, const char*) OS_NOEXCEPT;
-
-//string operator+(const string&, const string&) OS_NOEXCEPT;
-
-template <size_t Sa, size_t Sb>
-string<Sa> operator+(const string<Sa>& a, const char(&b)[Sb]) OS_NOEXCEPT
-{
-    size_t b_size = strnlen(b, Sb);
-    if(a.data_count + b_size <= a.size())
-    {
-        strncpy(a.data + a.data_count, b, Sa - 1);
-        a.data_count += b_size;
-    }
-    else
-    {
-        strncpy(a.data + a.data_count, b, a.size() - a.count());
-        a.data_count = a.size();
-    }
-}
-
 
 
 }

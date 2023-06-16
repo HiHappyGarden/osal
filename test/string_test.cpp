@@ -2,15 +2,65 @@
 
 #include"osal/osal.hpp"
 
+TEST(string_test, size)
+{
+    os::string str("help");
+
+    ASSERT_EQ(str.count(), 4);
+    ASSERT_EQ(str.size(), 4);
 
 
-TEST(string_test, base)
+}
+
+TEST(string_test, char_array)
 {
 
-    os::string str("ciao antonio");
+    os::string<128> str;
+    ASSERT_EQ(str.size(), 127);
 
-    str + " sono pippo";
+    str += "hello world";
+
+
+    char s[] = " by me";
+    str += s;
+
+    ASSERT_EQ(strcmp(str.c_str(), "hello world by me"), 0);
+
+    {
+        auto check = os::string("test") == "test";
+        ASSERT_TRUE(check);
+    }
+
+    {
+        auto check = os::string("test") != "test";
+        ASSERT_FALSE(check);
+    }
+}
+
+
+TEST(string_test, char_ptr)
+{
+
+    os::string<128> str;
+    ASSERT_EQ(str.size(), 127);
 
 
 
+
+    str += "hello world";
+
+    char *p = " by me";
+    str += " by me";
+
+    ASSERT_EQ(strcmp(str.c_str(), "hello world by me"), 0);
+
+    {
+        auto check = os::string("test") == "test";
+        ASSERT_TRUE(check);
+    }
+
+    {
+        auto check = os::string("test") != "test";
+        ASSERT_FALSE(check);
+    }
 }
