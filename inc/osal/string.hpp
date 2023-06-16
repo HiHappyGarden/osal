@@ -1,0 +1,119 @@
+/***************************************************************************
+ * 
+ * OSAL
+ * Copyright (C) 2023  Antonio Salsi <passy.linux@zresa.it>
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * 
+ ***************************************************************************/
+#pragma once
+#include <stdint.h>
+#include <string.h>
+namespace osal
+{
+inline namespace v1
+{
+
+template <size_t S = 33>
+class string
+{
+    char data[S];
+    size_t data_count;
+public:
+    constexpr string(const char(&str)[S]) OS_NOEXCEPT
+        : string(str, S)
+    {}
+
+    string(const char* str, size_t size) OS_NOEXCEPT
+    {
+        if(str == nullptr)
+        {
+            return;
+        }
+        strncpy(data, str, sizeof(data));
+    }
+
+    inline size_t size() const OS_NOEXCEPT
+    {
+        return sizeof(data) - 1;
+    }
+
+    inline size_t count() const OS_NOEXCEPT
+    {
+        return data_count;
+    }
+
+//    friend bool operator==(const string&, const string&) OS_NOEXCEPT;
+
+//    friend bool operator==(const string&, const char*) OS_NOEXCEPT;
+
+//    friend string operator+(const string&, const string&) OS_NOEXCEPT;
+
+//    template <size_t Sa, size_t Sb>
+//    friend string<Sa> operator+(const string<Sa>&, const char(&str)[Sb]) OS_NOEXCEPT;
+
+    template <size_t Sb>
+    string<S> operator+(const char(&b)[Sb]) OS_NOEXCEPT
+    {
+        size_t b_size = strnlen(b, Sb);
+        if(data_count + b_size <= size())
+        {
+            strncpy(data + data_count, b, S - 1);
+            data_count += b_size;
+        }
+        else
+        {
+            strncpy(data + data_count, b, size() - count());
+            data_count = size();
+        }
+        return *this;
+    }
+
+
+    template <size_t Sb>
+    inline string<S> operator+=(const char(&b)[Sb]) OS_NOEXCEPT
+    {
+
+        return (*this) + b;
+    }
+};
+
+//template <typename T = uint32_t>
+//bool operator==(const string<T>&, const string&) OS_NOEXCEPT;
+
+//bool operator==(const string&, const char*) OS_NOEXCEPT;
+
+//string operator+(const string&, const string&) OS_NOEXCEPT;
+
+template <size_t Sa, size_t Sb>
+string<Sa> operator+(const string<Sa>& a, const char(&b)[Sb]) OS_NOEXCEPT
+{
+    size_t b_size = strnlen(b, Sb);
+    if(a.data_count + b_size <= a.size())
+    {
+        strncpy(a.data + a.data_count, b, Sa - 1);
+        a.data_count += b_size;
+    }
+    else
+    {
+        strncpy(a.data + a.data_count, b, a.size() - a.count());
+        a.data_count = a.size();
+    }
+}
+
+
+
+}
+}
+
+

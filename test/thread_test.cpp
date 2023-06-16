@@ -24,7 +24,8 @@ void * thread_test(void *)
 }
 
 
-TEST(thread_test, base) {
+TEST(thread_test, base)
+{
     os::thread* t = os::thread::build( "test", 4, 1024, thread_test);
 
     t->create();
@@ -36,15 +37,3 @@ TEST(thread_test, base) {
     delete t;
 }
 
-
-//TEST(thread_test, exit) {
-//    os::thread* t = os::thread::build( "test", 4, 1024, thread_test);
-
-//    os::us_sleep(1'000'000);
-
-//    ASSERT_TRUE(check);
-
-//    t->exit();
-
-//    delete t;
-//}

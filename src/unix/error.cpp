@@ -23,5 +23,11 @@ namespace osal
 inline namespace v1
 {
 
+class error
+{
+public:
+    error();
+};
+
 }
 }

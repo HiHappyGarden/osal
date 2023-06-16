@@ -37,13 +37,17 @@ inline namespace v1
 
 class thread {
 public:
+    thread() = default;
+    thread(const thread&) = delete;
+    thread& operator = (const thread&) = delete;
+    thread(thread&&) = delete;
+    thread& operator = (thread&&) = delete;
+
     /**
       * @typedef handler
       * @brief Function pointer type for the thread handler.
       * @param arg The argument passed to the thread handler.
       */
-
-
 #ifdef __MACH__
     using handler = void* _Nullable (* _Nonnull)(void* _Nullable);
 #else
@@ -87,4 +91,4 @@ public:
 }
 }
 
-namespace os = osal::v1;
+

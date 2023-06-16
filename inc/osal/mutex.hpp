@@ -23,7 +23,29 @@ namespace osal
 inline namespace v1
 {
 
+class mutex
+{
+public:
+    mutex() = default;
+    mutex(const mutex&) = delete;
+    mutex& operator = (const mutex&) = delete;
+    mutex(mutex&&) = delete;
+    mutex& operator = (mutex&&) = delete;
+    ~mutex() OS_NOEXCEPT;
+
+    virtual void lock () OS_NOEXCEPT = 0;
+
+    virtual void unlock () OS_NOEXCEPT = 0;
+
+#ifdef __MACH__
+    static mutex* _Nullable build() OS_NOEXCEPT;
+#else
+    static mutex* build() OS_NOEXCEPT;
+#endif
+};
+
+
 }
 }
 
-namespace os = osal::v1;
+

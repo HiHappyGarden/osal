@@ -28,8 +28,16 @@
 #include "mutex.hpp"
 #include "queue.hpp"
 #include "semaphore.hpp"
+#include "string.hpp"
 #include "thread.hpp"
 #include "timer.hpp"
+
+#define OS_NO_COPY_NO_MOVE(cls) \
+Singleton<T>(const cls&) = delete; \
+Singleton<T>& operator = (const cls&) = delete; \
+Singleton<T>(cls&&) = delete; \
+Singleton<T>& operator = (cls&&) = delete;
+
 
 namespace osal
 {
@@ -72,4 +80,4 @@ void tick_sleep(tick tick) OS_NOEXCEPT;
 }
 }
 
-namespace os = osal::v1;
+namespace os = osal;
