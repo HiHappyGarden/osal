@@ -45,22 +45,33 @@ TEST(string_test, char_ptr)
     ASSERT_EQ(str.size(), 127);
 
 
-
-
     str += "hello world";
 
     char *p = " by me";
-    str += " by me";
+    str += p;
 
-    ASSERT_EQ(strcmp(str.c_str(), "hello world by me"), 0);
 
+    char* s = "hello world by me";
+    ASSERT_EQ(strcmp(str.c_str(), s), 0);
+
+    char* t = "test";
     {
-        auto check = os::string("test") == "test";
+        auto check = os::string("test") == t;
         ASSERT_TRUE(check);
     }
 
     {
-        auto check = os::string("test") != "test";
+        auto check = os::string("test") != t;
         ASSERT_FALSE(check);
     }
+}
+
+TEST(string_test, unarray)
+{
+    os::string s("test");
+
+    char c = s[1];
+    ASSERT_EQ(c, 'e');
+    c = s[4];
+    ASSERT_EQ(c, '\0');
 }

@@ -84,7 +84,6 @@ public:
         return (*this) + b;
     }
 
-
     template <size_t Sb>
     inline bool operator==(const char(&b)[Sb]) OS_NOEXCEPT
     {
@@ -95,6 +94,56 @@ public:
     inline bool operator!=(const char(&b)[Sb]) OS_NOEXCEPT
     {
         return strncmp(data, b, size()) != 0;
+    }
+
+    string<S> operator+(const char* b) OS_NOEXCEPT
+    {
+        size_t b_size = strnlen(b, S);
+        if(data_count + b_size <= size())
+        {
+            strncpy(data + data_count, b, S - 1);
+            data_count += b_size;
+        }
+        else
+        {
+            strncpy(data + data_count, b, size() - count());
+            data_count = size();
+        }
+        return *this;
+    }
+
+    inline string<S> operator+=(const char* b) OS_NOEXCEPT
+    {
+        return (*this) + b;
+    }
+
+    inline bool operator==(const char* b) OS_NOEXCEPT
+    {
+        return strncmp(data, b, size()) == 0;
+    }
+
+    inline bool operator!=(const char* b) OS_NOEXCEPT
+    {
+        return strncmp(data, b, size()) != 0;
+    }
+
+
+    char operator[](int idx)
+    {
+//        if(idx >= data_count)
+//        {
+//            return '\0';
+//        }
+        return data[idx];
+    }
+
+    char operator[](int idx) const OS_NOEXCEPT
+    {
+        if(idx >= data_count)
+        {
+            return '\0';
+        }
+        return data[idx];
     }
 };
 

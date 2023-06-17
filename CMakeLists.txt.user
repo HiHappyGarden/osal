@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.14.1, 2023-06-15T05:42:30. -->
+<!-- Written by QtCreator 4.14.1, 2023-06-16T23:43:55. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -65,6 +65,10 @@
     <value type="bool" key="AutoTest.Framework.QtTest">true</value>
    </valuemap>
    <valuemap type="QVariantMap" key="AutoTest.CheckStates">
+    <value type="Qt::CheckState" key="/home/antoniosalsi/projects/osal/test/string_test.cpp:char_array">Checked</value>
+    <value type="Qt::CheckState" key="/home/antoniosalsi/projects/osal/test/string_test.cpp:char_ptr">Checked</value>
+    <value type="Qt::CheckState" key="/home/antoniosalsi/projects/osal/test/string_test.cpp:size">Checked</value>
+    <value type="Qt::CheckState" key="/home/antoniosalsi/projects/osal/test/string_test.cpp:string_test">Checked</value>
     <value type="Qt::CheckState" key="/home/antoniosalsi/projects/osal/test/thread_test.cpp:base">Checked</value>
     <value type="Qt::CheckState" key="/home/antoniosalsi/projects/osal/test/thread_test.cpp:thread_test">Checked</value>
    </valuemap>
