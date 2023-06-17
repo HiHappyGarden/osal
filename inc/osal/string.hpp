@@ -24,19 +24,19 @@ namespace osal
 inline namespace v1
 {
 
-template <size_t S = 33>
+template <size_t Size = 33>
 class string
 {
-    char data[S] = { '\0' };
-    size_t data_count = 0;
+    char data[Size]{};
+    size_t data_length{0};
 public:
     string() = default;
-    constexpr string(const char(&str)[S]) OS_NOEXCEPT
-        : string(str, S - 1)
+    constexpr string(const char(&str)[Size]) OS_NOEXCEPT
+        : string(str, Size - 1)
     {}
 
     string(const char* str, size_t size) OS_NOEXCEPT
-        : data_count(size)
+        : data_length(size)
     {
         if(str == nullptr)
         {
@@ -50,9 +50,9 @@ public:
         return sizeof(data) - 1;
     }
 
-    inline size_t count() const OS_NOEXCEPT
+    inline size_t length() const OS_NOEXCEPT
     {
-        return data_count;
+        return data_length;
     }
 
     inline const char* c_str() const OS_NOEXCEPT
@@ -60,59 +60,59 @@ public:
         return data;
     }
 
-    template <size_t Sb>
-    string<S> operator+(const char(&b)[Sb]) OS_NOEXCEPT
+    template <size_t SizeB>
+    string<Size> operator+(const char(&b)[SizeB]) OS_NOEXCEPT
     {
-        size_t b_size = strnlen(b, Sb);
-        if(data_count + b_size <= size())
+        size_t size_b = strnlen(b, SizeB);
+        if(data_length + size_b <= size())
         {
-            strncpy(data + data_count, b, S - 1);
-            data_count += b_size;
+            strncpy(data + data_length, b, Size - 1);
+            data_length += size_b;
         }
         else
         {
-            strncpy(data + data_count, b, size() - count());
-            data_count = size();
+            strncpy(data + data_length, b, size() - length());
+            data_length = size();
         }
         return *this;
     }
 
 
-    template <size_t Sb>
-    inline string<S> operator+=(const char(&b)[Sb]) OS_NOEXCEPT
+    template <size_t SizeB>
+    inline string<Size> operator+=(const char(&b)[SizeB]) OS_NOEXCEPT
     {
         return (*this) + b;
     }
 
-    template <size_t Sb>
-    inline bool operator==(const char(&b)[Sb]) OS_NOEXCEPT
+    template <size_t SizeB>
+    inline bool operator==(const char(&b)[SizeB]) OS_NOEXCEPT
     {
         return strncmp(data, b, size()) == 0;
     }
 
-    template <size_t Sb>
-    inline bool operator!=(const char(&b)[Sb]) OS_NOEXCEPT
+    template <size_t SizeB>
+    inline bool operator!=(const char(&b)[SizeB]) OS_NOEXCEPT
     {
         return strncmp(data, b, size()) != 0;
     }
 
-    string<S> operator+(const char* b) OS_NOEXCEPT
+    string<Size> operator+(const char* b) OS_NOEXCEPT
     {
-        size_t b_size = strnlen(b, S);
-        if(data_count + b_size <= size())
+        size_t size_b = strnlen(b, Size);
+        if(data_length + size_b <= size())
         {
-            strncpy(data + data_count, b, S - 1);
-            data_count += b_size;
+            strncpy(data + data_length, b, Size - 1);
+            data_length += size_b;
         }
         else
         {
-            strncpy(data + data_count, b, size() - count());
-            data_count = size();
+            strncpy(data + data_length, b, size() - length());
+            data_length = size();
         }
         return *this;
     }
 
-    inline string<S> operator+=(const char* b) OS_NOEXCEPT
+    inline string<Size> operator+=(const char* b) OS_NOEXCEPT
     {
         return (*this) + b;
     }
@@ -128,22 +128,34 @@ public:
     }
 
 
-    char operator[](int idx)
+    char* operator[](size_t idx) OS_NOEXCEPT
     {
-//        if(idx >= data_count)
-//        {
-//            return '\0';
-//        }
-        return data[idx];
+        if(idx >= data_length)
+        {
+            return nullptr;
+        }
+        return &data[idx];
     }
 
-    char operator[](int idx) const OS_NOEXCEPT
+    const char* operator[](size_t idx) const OS_NOEXCEPT
     {
-        if(idx >= data_count)
+        if(idx >= data_length)
         {
-            return '\0';
+            return nullptr;
         }
-        return data[idx];
+        return &data[idx];
+    }
+
+    string<Size>& operator=(const char* other) OS_NOEXCEPT
+    {
+        if(other == nullptr)
+        {
+            return *this;
+        }
+       memset(data, '\0', sizeof(data));
+       data_length = 0;
+       (*this) += other;
+       return *this;
     }
 };
 

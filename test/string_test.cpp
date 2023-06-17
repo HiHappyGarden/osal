@@ -2,11 +2,13 @@
 
 #include"osal/osal.hpp"
 
+#include <stdio.h>
+
 TEST(string_test, size)
 {
     os::string str("help");
 
-    ASSERT_EQ(str.count(), 4);
+    ASSERT_EQ(str.length(), 4);
     ASSERT_EQ(str.size(), 4);
 
 
@@ -66,12 +68,28 @@ TEST(string_test, char_ptr)
     }
 }
 
+
 TEST(string_test, unarray)
 {
     os::string s("test");
 
-    char c = s[1];
-    ASSERT_EQ(c, 'e');
+    char* c =  s[1];
+    ASSERT_EQ(*c, 'e');
     c = s[4];
-    ASSERT_EQ(c, '\0');
+    ASSERT_TRUE(c == nullptr);
+}
+
+TEST(string_test, assignment)
+{
+    os::string s = "test";
+
+    ASSERT_EQ(s.size(), 4);
+    ASSERT_EQ(s.length(), 4);
+    ASSERT_TRUE(s == "test");
+
+    s = "ciao";
+    ASSERT_EQ(s.size(), 4);
+    ASSERT_EQ(s.length(), 4);
+    ASSERT_TRUE(s == "ciao");
+
 }
