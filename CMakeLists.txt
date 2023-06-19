@@ -5,9 +5,12 @@ if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
 endif()
 PROJECT(osal VERSION 0.1.0 LANGUAGES CXX C)
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_C_EXTENSIONS OFF)
+
 
 include(CheckIPOSupported)
 check_ipo_supported(RESULT supported OUTPUT error)
@@ -40,13 +43,13 @@ set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE 1)
 
 configure_file(config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/inc/osal/config.h)
 
-foreach(i ${CMAKE_CXX_COMPILE_FEATURES})
-  #message("-- ${i}")
-  if( ${i} STREQUAL "cxx_noexcept")
-      message(STATUS "Find noexcept")
-      add_definitions(-DOS_NOEXCEPT=noexcept)
-  endif()
-endforeach()
+#foreach(i ${CMAKE_CXX_COMPILE_FEATURES})
+#  #message("-- ${i}")
+#  if( ${i} STREQUAL "cxx_noexcept")
+#      message(STATUS "Find noexcept")
+#      add_definitions(-DOS_NOEXCEPT=noexcept)
+#  endif()
+#endforeach()
 
 file(GLOB_RECURSE OSAL_TEST CONFIGURE_DEPENDS "test/*.cpp")
 
@@ -84,7 +87,9 @@ elseif(UNIX)
     file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/unix/*.cpp")
 endif()
 
-
+add_definitions(-DOS_NOEXCEPT=)
+add_compile_options(-fno-rtti -fno-exceptions)
+#target_compile_options(${PROJECT_NAME} PUBLIC -fno-rtti -fno-exceptions)
 add_library(${PROJECT_NAME} STATIC ${OSAL_SOURCES} ${OSAL_INCLUDE})
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/headers)
 

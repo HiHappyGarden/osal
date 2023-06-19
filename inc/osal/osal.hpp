@@ -22,6 +22,7 @@
 
 #include "sys/osal_sys.hpp"
 
+#include "array.hpp"
 #include "error.hpp"
 #include "event.hpp"
 #include "log.hpp"
