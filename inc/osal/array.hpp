@@ -28,7 +28,7 @@ inline namespace v1
     class array
     {
     protected:
-        T data[Size]{};
+        T data[Size]{0};
 
     public:
         constexpr array() = default;
@@ -45,7 +45,7 @@ inline namespace v1
     class array_init : public array<T, sizeof... (Args)>
     {
         size_t data_idx{0};
-        T data[sizeof... (Args)]{};
+        T data[sizeof... (Args)]{0};
 
         template <typename TP>
         constexpr void fill(const TP& last) OS_NOEXCEPT

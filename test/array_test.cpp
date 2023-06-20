@@ -17,8 +17,8 @@ TEST(array_test, size)
 
    //f.fill();
 
-    os::array data(1,2,3,4,5,6);
-    os::buffer<int, 10> data2;
+    os::array_init data(1,2,3,4,5,6);
+    os::array<int, 10> data2;
 
     const int* i = data.get_data();
 
