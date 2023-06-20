@@ -35,7 +35,7 @@ public:
         : string(str, Size - 1)
     {}
 
-    string(const char* str, size_t size) OS_NOEXCEPT
+    constexpr string(const char* str, size_t size) OS_NOEXCEPT
         : data_length(size)
     {
         if(str == nullptr)
@@ -45,17 +45,17 @@ public:
         strncpy(data, str, sizeof(data));
     }
 
-    inline size_t size() const OS_NOEXCEPT
+    constexpr inline size_t size() const OS_NOEXCEPT
     {
         return sizeof(data) - 1;
     }
 
-    inline size_t length() const OS_NOEXCEPT
+    constexpr inline size_t length() const OS_NOEXCEPT
     {
         return data_length;
     }
 
-    inline const char* c_str() const OS_NOEXCEPT
+    constexpr inline const char* c_str() const OS_NOEXCEPT
     {
         return data;
     }
@@ -85,7 +85,7 @@ public:
     }
 
     template <size_t SizeB>
-    inline bool operator==(const char(&b)[SizeB]) OS_NOEXCEPT
+    constexpr inline bool operator==(const char(&b)[SizeB]) OS_NOEXCEPT
     {
         return strncmp(data, b, size()) == 0;
     }
@@ -117,18 +117,18 @@ public:
         return (*this) + b;
     }
 
-    inline bool operator==(const char* b) OS_NOEXCEPT
+    constexpr inline bool operator==(const char* b) OS_NOEXCEPT
     {
         return strncmp(data, b, size()) == 0;
     }
 
-    inline bool operator!=(const char* b) OS_NOEXCEPT
+    constexpr inline bool operator!=(const char* b) OS_NOEXCEPT
     {
         return strncmp(data, b, size()) != 0;
     }
 
 
-    char* operator[](size_t idx) OS_NOEXCEPT
+    constexpr char* operator[](size_t idx) OS_NOEXCEPT
     {
         if(idx >= data_length)
         {
@@ -137,7 +137,7 @@ public:
         return &data[idx];
     }
 
-    const char* operator[](size_t idx) const OS_NOEXCEPT
+    constexpr const char* operator[](size_t idx) const OS_NOEXCEPT
     {
         if(idx >= data_length)
         {

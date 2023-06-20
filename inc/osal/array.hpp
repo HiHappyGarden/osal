@@ -24,20 +24,37 @@ namespace osal
 inline namespace v1
 {
 
-    template <typename T, typename... Args>
+    template <typename T, size_t Size>
     class array
+    {
+    protected:
+        T data[Size]{};
+
+    public:
+        constexpr array() = default;
+        inline ~array() { memset(&data, 0, sizeof(data)); }
+        constexpr inline const T* get_data() const OS_NOEXCEPT
+        {
+            return &data[0];
+        }
+
+    };
+
+
+    template <typename T, typename... Args>
+    class array_init : public array<T, sizeof... (Args)>
     {
         size_t data_idx{0};
         T data[sizeof... (Args)]{};
 
         template <typename TP>
-        void fill(const TP& last) OS_NOEXCEPT
+        constexpr void fill(const TP& last) OS_NOEXCEPT
         {
             memcpy(&data[data_idx], &last, sizeof (last));
         }
 
         template <typename TP, typename... ArgsP>
-        void fill(const TP& first, ArgsP... args) OS_NOEXCEPT
+        constexpr void fill(const TP& first, ArgsP... args) OS_NOEXCEPT
         {
             memcpy(&data[data_idx], &first, sizeof (first));
             data_idx++;
@@ -45,13 +62,15 @@ inline namespace v1
         }
 
     public:
-        explicit array(const T& first, Args... args) OS_NOEXCEPT
+        constexpr array_init() = default;
+        inline ~array_init() { memset(&data, 0, sizeof(data)); }
+        constexpr explicit array_init(const T& first, Args... args) OS_NOEXCEPT
         {
             fill(first, args...);
         }
 
 
-        inline const T* get_data() const OS_NOEXCEPT
+        constexpr inline const T* get_data() const OS_NOEXCEPT
         {
             return &data[0];
         }
