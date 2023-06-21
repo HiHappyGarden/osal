@@ -23,11 +23,32 @@ namespace osal
 inline namespace v1
 {
 
-class error
-{
-public:
-    error();
-};
+    namespace
+    {
+        error last_error(nullptr_t);
+    }
+
+
+    error::error(const char *msg, uint8_t code = 0, const char *file = "", const char *funct = "", uint32_t line = 0) OS_NOEXCEPT
+        : msg(msg)
+        , code(code)
+        , file(file)
+        , funct(funct)
+        , line(line)
+    {
+
+        last_error = *this;
+    }
+
+    error::~error() OS_NOEXCEPT
+    {
+        if(new_error)
+        {
+            delete new_error;
+            new_error = nullptr;
+        }
+    }
+
 
 }
 }

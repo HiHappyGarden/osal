@@ -45,6 +45,8 @@ public:
         strncpy(data, str, sizeof(data));
     }
 
+    inline ~string() OS_NOEXCEPT { memset(&data, '\0', sizeof(data)); }
+
     constexpr inline size_t size() const OS_NOEXCEPT
     {
         return sizeof(data) - 1;
@@ -61,7 +63,7 @@ public:
     }
 
     template <size_t SizeB>
-    string<Size> operator+(const char(&b)[SizeB]) OS_NOEXCEPT
+    constexpr string<Size>&operator+(const char(&b)[SizeB]) OS_NOEXCEPT
     {
         size_t size_b = strnlen(b, SizeB);
         if(data_length + size_b <= size())
@@ -77,11 +79,28 @@ public:
         return *this;
     }
 
-
     template <size_t SizeB>
-    inline string<Size> operator+=(const char(&b)[SizeB]) OS_NOEXCEPT
+    constexpr inline string<Size> operator+(char(&&b)[SizeB]) OS_NOEXCEPT
     {
         return (*this) + b;
+    }
+
+    template <size_t SizeB>
+    constexpr inline string<Size>& operator+=(char(&&b)[SizeB]) OS_NOEXCEPT
+    {
+        return (*this) + b;
+    }
+
+    template <size_t SizeB>
+    constexpr inline string<Size>& operator+=(const char(&b)[SizeB]) OS_NOEXCEPT
+    {
+        return (*this) + b;
+    }
+
+    template <size_t SizeB>
+    constexpr inline bool operator==(char(&&b)[SizeB]) OS_NOEXCEPT
+    {
+        return strncmp(data, b, size()) == 0;
     }
 
     template <size_t SizeB>
@@ -91,12 +110,19 @@ public:
     }
 
     template <size_t SizeB>
-    inline bool operator!=(const char(&b)[SizeB]) OS_NOEXCEPT
+    constexpr inline bool operator!=(const char(&b)[SizeB]) OS_NOEXCEPT
     {
         return strncmp(data, b, size()) != 0;
     }
 
-    string<Size> operator+(const char* b) OS_NOEXCEPT
+    template <size_t SizeB>
+    constexpr inline bool operator!=(char(&&b)[SizeB]) OS_NOEXCEPT
+    {
+        return strncmp(data, b, size()) != 0;
+    }
+
+
+    constexpr string<Size>& operator+(const char* b) OS_NOEXCEPT
     {
         size_t size_b = strnlen(b, Size);
         if(data_length + size_b <= size())
@@ -112,7 +138,7 @@ public:
         return *this;
     }
 
-    inline string<Size> operator+=(const char* b) OS_NOEXCEPT
+    constexpr inline string<Size>& operator+=(const char* b) OS_NOEXCEPT
     {
         return (*this) + b;
     }
@@ -126,7 +152,6 @@ public:
     {
         return strncmp(data, b, size()) != 0;
     }
-
 
     constexpr char* operator[](size_t idx) OS_NOEXCEPT
     {
@@ -146,7 +171,7 @@ public:
         return &data[idx];
     }
 
-    string<Size>& operator=(const char* other) OS_NOEXCEPT
+    constexpr string<Size>& operator=(const char* other) OS_NOEXCEPT
     {
         if(other == nullptr)
         {

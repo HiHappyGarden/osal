@@ -25,39 +25,90 @@ inline namespace v1
 {
 
     template <typename T, size_t Size>
-    class array
+    class array final
     {
-    protected:
+    private:
         T data[Size]{0};
+        size_t data_length{0};
 
     public:
         constexpr array() = default;
-        inline ~array() { memset(&data, 0, sizeof(data)); }
+        inline ~array() OS_NOEXCEPT { memset(&data, 0, sizeof(data)); }
         constexpr inline const T* get_data() const OS_NOEXCEPT
         {
             return &data[0];
+        }
+
+        constexpr inline T* get_data() OS_NOEXCEPT
+        {
+            return &data[0];
+        }
+
+        constexpr inline size_t size() const OS_NOEXCEPT
+        {
+            return Size;
+        }
+
+        constexpr inline size_t length() const OS_NOEXCEPT
+        {
+            return data_length;
+        }
+
+        constexpr array<T, Size> & operator<<(const T& other) OS_NOEXCEPT
+        {
+            if(data_length + 1 <= size())
+            {
+                memcpy(data + data_length, &other, sizeof(T));
+                data_length += 1;
+            }
+            return *this;
+        }
+
+        constexpr inline array<T, Size>& operator<<(T&& other) OS_NOEXCEPT
+        {
+            return (*this) << other;
+        }
+
+        constexpr T& operator[](size_t idx) OS_NOEXCEPT
+        {
+            if(idx >= data_length)
+            {
+                //exit(0);
+            }
+            return data[idx];
+        }
+
+        constexpr const T& operator[](size_t idx) const OS_NOEXCEPT
+        {
+            if(idx >= data_length)
+            {
+                //exit(0);
+            }
+            return data[idx];
         }
 
     };
 
 
     template <typename T, typename... Args>
-    class array_init : public array<T, sizeof... (Args)>
+    class array_init final
     {
-        size_t data_idx{0};
-        T data[sizeof... (Args)]{0};
+        size_t data_length{0};
+        T data[sizeof... (Args) + 1]{0};
+
 
         template <typename TP>
         constexpr void fill(const TP& last) OS_NOEXCEPT
         {
-            memcpy(&data[data_idx], &last, sizeof (last));
+            memcpy(&data[data_length], &last, sizeof (last));
+            data_length++;
         }
 
         template <typename TP, typename... ArgsP>
         constexpr void fill(const TP& first, ArgsP... args) OS_NOEXCEPT
         {
-            memcpy(&data[data_idx], &first, sizeof (first));
-            data_idx++;
+            memcpy(&data[data_length], &first, sizeof (first));
+            data_length++;
             fill(args...);
         }
 
@@ -69,12 +120,58 @@ inline namespace v1
             fill(first, args...);
         }
 
-
         constexpr inline const T* get_data() const OS_NOEXCEPT
         {
             return &data[0];
         }
 
+        constexpr inline T* get_data() OS_NOEXCEPT
+        {
+            return &data[0];
+        }
+
+        constexpr inline size_t size() const OS_NOEXCEPT
+        {
+            return sizeof(data) / sizeof (data[0]);
+        }
+
+        constexpr inline size_t length() const OS_NOEXCEPT
+        {
+            return data_length;
+        }
+
+        constexpr array_init<T, Args...>& operator<<(const T& other) OS_NOEXCEPT
+        {
+            if(data_length + 1 <= size())
+            {
+                memcpy(data + data_length, &other, sizeof(T));
+                data_length += 1;
+            }
+            return *this;
+        }
+
+        constexpr array_init<T, Args...>& operator<<(T&& other) OS_NOEXCEPT
+        {
+            return (*this) << other;
+        }
+
+        constexpr T& operator[](size_t idx) OS_NOEXCEPT
+        {
+            if(idx >= data_length)
+            {
+                //exit(0);
+            }
+            return data[idx];
+        }
+
+        constexpr const T& operator[](size_t idx) const OS_NOEXCEPT
+        {
+            if(idx >= data_length)
+            {
+                //exit(0);
+            }
+            return data[idx];
+        }
     };
 
 

@@ -3,112 +3,52 @@
 #include"osal/osal.hpp"
 
 #include <stdio.h>
-#include <array>
 
 TEST(array_test, size)
 {
-//    auto i = {1,2,3,4,5};
-//    os::array<int, 4> str = i;
+    os::array<int, 6> data2;
+    ASSERT_EQ(data2.size(), 6);
+    ASSERT_EQ(data2.length(), 0);
 
-//    ASSERT_EQ(str.length(), 4);
-//    ASSERT_EQ(str.size(), 4);
-
-    //Testone t = 20;
-
-   //f.fill();
-
-    os::array_init data(1,2,3,4,5,6);
-    os::array<int, 10> data2;
-
-    const int* i = data.get_data();
-
-
-    std::cout << *i << std::endl;
-    i++;
-
-    std::cout << *i << std::endl;
-    i++;
-
-    std::cout << *i << std::endl;
-    i++;
+    os::array_init data1(1,2,3,4,5,6);
+    ASSERT_EQ(data1.size(), 6);
+    ASSERT_EQ(data1.length(), 6);
 }
 
 TEST(array_test, char_array)
 {
 
-    os::string<128> str;
-    ASSERT_EQ(str.size(), 127);
+    os::array<int, 6> data2;
+    data2 << 10;
+    ASSERT_EQ(data2.size(), 6);
+    ASSERT_EQ(data2.length(), 1);
+    ASSERT_EQ(data2[0], 10);
 
-    str += "hello world";
+    os::array_init data1(1,2,3,4,5,6);
+    data1 << 10;
+    ASSERT_EQ(data1.size(), 6);
+    ASSERT_EQ(data1.length(), 6);
+    ASSERT_EQ(data1[0], 1);
+    //ASSERT_TRUE(data1[6] == nullptr);
 
 
-    char s[] = " by me";
-    str += s;
-
-    ASSERT_EQ(strcmp(str.c_str(), "hello world by me"), 0);
-
-    {
-        auto check = os::string("test") == "test";
-        ASSERT_TRUE(check);
-    }
-
-    {
-        auto check = os::string("test") != "test";
-        ASSERT_FALSE(check);
-    }
 }
 
 
 TEST(array_test, char_ptr)
 {
 
-    os::string<128> str;
-    ASSERT_EQ(str.size(), 127);
-
-
-    str += "hello world";
-
-    char *p = " by me";
-    str += p;
-
-
-    char* s = "hello world by me";
-    ASSERT_EQ(strcmp(str.c_str(), s), 0);
-
-    char* t = "test";
-    {
-        auto check = os::string("test") == t;
-        ASSERT_TRUE(check);
-    }
-
-    {
-        auto check = os::string("test") != t;
-        ASSERT_FALSE(check);
-    }
-}
-
-
-TEST(array_test, unarray)
-{
-    os::string s("test");
-
-    char* c =  s[1];
-    ASSERT_EQ(*c, 'e');
-    c = s[4];
-    ASSERT_TRUE(c == nullptr);
-}
-
-TEST(array_test, assignment)
-{
-    os::string s = "test";
-
-    ASSERT_EQ(s.size(), 4);
-    ASSERT_EQ(s.length(), 4);
-    ASSERT_TRUE(s == "test");
-
-    s = "ciao";
-    ASSERT_EQ(s.size(), 4);
-    ASSERT_EQ(s.length(), 4);
-    ASSERT_TRUE(s == "ciao");
+    os::array<int, 6> data;
+    data << 1;
+    data << 2;
+    data << 3;
+    data << 4;
+    data << 5;
+    data << 6;
+    data << 7;
+    ASSERT_EQ(data.size(), 6);
+    ASSERT_EQ(data.length(), 6);
+    ASSERT_EQ(data[0], 1);
 
 }
+
