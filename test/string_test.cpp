@@ -49,14 +49,14 @@ TEST(string_test, char_ptr)
 
     str += "hello world";
 
-    char *p = " by me";
+    const char *p = " by me";
     str += p;
 
 
-    char* s = "hello world by me";
+    const char* s = "hello world by me";
     ASSERT_EQ(strcmp(str.c_str(), s), 0);
 
-    char* t = "test";
+    const char* t = "test";
     {
         auto check = os::string("test") == t;
         ASSERT_TRUE(check);

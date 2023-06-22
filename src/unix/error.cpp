@@ -25,27 +25,34 @@ inline namespace v1
 
     namespace
     {
-        error last_error(nullptr_t);
+        error last_error;
     }
 
 
-    error::error(const char *msg, uint8_t code = 0, const char *file = "", const char *funct = "", uint32_t line = 0) OS_NOEXCEPT
+    error::error(const char *msg, uint8_t code, const char *file, const char *func, uint32_t line) OS_NOEXCEPT
         : msg(msg)
         , code(code)
         , file(file)
-        , funct(funct)
+        , func(func)
         , line(line)
     {
 
         last_error = *this;
     }
 
+    error::error(const error& old_error, const char* msg, uint8_t code, const char* file, const char* func, uint32_t line) OS_NOEXCEPT
+        : error(msg, code, file, func, line)
+    {
+        this->old_error = new error(old_error);
+    }
+
+
     error::~error() OS_NOEXCEPT
     {
-        if(new_error)
+        if(old_error)
         {
-            delete new_error;
-            new_error = nullptr;
+            delete old_error;
+            old_error = nullptr;
         }
     }
 

@@ -27,6 +27,20 @@ inline namespace v1
 {
     typedef decltype(nullptr) nullptr_t;
 
+    template <typename T, size_t S>
+    inline constexpr size_t get_file_name_offset(const T (& str)[S], size_t i = S - 1)
+    {
+        return (str[i] == '/' || str[i] == '\\') ? i + 1 : (i > 0 ? get_file_name_offset(str, i - 1) : 0);
+    }
+
+    template <typename T>
+    inline constexpr size_t get_file_name_offset(T (& str)[1])
+    {
+        return 0;
+    }
+
+    constexpr auto file = &__FILE__[get_file_name_offset(__FILE__)];
+
     template <size_t Size>
     class string;
 
@@ -35,18 +49,26 @@ inline namespace v1
         const char* msg = nullptr;
         uint8_t code = 0;
         const char* file = nullptr;
-        const char* funct = nullptr;
+        const char* func = nullptr;
         uint32_t line = 0;
 
-        osal::error* new_error;
+        osal::error* old_error;
     public:
         error() = default;
-        explicit error(nullptr_t) {}
-        explicit error(const char* msg, uint8_t code, const char* file, const char* funct, uint32_t line) OS_NOEXCEPT;
+        explicit error(nullptr_t) OS_NOEXCEPT {}
+        explicit error(const char* msg, uint8_t code = 0, const char* file = __FILE__, const char* funct = __FUNCTION__, uint32_t line = __LINE__) OS_NOEXCEPT;
+        error(const error& old_error, const char* msg, uint8_t code = 0, const char* file = __FILE__, const char* funct = __FUNCTION__, uint32_t line = __LINE__) OS_NOEXCEPT;
+        
+        error(const error&) = default; 
+        error& operator = (const error&) = default; 
+        error(error&&) = default; 
+        error& operator = (error&&) = default; 
+
         ~error() OS_NOEXCEPT;
-        inline void add_error(const error& new_error) OS_NOEXCEPT
+
+        inline void add_error(const error& old_error) OS_NOEXCEPT
         {
-            this->new_error = new error(new_error);
+            this->old_error = new error(old_error);
         }
 
         inline const char* get_msg() const OS_NOEXCEPT
@@ -66,7 +88,7 @@ inline namespace v1
 
         inline const char* get_funct() const OS_NOEXCEPT
         {
-            return funct;
+            return func;
         }
 
         inline uint32_t get_line() const OS_NOEXCEPT
