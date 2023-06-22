@@ -43,6 +43,11 @@ inline namespace v1
     error::error(const error& old_error, const char* msg, uint8_t code, const char* file, const char* func, uint32_t line) OS_NOEXCEPT
         : error(msg, code, file, func, line)
     {
+        if(this->old_error)
+        {
+            delete this->old_error;
+            this->old_error = nullptr;
+        }
         this->old_error = new error(old_error);
     }
 
@@ -54,6 +59,16 @@ inline namespace v1
             delete old_error;
             old_error = nullptr;
         }
+    }
+
+    void error::add_error(const error &old_error) OS_NOEXCEPT
+    {
+        if(this->old_error)
+        {
+            delete this->old_error;
+            this->old_error = nullptr;
+        }
+        this->old_error = new error(old_error);
     }
 
 

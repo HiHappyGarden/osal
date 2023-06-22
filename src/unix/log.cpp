@@ -22,6 +22,39 @@ namespace osal
 {
 inline namespace v1
 {
+    uint8_t log_level = LEVEL_DEBUG | STATE_ON;
+
+    inline void set_log_level(uint8_t t) OS_NOEXCEPT
+    {
+        log_level |= t;
+    }
+
+    inline void set_enable_log(bool t) OS_NOEXCEPT
+    {
+        if(t)
+        {
+            log_level &= STATE_ON;
+        }
+        else
+        {
+            log_level &= ~(STATE_ON);
+        }
+    }
+
+    inline bool get_enable_log() OS_NOEXCEPT
+    {
+        return (log_level & STATE_ON) > 0;
+    }
+
+    inline bool is_enabled_log(uint8_t type)
+    {
+        return (get_level_log(type) >= log_level) && (type & STATE_ON);
+    }
+
+    void log(const char *tag, const char *format, ...)
+    {
+
+    }
 
 }
 }

@@ -7,8 +7,8 @@
 TEST(array_test, size)
 {
     os::array<int, 6> data2;
-    ASSERT_EQ(data2.size(), 6);
-    ASSERT_EQ(data2.length(), 0);
+    ASSERT_EQ(data2.get_size(), 6);
+    ASSERT_EQ(data2.get_length(), 0);
 
     os::array_init data1(1,2,3,4,5,6);
     ASSERT_EQ(data1.size(), 6);
@@ -20,8 +20,8 @@ TEST(array_test, char_array)
 
     os::array<int, 6> data2;
     data2 << 10;
-    ASSERT_EQ(data2.size(), 6);
-    ASSERT_EQ(data2.length(), 1);
+    ASSERT_EQ(data2.get_size(), 6);
+    ASSERT_EQ(data2.get_length(), 1);
     ASSERT_EQ(data2[0], 10);
 
     os::array_init data1(1,2,3,4,5,6);
@@ -46,8 +46,8 @@ TEST(array_test, char_ptr)
     data << 5;
     data << 6;
     data << 7;
-    ASSERT_EQ(data.size(), 6);
-    ASSERT_EQ(data.length(), 6);
+    ASSERT_EQ(data.get_size(), 6);
+    ASSERT_EQ(data.get_length(), 6);
     ASSERT_EQ(data[0], 1);
 
 }

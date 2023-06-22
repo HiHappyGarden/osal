@@ -18,11 +18,35 @@
  ***************************************************************************/
 #pragma once
 
+#include <stdint.h>
+
 namespace osal
 {
 inline namespace v1
 {
 
+
+    constexpr inline const uint8_t LEVEL_DEBUG   = 0x00;
+    constexpr inline const uint8_t LEVEL_INFO    = 0x01;
+    constexpr inline const uint8_t LEVEL_WARNING = 0x02;
+    constexpr inline const uint8_t LEVEL_ERROR   = 0x03;
+    constexpr inline const uint8_t LEVEL_FATAL   = 0x04;
+    constexpr inline const uint8_t LEVEL_MASK    = 0x0F;
+
+    constexpr inline const uint8_t STATE_ON  = (1 << 7);
+    constexpr inline const uint8_t STATE_OFF = (0 << 7);
+
+    constexpr inline uint8_t get_level_log(uint8_t t) { return t & LEVEL_MASK; }
+    void set_level_log(uint8_t t) OS_NOEXCEPT;
+    void set_enable_log(bool t) OS_NOEXCEPT;
+    bool get_enable_log() OS_NOEXCEPT;
+
+    bool is_enabled_log(uint8_t type);
+
+    void log(const char* tag, const char* format, ...);
+
+
+    //void kiwi_os_log (uint8_t type, const char * fmt, ...) CC_FORMAT (2, 3);
 }
 }
 
