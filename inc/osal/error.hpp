@@ -70,8 +70,8 @@ inline namespace v1
     public:
         error() = default;
         explicit error(nullptr_t) OS_NOEXCEPT {}
-        explicit error(const char* msg, uint8_t code = 0, const char* file = get_file_name(__FILE__), const char* funct = __FUNCTION__, uint32_t line = __LINE__) OS_NOEXCEPT;
-        error(const error& old_error, const char* msg, uint8_t code = 0, const char* file = get_file_name(__FILE__), const char* funct = __FUNCTION__, uint32_t line = __LINE__) OS_NOEXCEPT;
+        explicit error(const char* msg, uint8_t code = 0, const char* file = get_file_name(__FILE__), const char* funct = "", uint32_t line = __LINE__) OS_NOEXCEPT;
+        error(const error& old_error, const char* msg, uint8_t code = 0, const char* file = get_file_name(__FILE__), const char* funct = "", uint32_t line = __LINE__) OS_NOEXCEPT;
         
         error(const error&) = default;
         error& operator = (const error&) = default;

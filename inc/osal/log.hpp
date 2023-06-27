@@ -19,6 +19,8 @@
 #pragma once
 
 #include <stdint.h>
+#include <stdio.h>
+#include <stdarg.h>
 
 namespace osal
 {
@@ -43,10 +45,38 @@ inline namespace v1
 
     bool is_enabled_log(uint8_t type);
 
-    void log(const char* tag, const char* format, ...);
+    void log(const char* tag, uint8_t type, const char* fmt, ...);
 
+    template<typename... Args>
+    constexpr inline void log_debug(const char* tag, uint8_t type, const char* fmt,  Args... args)
+    {
+        log(tag, LEVEL_DEBUG, fmt, args...);
+    }
 
-    //void kiwi_os_log (uint8_t type, const char * fmt, ...) CC_FORMAT (2, 3);
+    template<typename... Args>
+    constexpr inline void log_info(const char* tag, uint8_t type, const char* fmt,  Args... args)
+    {
+        log(tag, LEVEL_INFO, fmt, args...);
+    }
+
+    template<typename... Args>
+    constexpr inline void log_warning(const char* tag, uint8_t type, const char* fmt,  Args... args)
+    {
+        log(tag, LEVEL_WARNING, fmt, args...);
+    }
+
+    template<typename... Args>
+    constexpr inline void log_error(const char* tag, uint8_t type, const char* fmt,  Args... args)
+    {
+        log(tag, LEVEL_ERROR, fmt, args...);
+    }
+
+    template<typename... Args>
+    constexpr inline void log_fatal(const char* tag, uint8_t type, const char* fmt,  Args... args)
+    {
+        log(tag, LEVEL_FATAL, fmt, args...);
+    }
+
 }
 }
 

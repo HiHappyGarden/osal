@@ -18,6 +18,9 @@
  ***************************************************************************/
 #include "osal/log.hpp"
 
+#include <time.h>
+
+
 namespace osal
 {
 inline namespace v1
@@ -51,7 +54,45 @@ inline namespace v1
         return (get_level_log(type) >= log_level) && (type & STATE_ON);
     }
 
-    void log(const char *tag, const char *format, ...)
+    void log(const char *tag, uint8_t type, const char *fmt, ...)
+    {
+        va_list list;
+        time_t rawtime;
+        struct tm timestruct;
+        char timestamp[10];
+
+        time (&rawtime);
+        localtime_r (&rawtime, &timestruct);
+        strftime (timestamp, sizeof (timestamp), "%H:%M:%S", &timestruct);
+
+        switch (get_level_log(type))
+        {
+        case LEVEL_DEBUG:
+            printf ("[%s DEBUG] ", timestamp);
+            break;
+        case LEVEL_INFO:
+            printf ("[%s INFO ] ", timestamp);
+            break;
+        case LEVEL_WARNING:
+            printf ("[%s WARN ] ", timestamp);
+            break;
+        case LEVEL_ERROR:
+            printf ("[%s ERROR] ", timestamp);
+            break;
+        case LEVEL_FATAL:
+            printf ("[%s FATAL] ", timestamp);
+            break;
+        default:
+            break;
+        }
+
+        va_start (list, fmt);
+        vprintf (fmt, list);
+        va_end (list);
+        fflush (stdout);
+    }
+
+    void log_debug(const char *tag, uint8_t type, const char *fmt)
     {
 
     }
