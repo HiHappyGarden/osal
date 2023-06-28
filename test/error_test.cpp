@@ -25,6 +25,7 @@ TEST(error_test, old_error)
 
     os::error err(old, "test",30, osal::get_file_name(__FILE__), __FUNCTION__, __LINE__);
 
+    os::printf_stack_error(err);
 
 }
 

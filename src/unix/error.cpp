@@ -17,28 +17,21 @@
  *
  ***************************************************************************/
 #include "osal/error.hpp"
+#include <stdio.h>
+
 
 namespace osal
 {
 inline namespace v1
 {
 
-    namespace
-    {
-        error last_error;
-    }
-
-
-    error::error(const char *msg, uint8_t code, const char *file, const char *func, uint32_t line) OS_NOEXCEPT
+    inline error::error(const char *msg, uint8_t code, const char *file, const char *func, uint32_t line) OS_NOEXCEPT
         : msg(msg)
         , code(code)
         , file(file)
         , func(func)
         , line(line)
-    {
-
-        last_error = *this;
-    }
+    {}
 
     error::error(const error& old_error, const char* msg, uint8_t code, const char* file, const char* func, uint32_t line) OS_NOEXCEPT
         : error(msg, code, file, func, line)
@@ -50,7 +43,6 @@ inline namespace v1
         }
         this->old_error = new error(old_error);
     }
-
 
     error::~error() OS_NOEXCEPT
     {
@@ -70,6 +62,31 @@ inline namespace v1
         }
         this->old_error = new error(old_error);
     }
+
+
+    void printf_stack_error(const error &e, const char* fmt, ...)
+    {
+        if(fmt && strlen(fmt))
+        {
+            va_list list;
+            va_start (list, fmt);
+            vprintf (fmt, list);
+            printf ("\n");
+            va_end (list);
+        }
+
+        uint16_t count = 0;
+        const error *ptr = &e;
+        while(ptr)
+        {
+            count++;
+            printf("%u. msg:%s code:%d (%s::%s(line: %u))\n", count, ptr->msg, ptr->code, ptr->file, ptr->func, ptr->line);
+            ptr = ptr->old_error;
+        }
+        fflush(stdout);
+
+    }
+
 
 
 }

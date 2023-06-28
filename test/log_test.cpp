@@ -12,8 +12,7 @@ TEST(log_test, base)
     OS_LOG_WARNING(APP_TAG, "warning");
     OS_LOG_ERROR(APP_TAG, "error");
     OS_LOG_FATAL(APP_TAG, "fatal");
-    printf(OS_ANSI_COLOR_RESET "");
-    fflush(stdout);
+    os::reset_log_color();
 }
 
 
@@ -27,8 +26,7 @@ TEST(log_test, set_level)
     OS_LOG_WARNING(APP_TAG, "warning");
     OS_LOG_ERROR(APP_TAG, "error");
     OS_LOG_FATAL(APP_TAG, "fatal");
-    printf(OS_ANSI_COLOR_RESET "");
-    fflush(stdout);
+    os::reset_log_color();
 }
 
 
@@ -42,6 +40,5 @@ TEST(log_test, disable_log)
     OS_LOG_WARNING(APP_TAG, "warning");
     OS_LOG_ERROR(APP_TAG, "error");
     OS_LOG_FATAL(APP_TAG, "fatal");
-    printf(OS_ANSI_COLOR_RESET "");
-    fflush(stdout);
+    os::reset_log_color();
 }

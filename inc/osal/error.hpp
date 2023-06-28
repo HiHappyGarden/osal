@@ -18,6 +18,7 @@
  ***************************************************************************/
 #pragma once
 
+#include <stdarg.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
@@ -58,6 +59,8 @@ inline namespace v1
     template <size_t Size>
     class string;
 
+
+
     class error final
     {
         const char* msg = nullptr;
@@ -67,6 +70,9 @@ inline namespace v1
         uint32_t line = 0;
 
         osal::error* old_error = nullptr;
+
+        friend void printf_stack_error(const error &e, const char* fmt, ...);
+
     public:
         error() = default;
         explicit error(nullptr_t) OS_NOEXCEPT {}
@@ -108,6 +114,19 @@ inline namespace v1
         }
     };
 
+
+    template<typename... Args>
+    constexpr inline void printf_stack_error(const error &e, Args... args)
+    {
+        printf_stack_error(e, "",  args...);
+    }
+
+
+    template<typename... Args>
+    constexpr inline void printf_stack_error(error &&e, const char* fmt = nullptr,  Args... args)
+    {
+        printf_stack_error(e, fmt,  args...);
+    }
 }
 }
 

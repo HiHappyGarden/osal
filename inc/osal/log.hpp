@@ -107,6 +107,13 @@ inline namespace v1
         log(tag, LEVEL_FATAL, fmt, args...);
     }
 
+    inline void reset_log_color()
+    {
+        printf(OS_ANSI_COLOR_RESET "");
+        fflush(stdout);
+    }
+
+
 }
 }
 
