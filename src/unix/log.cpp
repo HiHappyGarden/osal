@@ -28,7 +28,7 @@ namespace osal
 {
 inline namespace v1
 {
-uint8_t log_level = LEVEL_FATAL | LOG_STATE_ON;
+    uint8_t log_level = LEVEL_FATAL | LOG_STATE_ON;
 
     void set_level_log(uint8_t t) OS_NOEXCEPT
     {
@@ -52,12 +52,12 @@ uint8_t log_level = LEVEL_FATAL | LOG_STATE_ON;
         return (log_level & LOG_STATE_ON) > 0;
     }
 
-    bool is_enabled_log(uint8_t type)
+    bool is_enabled_log(uint8_t type) OS_NOEXCEPT
     {
         return (get_level_log(type) >= log_level) && (type & LOG_STATE_ON);
     }
 
-    void log(const char *tag, uint8_t type, const char *fmt, ...)
+    void log(const char *tag, uint8_t type, const char *fmt, ...) OS_NOEXCEPT
     {
         va_list list;
         time_t rawtime;

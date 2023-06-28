@@ -69,45 +69,48 @@ inline namespace v1
     constexpr inline const uint8_t LOG_STATE_OFF = (0 << 7);
 
     constexpr inline uint8_t get_level_log(uint8_t t) OS_NOEXCEPT { return t & LEVEL_MASK; }
+
     void set_level_log(uint8_t t) OS_NOEXCEPT;
+
     void set_enable_log(bool t) OS_NOEXCEPT;
+
     bool get_enable_log() OS_NOEXCEPT;
 
-    bool is_enabled_log(uint8_t type);
+    bool is_enabled_log(uint8_t type) OS_NOEXCEPT;
 
-    void log(const char* tag, uint8_t type, const char* fmt, ...);
+    void log(const char* tag, uint8_t type, const char* fmt, ...) OS_NOEXCEPT;
 
     template<typename... Args>
-    constexpr inline void log_debug(const char* tag, const char* fmt,  Args... args)
+    constexpr inline void log_debug(const char* tag, const char* fmt,  Args... args) OS_NOEXCEPT
     {
         log(tag, LEVEL_DEBUG, fmt, args...);
     }
 
     template<typename... Args>
-    constexpr inline void log_info(const char* tag, const char* fmt,  Args... args)
+    constexpr inline void log_info(const char* tag, const char* fmt,  Args... args) OS_NOEXCEPT
     {
         log(tag, LEVEL_INFO, fmt, args...);
     }
 
     template<typename... Args>
-    constexpr inline void log_warning(const char* tag, const char* fmt,  Args... args)
+    constexpr inline void log_warning(const char* tag, const char* fmt,  Args... args) OS_NOEXCEPT
     {
         log(tag, LEVEL_WARNING, fmt, args...);
     }
 
     template<typename... Args>
-    constexpr inline void log_error(const char* tag, const char* fmt,  Args... args)
+    constexpr inline void log_error(const char* tag, const char* fmt,  Args... args) OS_NOEXCEPT
     {
         log(tag, LEVEL_ERROR, fmt, args...);
     }
 
     template<typename... Args>
-    constexpr inline void log_fatal(const char* tag, const char* fmt,  Args... args)
+    constexpr inline void log_fatal(const char* tag, const char* fmt,  Args... args) OS_NOEXCEPT
     {
         log(tag, LEVEL_FATAL, fmt, args...);
     }
 
-    inline void reset_log_color()
+    inline void reset_log_color() OS_NOEXCEPT
     {
         printf(OS_ANSI_COLOR_RESET "");
         fflush(stdout);

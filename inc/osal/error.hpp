@@ -72,7 +72,7 @@ inline namespace v1
 
         osal::error* old_error = nullptr;
 
-        friend void printf_stack_error(const error &e, const char* fmt, ...);
+        friend void printf_stack_error(const error &e, const char* fmt, ...) OS_NOEXCEPT;
 
     public:
         error() = default;
@@ -87,7 +87,7 @@ inline namespace v1
 
         ~error() OS_NOEXCEPT;
 
-        void add_error(const error& old_error);
+        void add_error(const error& old_error) OS_NOEXCEPT;
 
         inline const char* get_msg() const OS_NOEXCEPT
         {
@@ -117,14 +117,14 @@ inline namespace v1
 
 
     template<typename... Args>
-    constexpr inline void printf_stack_error(const error &e, Args... args)
+    constexpr inline void printf_stack_error(const error &e, Args... args) OS_NOEXCEPT
     {
         printf_stack_error(e, "",  args...);
     }
 
 
     template<typename... Args>
-    constexpr inline void printf_stack_error(error &&e, const char* fmt = nullptr,  Args... args)
+    constexpr inline void printf_stack_error(error &&e, const char* fmt = nullptr,  Args... args) OS_NOEXCEPT
     {
         printf_stack_error(e, fmt,  args...);
     }
