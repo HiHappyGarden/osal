@@ -18,6 +18,8 @@
  ***************************************************************************/
 #pragma once
 
+#include "types.hpp"
+
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -29,7 +31,6 @@ namespace osal
 {
 inline namespace v1
 {
-    typedef decltype(nullptr) nullptr_t;
 
     template <typename T, size_t S>
     inline constexpr size_t get_file_name_offset(const T (& str)[S], size_t i = S - 1)
