@@ -19,3 +19,53 @@
 #include <gtest/gtest.h>
 
 #include"osal/osal.hpp"
+
+
+// Global variable to store the shared value
+int shared_value = 0;
+
+// Mutex to synchronize access to shared_value
+pthread_mutex_t mutex;
+
+// Function to be executed by the threads
+void* thread_function(void*) {
+    // Acquire the lock
+    pthread_mutex_lock(&mutex);
+
+    // Increment the shared value
+    shared_value++;
+
+    // Release the lock
+    pthread_mutex_unlock(&mutex);
+
+    pthread_exit(nullptr);
+}
+
+// Test case for concurrent increment
+TEST(ConcurrencyTest, IncrementTest) {
+    const int num_threads = 10;
+
+    // Create an array of threads
+    pthread_t threads[num_threads];
+
+    // Initialize the mutex
+    pthread_mutex_init(&mutex, nullptr);
+
+    // Create the threads
+    for (int i = 0; i < num_threads; ++i) {
+        int rc = pthread_create(&threads[i], nullptr, thread_function, nullptr);
+        ASSERT_EQ(rc, 0) << "Failed to create thread";
+    }
+
+    // Wait for the threads to finish
+    for (int i = 0; i < num_threads; ++i) {
+        int rc = pthread_join(threads[i], nullptr);
+        ASSERT_EQ(rc, 0) << "Failed to join thread";
+    }
+
+    // Destroy the mutex
+    pthread_mutex_destroy(&mutex);
+
+    // Check the final value of the shared variable
+    EXPECT_EQ(shared_value, num_threads);
+}

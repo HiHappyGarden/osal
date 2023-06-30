@@ -55,19 +55,19 @@ mutex_private::mutex_private(class error** error) OS_NOEXCEPT
     {
         switch (error_type(result)) {
         case error_type::OS_EAGAIN:
-                *error = OSAL_BUILD_ERROR("The system lacked the necessary resources (other than memory) to initialise another mutex.", error_type::OS_EAGAIN);
+                *error = OS_ERROR_BUILD("The system lacked the necessary resources (other than memory) to initialise another mutex.", error_type::OS_EAGAIN);
             break;
         case error_type::OS_ENOMEM:
-                *error = OSAL_BUILD_ERROR("Insufficient memory exists to initialise the mutex.", error_type::OS_ENOMEM);
+                *error = OS_ERROR_BUILD("Insufficient memory exists to initialise the mutex.", error_type::OS_ENOMEM);
             break;
         case error_type::OS_EPERM:
-                *error = OSAL_BUILD_ERROR("The caller does not have the privilege to perform the operation.", error_type::OS_EPERM);
+                *error = OS_ERROR_BUILD("The caller does not have the privilege to perform the operation.", error_type::OS_EPERM);
             break;
         case error_type::OS_EBUSY:
-                *error = OSAL_BUILD_ERROR("The caller does not have the privilege to perform the operation.", error_type::OS_EBUSY);
+                *error = OS_ERROR_BUILD("The caller does not have the privilege to perform the operation.", error_type::OS_EBUSY);
             break;
         case error_type::OS_EINVAL:
-                *error = OSAL_BUILD_ERROR("The caller does not have the privilege to perform the operation.", error_type::OS_EINVAL);
+                *error = OS_ERROR_BUILD("The caller does not have the privilege to perform the operation.", error_type::OS_EINVAL);
             break;
         default:
             break;

@@ -25,7 +25,9 @@
 #include <stdint.h>
 #include <string.h>
 
-#define OSAL_BUILD_ERROR(msg, ...) new osal::error(msg, __VA_ARGS__)
+#define OS_ERROR_BUILD(msg, ...) new osal::error(msg, __VA_ARGS__)
+#define OS_ERROR_SET_POSITION(obj) obj.set_position(os::get_file_name(__FILE__), __func__)
+#define OS_ERROR_PTR_SET_POSITION(obj) obj->set_position(os::get_file_name(__FILE__), __func__)
 
 namespace osal
 {

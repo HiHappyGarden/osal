@@ -24,13 +24,13 @@
 TEST(error_test, base)
 {
 
-    os::error* err = OSAL_BUILD_ERROR("test", 20);
-    err->set_position();
+    os::error* err = OS_ERROR_BUILD("test", 20);
+    OS_ERROR_PTR_SET_POSITION(err);
 
     ASSERT_TRUE(strcmp(err->get_msg(), "test") == 0);
     ASSERT_TRUE(strcmp(err->get_file(), "error_test.cpp") == 0);
     ASSERT_TRUE(strcmp(err->get_func(), "TestBody") == 0);
-    ASSERT_TRUE(err->get_line() == 10);
+    ASSERT_TRUE(err->get_line() == 275);
 
     delete err;
 }
@@ -39,7 +39,7 @@ TEST(error_test, base)
 TEST(error_test, old_error)
 {
 
-    os::error* old = OSAL_BUILD_ERROR("old", 20);
+    os::error* old = OS_ERROR_BUILD("old", 20);
 
 
     os::error err(*old, "test",30, osal::get_file_name(__FILE__), __FUNCTION__, __LINE__);

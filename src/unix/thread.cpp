@@ -89,16 +89,16 @@ bool thread_private::create(void* arg, class error** error) OS_NOEXCEPT
         switch (error_type(result))
         {
         case error_type::OS_EAGAIN:
-            *error = OSAL_BUILD_ERROR("Insufficient resources to create another thread.", error_type::OS_EAGAIN);
+            *error = OS_ERROR_BUILD("Insufficient resources to create another thread.", error_type::OS_EAGAIN);
             break;
         case error_type::OS_EINVAL:
-            *error = OSAL_BUILD_ERROR("Invalid settings in attr.", error_type::OS_EINVAL);
+            *error = OS_ERROR_BUILD("Invalid settings in attr.", error_type::OS_EINVAL);
             break;
         case error_type::OS_EPERM:
-            *error = OSAL_BUILD_ERROR("No permission to set the scheduling policy and parameters specified in attr.", error_type::OS_EINVAL);
+            *error = OS_ERROR_BUILD("No permission to set the scheduling policy and parameters specified in attr.", error_type::OS_EINVAL);
             break;
         default:
-            *error = OSAL_BUILD_ERROR("Unmanaged error", result);
+            *error = OS_ERROR_BUILD("Unmanaged error", result);
             break;
         }
     }
@@ -115,21 +115,25 @@ bool thread_private::exit() OS_NOEXCEPT
     return true;
 }
 
-#ifdef __MACH__
-thread* _Nullable thread::build(const char* _Nullable name, uint32_t priority, size_t stack_size, handler handler, class error** error) OS_NOEXCEPT
-#else
-thread* thread::build(const char* name, uint32_t priority, size_t stack_size, handler handler) OS_NOEXCEPT
-#endif
 
+thread* thread::build(const char* name, uint32_t priority, size_t stack_size, handler handler, class error** error) OS_NOEXCEPT
 {
     if(name == nullptr || handler == nullptr)
     {
+        if(error)
+        {
+            *error = OS_ERROR_BUILD("Invalid argument.", error_type::OS_EINVAL);
+        }
         return nullptr;
     }
 
     thread* t = dynamic_cast<thread*>(new thread_private(name, priority, stack_size, handler));
     if(t == nullptr)
     {
+        if(error)
+        {
+            *error = OS_ERROR_BUILD("Out of memory.", error_type::OS_ENOMEM);
+        }
         return nullptr;
     }
     return t;

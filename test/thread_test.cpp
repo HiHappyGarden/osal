@@ -25,33 +25,27 @@ namespace
 
 bool check = false;
 
-#ifdef __MACH__
-#include <limits.h>
-void * _Nullable thread_test(void * _Nullable)
-{
-    check = true;
-    return nullptr;
-}
-#else
+
 void * thread_test(void *)
 {
     check = true;
     return nullptr;
 }
-#endif
+
 }
 
 
 TEST(thread_test, base)
 {
-    os::thread* t = os::thread::build( "test", 4, 1024, thread_test);
+    os::thread* thread = os::thread::build("test", 4, 1024, thread_test);
+    ASSERT_TRUE(thread);
 
-    t->create();
+    ASSERT_TRUE(thread->create());
 
     os::us_sleep(1'000'000);
 
     ASSERT_TRUE(check);
 
-    delete t;
+    delete thread;
 }
 

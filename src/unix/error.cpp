@@ -68,6 +68,7 @@ inline namespace v1
     {
         strncpy(&this->file[0], file, sizeof(this->file));
         strncpy(&this->func[0], func, sizeof(this->func));
+        this->line = line;
     }
 
 
