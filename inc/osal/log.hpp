@@ -57,64 +57,171 @@ namespace osal
 inline namespace v1
 {
 
+/**
+ * @brief Debug log level.
+ */
+constexpr inline const uint8_t LEVEL_DEBUG   = 0x00;
 
-    constexpr inline const uint8_t LEVEL_DEBUG   = 0x00;
-    constexpr inline const uint8_t LEVEL_INFO    = 0x01;
-    constexpr inline const uint8_t LEVEL_WARNING = 0x02;
-    constexpr inline const uint8_t LEVEL_ERROR   = 0x03;
-    constexpr inline const uint8_t LEVEL_FATAL   = 0x04;
-    constexpr inline const uint8_t LEVEL_MASK    = 0x0F;
+/**
+ * @brief Info log level.
+ */
+constexpr inline const uint8_t LEVEL_INFO    = 0x01;
 
-    constexpr inline const uint8_t LOG_STATE_ON  = (1 << 7);
-    constexpr inline const uint8_t LOG_STATE_OFF = (0 << 7);
+/**
+ * @brief Warning log level.
+ */
+constexpr inline const uint8_t LEVEL_WARNING = 0x02;
 
-    constexpr inline uint8_t get_level_log(uint8_t t) OS_NOEXCEPT { return t & LEVEL_MASK; }
+/**
+ * @brief Error log level.
+ */
+constexpr inline const uint8_t LEVEL_ERROR   = 0x03;
 
-    void set_level_log(uint8_t t) OS_NOEXCEPT;
+/**
+ * @brief Fatal log level.
+ */
+constexpr inline const uint8_t LEVEL_FATAL   = 0x04;
 
-    void set_enable_log(bool t) OS_NOEXCEPT;
+/**
+ * @brief Log level mask.
+ */
+constexpr inline const uint8_t LEVEL_MASK    = 0x0F;
 
-    bool get_enable_log() OS_NOEXCEPT;
+/**
+ * @brief Log state when enabled.
+ */
+constexpr inline const uint8_t LOG_STATE_ON  = (1 << 7);
 
-    bool is_enabled_log(uint8_t type) OS_NOEXCEPT;
+/**
+ * @brief Log state when disabled.
+ */
+constexpr inline const uint8_t LOG_STATE_OFF = (0 << 7);
 
-    void log(const char* tag, uint8_t type, const char* fmt, ...) OS_NOEXCEPT;
+/**
+ * @brief Gets the log level from a given value.
+ *
+ * @param t The value containing the log level.
+ * @return The log level extracted from the value.
+ */
+constexpr inline uint8_t get_level_log(uint8_t t) OS_NOEXCEPT { return t & LEVEL_MASK; }
 
-    template<typename... Args>
-    constexpr inline void log_debug(const char* tag, const char* fmt,  Args... args) OS_NOEXCEPT
-    {
-        log(tag, LEVEL_DEBUG, fmt, args...);
-    }
+/**
+ * @brief Sets the log level.
+ *
+ * @param t The log level to set.
+ */
+void set_level_log(uint8_t t) OS_NOEXCEPT;
 
-    template<typename... Args>
-    constexpr inline void log_info(const char* tag, const char* fmt,  Args... args) OS_NOEXCEPT
-    {
-        log(tag, LEVEL_INFO, fmt, args...);
-    }
+/**
+ * @brief Sets the log enable state.
+ *
+ * @param t The enable state of the log.
+ */
+void set_enable_log(bool t) OS_NOEXCEPT;
 
-    template<typename... Args>
-    constexpr inline void log_warning(const char* tag, const char* fmt,  Args... args) OS_NOEXCEPT
-    {
-        log(tag, LEVEL_WARNING, fmt, args...);
-    }
+/**
+ * @brief Gets the log enable state.
+ *
+ * @return The enable state of the log.
+ */
+bool get_enable_log() OS_NOEXCEPT;
 
-    template<typename... Args>
-    constexpr inline void log_error(const char* tag, const char* fmt,  Args... args) OS_NOEXCEPT
-    {
-        log(tag, LEVEL_ERROR, fmt, args...);
-    }
+/**
+ * @brief Checks if a specific log level is enabled.
+ *
+ * @param type The log level to check.
+ * @return True if the log level is enabled, false otherwise.
+ */
+bool is_enabled_log(uint8_t type) OS_NOEXCEPT;
 
-    template<typename... Args>
-    constexpr inline void log_fatal(const char* tag, const char* fmt,  Args... args) OS_NOEXCEPT
-    {
-        log(tag, LEVEL_FATAL, fmt, args...);
-    }
+/**
+ * @brief Writes a log message with the given tag, log level, and formatted message.
+ *
+ * @param tag The tag of the log message.
+ * @param type The log level.
+ * @param fmt The format string for the log message.
+ * @param ... The variadic arguments for formatting the log message.
+ */
+void log(const char* tag, uint8_t type, const char* fmt, ...) OS_NOEXCEPT;
 
-    inline void reset_log_color() OS_NOEXCEPT
-    {
-        printf(OS_ANSI_COLOR_RESET "");
-        fflush(stdout);
-    }
+/**
+ * @brief Writes a debug log message with the given tag and formatted message.
+ *
+ * @tparam Args The variadic argument types.
+ * @param tag The tag of the log message.
+ * @param fmt The format string for the log message.
+ * @param args The additional arguments for formatting the log message.
+ */
+template<typename... Args>
+constexpr inline void log_debug(const char* tag, const char* fmt, Args... args) OS_NOEXCEPT
+{
+    log(tag, LEVEL_DEBUG, fmt, args...);
+}
+
+/**
+ * @brief Writes an info log message with the given tag and formatted message.
+ *
+ * @tparam Args The variadic argument types.
+ * @param tag The tag of the log message.
+ * @param fmt The format string for the log message.
+ * @param args The additional arguments for formatting the log message.
+ */
+template<typename... Args>
+constexpr inline void log_info(const char* tag, const char* fmt, Args... args) OS_NOEXCEPT
+{
+    log(tag, LEVEL_INFO, fmt, args...);
+}
+
+/**
+ * @brief Writes a warning log message with the given tag and formatted message.
+ *
+ * @tparam Args The variadic argument types.
+ * @param tag The tag of the log message.
+ * @param fmt The format string for the log message.
+ * @param args The additional arguments for formatting the log message.
+ */
+template<typename... Args>
+constexpr inline void log_warning(const char* tag, const char* fmt, Args... args) OS_NOEXCEPT
+{
+    log(tag, LEVEL_WARNING, fmt, args...);
+}
+
+/**
+ * @brief Writes an error log message with the given tag and formatted message.
+ *
+ * @tparam Args The variadic argument types.
+ * @param tag The tag of the log message.
+ * @param fmt The format string for the log message.
+ * @param args The additional arguments for formatting the log message.
+ */
+template<typename... Args>
+constexpr inline void log_error(const char* tag, const char* fmt, Args... args) OS_NOEXCEPT
+{
+    log(tag, LEVEL_ERROR, fmt, args...);
+}
+
+/**
+ * @brief Writes a fatal log message with the given tag and formatted message.
+ *
+ * @tparam Args The variadic argument types.
+ * @param tag The tag of the log message.
+ * @param fmt The format string for the log message.
+ * @param args The additional arguments for formatting the log message.
+ */
+template<typename... Args>
+constexpr inline void log_fatal(const char* tag, const char* fmt, Args... args) OS_NOEXCEPT
+{
+    log(tag, LEVEL_FATAL, fmt, args...);
+}
+
+/**
+ * @brief Resets the log color settings.
+ */
+inline void reset_log_color() OS_NOEXCEPT
+{
+    printf(OS_ANSI_COLOR_RESET "");
+    fflush(stdout);
+}
 
 
 }

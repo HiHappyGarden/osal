@@ -40,7 +40,7 @@ public:
     thread_private(const char *name, uint32_t priority, size_t stack_size, thread::handler handler) OS_NOEXCEPT;
 
 
-    bool create (void* arg) OS_NOEXCEPT override;
+    bool create (void* arg = nullptr, class error** error = nullptr) OS_NOEXCEPT override;
 
     bool exit() OS_NOEXCEPT override;
 
@@ -60,7 +60,7 @@ thread_private::thread_private(const char *name, uint32_t priority, size_t stack
 #ifdef __MACH__
 bool thread_private::create(void* _Nullable arg = nullptr) OS_NOEXCEPT
 #else
-bool thread_private::create(void* arg = nullptr) OS_NOEXCEPT
+bool thread_private::create(void* arg, class error** error) OS_NOEXCEPT
 #endif
 
 {
@@ -73,7 +73,6 @@ bool thread_private::create(void* arg = nullptr) OS_NOEXCEPT
     pthread_attr_setstacksize (&attr, PTHREAD_STACK_MIN + stack_size);
 
 #if defined(USE_SCHED_FIFO)
-//    CC_STATIC_ASSERT (_POSIX_THREAD_PRIORITY_SCHEDULING > 0);
     struct sched_param param = {.sched_priority = static_cast<int>(priority)};
     pthread_attr_setinheritsched (&attr, PTHREAD_EXPLICIT_SCHED);
     pthread_attr_setschedpolicy (&attr, SCHED_FIFO);
@@ -85,6 +84,24 @@ bool thread_private::create(void* arg = nullptr) OS_NOEXCEPT
 
 
     result = pthread_create (&t, &attr, handler, arg);
+    if(result && error)
+    {
+        switch (error_type(result))
+        {
+        case error_type::OS_EAGAIN:
+            *error = OSAL_BUILD_ERROR("Insufficient resources to create another thread.", error_type::OS_EAGAIN);
+            break;
+        case error_type::OS_EINVAL:
+            *error = OSAL_BUILD_ERROR("Invalid settings in attr.", error_type::OS_EINVAL);
+            break;
+        case error_type::OS_EPERM:
+            *error = OSAL_BUILD_ERROR("No permission to set the scheduling policy and parameters specified in attr.", error_type::OS_EINVAL);
+            break;
+        default:
+            *error = OSAL_BUILD_ERROR("Unmanaged error", result);
+            break;
+        }
+    }
 
 #ifndef __MACH__
     pthread_setname_np (t, name);
@@ -92,15 +109,14 @@ bool thread_private::create(void* arg = nullptr) OS_NOEXCEPT
     return result == 0;
 }
 
-bool thread_private::exit() noexcept
+bool thread_private::exit() OS_NOEXCEPT
 {
-
     pthread_exit(&t);
     return true;
 }
 
 #ifdef __MACH__
-thread* _Nullable thread::build(const char* _Nullable name, uint32_t priority, size_t stack_size, handler handler) OS_NOEXCEPT
+thread* _Nullable thread::build(const char* _Nullable name, uint32_t priority, size_t stack_size, handler handler, class error** error) OS_NOEXCEPT
 #else
 thread* thread::build(const char* name, uint32_t priority, size_t stack_size, handler handler) OS_NOEXCEPT
 #endif

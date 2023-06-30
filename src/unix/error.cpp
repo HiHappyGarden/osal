@@ -26,12 +26,13 @@ inline namespace v1
 {
 
     inline error::error(const char *msg, uint8_t code, const char *file, const char *func, uint32_t line) OS_NOEXCEPT
-        : msg(msg)
-        , code(code)
-        , file(file)
-        , func(func)
+        : code(code)
         , line(line)
-    {}
+    {
+        strncpy(&this->msg[0], msg, sizeof(this->msg));
+        strncpy(&this->file[0], file, sizeof(this->file));
+        strncpy(&this->func[0], func, sizeof(this->func));
+    }
 
     error::error(const error& old_error, const char* msg, uint8_t code, const char* file, const char* func, uint32_t line) OS_NOEXCEPT
         : error(msg, code, file, func, line)
@@ -61,6 +62,12 @@ inline namespace v1
             this->old_error = nullptr;
         }
         this->old_error = new error(old_error);
+    }
+
+    void error::set_position(const char *file, const char *func, uint32_t line) OS_NOEXCEPT
+    {
+        strncpy(&this->file[0], file, sizeof(this->file));
+        strncpy(&this->func[0], func, sizeof(this->func));
     }
 
 

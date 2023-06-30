@@ -17,6 +17,9 @@
  *
  ***************************************************************************/
 #pragma once
+
+#include "osal/error.hpp"
+
 #include <stdint.h>
 #include <stdlib.h>
 
@@ -67,7 +70,7 @@ inline namespace v1
 #ifdef __MACH__
         virtual bool create(void* _Nullable arg = nullptr) OS_NOEXCEPT = 0;
 #else
-        virtual bool create(void* arg = nullptr) OS_NOEXCEPT = 0;
+        virtual bool create(void* arg = nullptr, class error** error = nullptr) OS_NOEXCEPT = 0;
 #endif
         /**
       * @brief Builds a new thread object.
@@ -79,7 +82,7 @@ inline namespace v1
       */
 
 #ifdef __MACH__
-        static thread* _Nullable build(const char* _Nullable name, uint32_t priority, size_t stack_size, handler handler) OS_NOEXCEPT;
+        static thread* _Nullable build(const char* _Nullable name, uint32_t priority, size_t stack_size, handler handler, class error** error = nullptr) OS_NOEXCEPT;
 #else
         static thread* build(const char* name, uint32_t priority, size_t stack_size, handler handler) OS_NOEXCEPT;
 #endif

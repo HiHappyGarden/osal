@@ -22,16 +22,16 @@
 
 #include "sys/osal_sys.hpp"
 
-#include "array.hpp"
-#include "error.hpp"
-#include "event.hpp"
-#include "log.hpp"
-#include "mutex.hpp"
-#include "queue.hpp"
-#include "semaphore.hpp"
-#include "string.hpp"
-#include "thread.hpp"
-#include "timer.hpp"
+#include "osal/array.hpp"
+#include "osal/error.hpp"
+#include "osal/event.hpp"
+#include "osal/log.hpp"
+#include "osal/mutex.hpp"
+#include "osal/queue.hpp"
+#include "osal/semaphore.hpp"
+#include "osal/string.hpp"
+#include "osal/thread.hpp"
+#include "osal/timer.hpp"
 
 #define OS_NO_COPY_NO_MOVE(cls) \
     Singleton<T>(const cls&) = delete; \
@@ -45,8 +45,6 @@ namespace osal
 
 inline namespace v1
 {
-
-    typedef decltype(nullptr) nullptr_t;
 
     /**
      * @brief Suspends the execution of the current thread for a specified number of microseconds.

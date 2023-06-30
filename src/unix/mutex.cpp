@@ -29,7 +29,7 @@ class mutex_private final : public mutex
 {
     pthread_mutex_t mutex = {0};
 public:
-    mutex_private() OS_NOEXCEPT;
+    mutex_private(class error** error) OS_NOEXCEPT;
 
     ~mutex_private() OS_NOEXCEPT;
 
@@ -40,7 +40,7 @@ public:
 
 };
 
-mutex_private::mutex_private() OS_NOEXCEPT
+mutex_private::mutex_private(class error** error) OS_NOEXCEPT
 {
     int32_t result;
     pthread_mutexattr_t mattr;
@@ -51,15 +51,35 @@ mutex_private::mutex_private() OS_NOEXCEPT
     pthread_mutexattr_settype (&mattr, PTHREAD_MUTEX_RECURSIVE);
 
     result = pthread_mutex_init (&mutex, &mattr);
-    if (result != 0)
+    if (result && error)
     {
-//error
+        switch (error_type(result)) {
+        case error_type::OS_EAGAIN:
+                *error = OSAL_BUILD_ERROR("The system lacked the necessary resources (other than memory) to initialise another mutex.", error_type::OS_EAGAIN);
+            break;
+        case error_type::OS_ENOMEM:
+                *error = OSAL_BUILD_ERROR("Insufficient memory exists to initialise the mutex.", error_type::OS_ENOMEM);
+            break;
+        case error_type::OS_EPERM:
+                *error = OSAL_BUILD_ERROR("The caller does not have the privilege to perform the operation.", error_type::OS_EPERM);
+            break;
+        case error_type::OS_EBUSY:
+                *error = OSAL_BUILD_ERROR("The caller does not have the privilege to perform the operation.", error_type::OS_EBUSY);
+            break;
+        case error_type::OS_EINVAL:
+                *error = OSAL_BUILD_ERROR("The caller does not have the privilege to perform the operation.", error_type::OS_EINVAL);
+            break;
+        default:
+            break;
+        }
+
     }
 }
 
 inline mutex_private::~mutex_private() OS_NOEXCEPT
 {
     pthread_mutex_destroy (&mutex);
+    memset(&mutex, 0, sizeof(mutex));
 }
 
 inline void mutex_private::lock() OS_NOEXCEPT
@@ -76,10 +96,10 @@ inline void mutex_private::unlock() OS_NOEXCEPT
 #ifdef __MACH__
 static inline mutex* _Nullable build() OS_NOEXCEPT
 #else
-static inline mutex* build() OS_NOEXCEPT
+static inline mutex* build(class error** error) OS_NOEXCEPT
 #endif
 {
-    mutex* m = dynamic_cast<mutex*>(new mutex_private);
+    mutex* m = dynamic_cast<mutex*>(new mutex_private(error));
     if(m == nullptr)
     {
         return nullptr;

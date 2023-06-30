@@ -1,7 +1,7 @@
 /***************************************************************************
  *
- * OSAL
- * Copyright (C) 2023  Antonio Salsi <passy.linux@zresa.it>
+ * PROJECT
+ * Copyright (C) 202X  Antonio Salsi <passy.linux@zresa.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,34 +19,3 @@
 #include <gtest/gtest.h>
 
 #include"osal/osal.hpp"
-
-
-TEST(error_test, base)
-{
-
-    os::error* err = OSAL_BUILD_ERROR("test", 20);
-    err->set_position();
-
-    ASSERT_TRUE(strcmp(err->get_msg(), "test") == 0);
-    ASSERT_TRUE(strcmp(err->get_file(), "error_test.cpp") == 0);
-    ASSERT_TRUE(strcmp(err->get_func(), "TestBody") == 0);
-    ASSERT_TRUE(err->get_line() == 10);
-
-    delete err;
-}
-
-
-TEST(error_test, old_error)
-{
-
-    os::error* old = OSAL_BUILD_ERROR("old", 20);
-
-
-    os::error err(*old, "test",30, osal::get_file_name(__FILE__), __FUNCTION__, __LINE__);
-
-    os::printf_stack_error(err);
-
-
-    delete old;
-}
-
