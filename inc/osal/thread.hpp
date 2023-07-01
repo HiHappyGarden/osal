@@ -20,7 +20,7 @@
 
 #include "osal/error.hpp"
 
-#include "sys/osal_sys.hpp"
+#include "osal_sys/osal_sys.hpp"
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -76,6 +76,10 @@ inline namespace v1
          * @return false KO
          */
         bool exit() OS_NOEXCEPT;
+
+        bool join(error** error);
+
+
 
     private:
         char name[33];

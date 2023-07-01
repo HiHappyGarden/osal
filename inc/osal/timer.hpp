@@ -18,11 +18,14 @@
  ***************************************************************************/
 #pragma once
 
+#include <stdint.h>
+
 namespace osal
 {
 inline namespace v1
 {
 
+constexpr const uint8_t TIMER_PRIO = 30;
 
 
 }

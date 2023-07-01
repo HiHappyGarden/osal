@@ -1,7 +1,7 @@
 /***************************************************************************
  *
- * PROJECT
- * Copyright (C) 202X  Antonio Salsi <passy.linux@zresa.it>
+ * OSAL
+ * Copyright (C) 2023  Antonio Salsi <passy.linux@zresa.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -190,7 +190,10 @@ enum class error_type : uint8_t
 };
 
 
+constexpr const uint64_t USECS_PER_SEC = 1'000'000;
+constexpr const uint64_t NSECS_PER_SEC = 1'000'000'000;
 
+constexpr const uint64_t WAIT_FOREVER = 0xFFFFFFFFFFFFFFFF;
 
 }
 }

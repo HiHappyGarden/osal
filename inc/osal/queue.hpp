@@ -23,6 +23,11 @@ namespace osal
 inline namespace v1
 {
 
+class queue final
+{
+
+};
+
 }
 }
 

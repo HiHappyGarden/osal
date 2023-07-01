@@ -20,7 +20,7 @@
 
 #include <stdint.h>
 
-#include "sys/osal_sys.hpp"
+#include "osal_sys/osal_sys.hpp"
 
 #include "osal/array.hpp"
 #include "osal/error.hpp"
@@ -33,18 +33,15 @@
 #include "osal/thread.hpp"
 #include "osal/timer.hpp"
 
-#define OS_NO_COPY_NO_MOVE(cls) \
-    Singleton<T>(const cls&) = delete; \
-    Singleton<T>& operator = (const cls&) = delete; \
-    Singleton<T>(cls&&) = delete; \
-    Singleton<T>& operator = (cls&&) = delete;
-
 
 namespace osal
 {
 
 inline namespace v1
 {
+
+    constexpr inline uint64_t ms_to_us(uint32_t millis) { return millis * 1'000ul; }
+    constexpr inline uint64_t sec_to_us(uint32_t sec) { return sec * 1'000'000ul; }
 
     /**
      * @brief Suspends the execution of the current thread for a specified number of microseconds.

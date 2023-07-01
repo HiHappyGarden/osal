@@ -49,7 +49,7 @@ inline namespace v1
  * @return The offset of the file name within the path.
  */
 template <typename T, size_t S>
-inline constexpr size_t get_file_name_offset(const T (& str)[S], size_t i = S - 1)
+inline constexpr size_t get_file_name_offset(const T (& str)[S], size_t i = S - 1) OS_NOEXCEPT
 {
     return (str[i] == '/' || str[i] == '\\') ? i + 1 : (i > 0 ? get_file_name_offset(str, i - 1) : 0);
 }
@@ -68,7 +68,7 @@ inline constexpr size_t get_file_name_offset(const T (& str)[S], size_t i = S - 
  * @return The size of the file name within the path.
  */
 template <typename T, size_t S>
-inline constexpr size_t get_file_name_size(const T (& str)[S], size_t i = S - 1)
+inline constexpr size_t get_file_name_size(const T (& str)[S], size_t i = S - 1) OS_NOEXCEPT
 {
     return strlen(str) - get_file_name_offset(str);
 }
@@ -85,7 +85,7 @@ inline constexpr size_t get_file_name_size(const T (& str)[S], size_t i = S - 1)
      * @return A pointer to the file name within the path.
      */
 template <typename T, size_t S>
-inline constexpr const char* get_file_name(const T (& str)[S])
+inline constexpr const char* get_file_name(const T (& str)[S]) OS_NOEXCEPT
 {
     return str + get_file_name_offset(str);
 }

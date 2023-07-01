@@ -26,12 +26,6 @@ namespace osal
 inline namespace v1
 {
 
-
-constexpr const uint8_t TIMER_PRIO = 30;
-constexpr const uint32_t USECS_PER_SEC = 1'000'000;
-constexpr const uint32_t NSECS_PER_SEC = 1'000'000'000;
-constexpr const uint64_t OS_WAIT_FOREVER = 0xFFFFFFFFFFFFFFFF;
-
 template<typename T>
 constexpr T max(T a, T b)
 {

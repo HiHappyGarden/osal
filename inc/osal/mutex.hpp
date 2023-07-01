@@ -19,6 +19,7 @@
 #pragma once
 
 #include "osal/error.hpp"
+#include "osal_sys/osal_sys.hpp"
 
 namespace osal
 {
@@ -75,13 +76,33 @@ public:
     void lock() OS_NOEXCEPT;
 
     /**
+     * @brief Locks the mutex frm ISR.
+     *
+     * This function is pure virtual and should be implemented by derived classes to lock the mutex.
+     */
+    inline void lock_from_isr() OS_NOEXCEPT
+    {
+        lock();
+    }
+
+    /**
      * @brief Unlocks the mutex.
      *
      * This function is pure virtual and should be implemented by derived classes to unlock the mutex.
      */
     void unlock() OS_NOEXCEPT;
+
+    /**
+     * @brief Unlocks the mutex from ISR.
+     *
+     * This function is pure virtual and should be implemented by derived classes to unlock the mutex.
+     */
+    inline void unlock_from_isr() OS_NOEXCEPT
+    {
+        unlock();
+    }
 private:
-    pthread_mutex_t m = {0};
+    mutex_data m = {0};
 };
 
 
