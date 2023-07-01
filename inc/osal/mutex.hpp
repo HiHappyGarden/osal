@@ -34,13 +34,13 @@ inline namespace v1
  *
  * @note This class is non-copyable and non-movable.
  */
-class mutex
+class mutex final
 {
 public:
     /**
      * @brief Default constructor.
      */
-    mutex() = default;
+    explicit mutex(class error** error = nullptr);
 
     /**
      * @brief Deleted copy constructor.
@@ -72,36 +72,16 @@ public:
      *
      * This function is pure virtual and should be implemented by derived classes to lock the mutex.
      */
-    virtual void lock() OS_NOEXCEPT = 0;
+    void lock() OS_NOEXCEPT;
 
     /**
      * @brief Unlocks the mutex.
      *
      * This function is pure virtual and should be implemented by derived classes to unlock the mutex.
      */
-    virtual void unlock() OS_NOEXCEPT = 0;
-
-#ifdef __MACH__
-    /**
-     * @brief Builds a mutex object.
-     *
-     * This static function creates a mutex object of the appropriate type for the platform.
-     *
-     * @param error Optional pointer to an error object to be populated in case of failure (macOS only).
-     * @return A pointer to the created mutex object, or nullptr on failure.
-     */
-    static mutex* _Nullable build(class error** error = nullptr) OS_NOEXCEPT;
-#else
-    /**
-     * @brief Builds a mutex object.
-     *
-     * This static function creates a mutex object of the appropriate type for the platform.
-     *
-     * @param error Optional pointer to an error object to be populated in case of failure.
-     * @return A pointer to the created mutex object, or nullptr on failure.
-     */
-    static mutex* build(class error** error = nullptr) OS_NOEXCEPT;
-#endif
+    void unlock() OS_NOEXCEPT;
+private:
+    pthread_mutex_t m = {0};
 };
 
 

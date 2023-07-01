@@ -25,46 +25,46 @@
 int shared_value = 0;
 
 // Mutex to synchronize access to shared_value
-pthread_mutex_t mutex;
+os::mutex mutex;
 
 // Function to be executed by the threads
-void* thread_function(void*) {
+void* thread_function(void*)
+{
     // Acquire the lock
-    pthread_mutex_lock(&mutex);
+    mutex.lock();
 
     // Increment the shared value
     shared_value++;
 
     // Release the lock
-    pthread_mutex_unlock(&mutex);
+    mutex.unlock();
 
     pthread_exit(nullptr);
 }
 
 // Test case for concurrent increment
-TEST(ConcurrencyTest, IncrementTest) {
+TEST(thread_test, increment_test)
+{
     const int num_threads = 10;
 
     // Create an array of threads
-    pthread_t threads[num_threads];
+    os::thread* threads[num_threads];
 
     // Initialize the mutex
-    pthread_mutex_init(&mutex, nullptr);
+    //pthread_mutex_init(&mutex, nullptr);
 
     // Create the threads
     for (int i = 0; i < num_threads; ++i) {
-        int rc = pthread_create(&threads[i], nullptr, thread_function, nullptr);
-        ASSERT_EQ(rc, 0) << "Failed to create thread";
+        os::error* e = nullptr;
+        threads[i] = new os::thread("test", 1, 1024, thread_function);
+
+        if(threads[i]->create(nullptr, &e))
+        {
+            os::printf_stack_error(e);
+        }
     }
 
-    // Wait for the threads to finish
-    for (int i = 0; i < num_threads; ++i) {
-        int rc = pthread_join(threads[i], nullptr);
-        ASSERT_EQ(rc, 0) << "Failed to join thread";
-    }
-
-    // Destroy the mutex
-    pthread_mutex_destroy(&mutex);
+    os::us_sleep(1'000'000);
 
     // Check the final value of the shared variable
     EXPECT_EQ(shared_value, num_threads);

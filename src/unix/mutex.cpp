@@ -25,32 +25,17 @@ namespace osal
 inline namespace v1
 {
 
-class mutex_private final : public mutex
-{
-    pthread_mutex_t mutex = {0};
-public:
-    mutex_private(class error** error) OS_NOEXCEPT;
 
-    ~mutex_private() OS_NOEXCEPT;
-
-    void lock () OS_NOEXCEPT override;
-
-    void unlock () OS_NOEXCEPT override;
-
-
-};
-
-mutex_private::mutex_private(class error** error) OS_NOEXCEPT
+mutex::mutex(class error** error) OS_NOEXCEPT
 {
     int32_t result;
     pthread_mutexattr_t mattr;
 
-//   CC_STATIC_ASSERT (_POSIX_THREAD_PRIO_INHERIT > 0);
     pthread_mutexattr_init (&mattr);
     pthread_mutexattr_setprotocol (&mattr, PTHREAD_PRIO_INHERIT);
     pthread_mutexattr_settype (&mattr, PTHREAD_MUTEX_RECURSIVE);
 
-    result = pthread_mutex_init (&mutex, &mattr);
+    result = pthread_mutex_init (&m, &mattr);
     if (result && error)
     {
         switch (error_type(result)) {
@@ -70,44 +55,27 @@ mutex_private::mutex_private(class error** error) OS_NOEXCEPT
                 *error = OS_ERROR_BUILD("The caller does not have the privilege to perform the operation.", error_type::OS_EINVAL);
             break;
         default:
+            *error = OS_ERROR_BUILD("Unmanaged error", result);
             break;
         }
-
     }
 }
 
-inline mutex_private::~mutex_private() OS_NOEXCEPT
+mutex::~mutex() OS_NOEXCEPT
 {
-    pthread_mutex_destroy (&mutex);
-    memset(&mutex, 0, sizeof(mutex));
+    pthread_mutex_destroy (&m);
+    memset(&m, 0, sizeof(mutex));
 }
 
-inline void mutex_private::lock() OS_NOEXCEPT
+void mutex::lock() OS_NOEXCEPT
 {
-    pthread_mutex_lock (&mutex);
+    pthread_mutex_lock (&m);
 }
 
-inline void mutex_private::unlock() OS_NOEXCEPT
+void mutex::unlock() OS_NOEXCEPT
 {
-    pthread_mutex_unlock (&mutex);
+    pthread_mutex_unlock (&m);
 }
-
-
-#ifdef __MACH__
-static inline mutex* _Nullable build() OS_NOEXCEPT
-#else
-static inline mutex* build(class error** error) OS_NOEXCEPT
-#endif
-{
-    mutex* m = dynamic_cast<mutex*>(new mutex_private(error));
-    if(m == nullptr)
-    {
-        return nullptr;
-    }
-    return m;
-}
-
-
 
 }
 }

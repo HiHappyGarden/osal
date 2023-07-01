@@ -20,6 +20,8 @@
 
 #include "osal/error.hpp"
 
+#include "sys/osal_sys.hpp"
+
 #include <stdint.h>
 #include <stdlib.h>
 
@@ -34,58 +36,54 @@ inline namespace v1
 
 
     /**
-  * @class thread
-  * @brief Represents a thread abstraction.
-  */
+    * @class thread
+    * @brief Represents a thread abstraction.
+    */
 
-    class thread {
+    class thread final
+    {
     public:
-        thread() = default;
+
+        /**
+        * @typedef handler
+        * @brief Function pointer type for the thread handler.
+        * @param arg The argument passed to the thread handler.
+        */
+        using handler = void* (*)(void* arg);
+
+        thread(const char *name, uint32_t priority, size_t stack_size, handler handler);
         thread(const thread&) = delete;
         thread& operator = (const thread&) = delete;
         thread(thread&&) = delete;
         thread& operator = (thread&&) = delete;
 
-        /**
-      * @typedef handler
-      * @brief Function pointer type for the thread handler.
-      * @param arg The argument passed to the thread handler.
-      */
-        using handler = void* (*)(void* arg);
-
 
         /**
-      * @brief Default destructor for the thread class.
-      */
-        virtual ~thread() OS_NOEXCEPT = default;
+        * @brief Default destructor for the thread class.
+        */
+        ~thread() OS_NOEXCEPT = default;
 
         /**
-      * @brief Creates a new thread.
-      * @param arg The argument to be passed to the thread handler.
-      * @return true if the thread was created successfully, false otherwise.
-      */
-        virtual bool create(void* arg = nullptr, class error** error = nullptr) OS_NOEXCEPT = 0;
+        * @brief Creates a new thread.
+        * @param arg The argument to be passed to the thread handler.
+        * @return true if the thread was created successfully, false otherwise.
+        */
+        bool create(void* arg = nullptr, class error** error = nullptr) OS_NOEXCEPT;
 
         /**
          * @brief Exit from thread.
          * @return true OK
          * @return false KO
          */
-        virtual bool exit() OS_NOEXCEPT  = 0;
+        bool exit() OS_NOEXCEPT;
 
-        /**
-      * @brief Builds a new thread object.
-      * @brief thread to the newly created thread object.
-      * @param[out] name The name of the thread.
-      * @param priority The priority of the thread.
-      * @param stack_size The stack size of the thread.
-      * @param handler The thread handler function.
-      * @param[out] error The thread handler function.
-      * @return true OK
-      * @return false KO
-      */
-        static thread* build(const char* name, uint32_t priority, size_t stack_size, handler handler, class error** error = nullptr) OS_NOEXCEPT;
+    private:
+        char name[33];
+        uint32_t priority;
+        size_t stack_size;
+        thread::handler h;
 
+        thread_data t {0};
     };
 
 

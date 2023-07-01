@@ -314,6 +314,27 @@ constexpr inline void printf_stack_error(error &&e, const char* fmt = nullptr, A
     printf_stack_error(e, fmt, args...);
 }
 
+/**
+ * @brief Prints an error message with stack information.
+ *
+ * This function prints an error message along with stack information to the standard output.
+ * It takes an rvalue reference to an error object as the first argument, a format string (fmt) as the second argument (optional),
+ * and variadic arguments for formatting the error message.
+ * The error message can be formatted using the format string and additional arguments.
+ * The stack information is obtained from the error object.
+ *
+ * @tparam Args The variadic argument types.
+ * @param e The rvalue reference to the error object.
+ * @param fmt The format string for formatting the error message (optional).
+ * @param args The additional arguments for formatting the error message.
+ */
+template<typename... Args>
+constexpr inline void printf_stack_error(const error *e, const char* fmt = nullptr, Args... args) OS_NOEXCEPT
+{
+    printf_stack_error(*e, fmt, args...);
+}
+
+
 }
 }
 

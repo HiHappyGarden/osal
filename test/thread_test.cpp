@@ -37,15 +37,12 @@ void * thread_test(void *)
 
 TEST(thread_test, base)
 {
-    os::thread* thread = os::thread::build("test", 4, 1024, thread_test);
-    ASSERT_TRUE(thread);
+    os::thread thread("test", 4, 1024, thread_test);
 
-    ASSERT_TRUE(thread->create());
+    ASSERT_TRUE(thread.create());
 
     os::us_sleep(1'000'000);
 
     ASSERT_TRUE(check);
-
-    delete thread;
 }
 

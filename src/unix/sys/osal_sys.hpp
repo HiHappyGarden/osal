@@ -17,12 +17,98 @@
  *
  ***************************************************************************/
 #pragma once
+#include <stdlib.h>
 #include <stdint.h>
+#include <pthread.h>
+#include <time.h>
+
+
+#define OS_THREAD_DATA
+#define OS_MUTEX_DATA
+#define OS_SEM_DATA
+#define OS_EVENT_DATA
+#define OS_MBOX_DATA
+#define OS_TIMER_DATA
+#define OS_TICK_DATA
+#define OS_STREAM_DATA
+
 
 namespace osal
 {
 inline namespace v1
 {
+
+class thread;
+class timer;
+
+using thread_data = pthread_t;
+using mutex_data = pthread_mutex_t;
+
+struct semaphore_data
+{
+    pthread_cond_t cond;
+    pthread_mutex_t mutex;
+    size_t count;
+};
+
+struct event_data
+{
+    pthread_cond_t cond;
+    pthread_mutex_t mutex;
+    uint32_t flags;
+};
+
+struct queue_data
+{
+    pthread_cond_t cond;
+    pthread_mutex_t mutex;
+    size_t r;
+    size_t w;
+    size_t count;
+    size_t size;
+    void * msg[];
+};
+
+struct timer_data
+{
+    timer_t timerid;
+    //thread* thread;
+    pid_t thread_id;
+    bool exit;
+    void (*fn) (class timer *, void*);
+    void * arg;
+    uint32_t us;
+    bool oneshot;
+};
+
+struct stream_data
+{
+    pthread_cond_t cond;
+    pthread_mutex_t mutex;
+    size_t trigger_size;
+    size_t r;
+    size_t w;
+    size_t end;
+    size_t count;
+    size_t size;
+    uint8_t* buffer;
+};
+
+struct stream
+{
+    pthread_cond_t cond;
+    pthread_mutex_t mutex;
+    size_t trigger_size;
+    size_t r;
+    size_t w;
+    size_t end;
+    size_t count;
+    size_t size;
+    uint8_t* buffer;
+};
+
 using tick = uint64_t;
+
+
 }
 }

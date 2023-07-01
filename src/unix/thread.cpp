@@ -27,29 +27,11 @@ namespace osal
 inline namespace v1
 {
 
-class thread_private final : public thread
-{
-    pthread_t t = {0};
-    char name[33];
-    uint32_t priority;
-    size_t stack_size;
-    thread::handler handler;
 
-public:
-
-    thread_private(const char *name, uint32_t priority, size_t stack_size, thread::handler handler) OS_NOEXCEPT;
-
-
-    bool create (void* arg = nullptr, class error** error = nullptr) OS_NOEXCEPT override;
-
-    bool exit() OS_NOEXCEPT override;
-
-};
-
-thread_private::thread_private(const char *name, uint32_t priority, size_t stack_size, thread::handler handler) OS_NOEXCEPT
+thread::thread(const char *name, uint32_t priority, size_t stack_size, thread::handler handler) OS_NOEXCEPT
     : priority(priority)
     , stack_size(stack_size)
-    , handler(handler)
+    , h(handler)
 {
     if(name)
     {
@@ -57,15 +39,11 @@ thread_private::thread_private(const char *name, uint32_t priority, size_t stack
     }
 }
 
-#ifdef __MACH__
-bool thread_private::create(void* _Nullable arg = nullptr) OS_NOEXCEPT
-#else
-bool thread_private::create(void* arg, class error** error) OS_NOEXCEPT
-#endif
 
+bool thread::create(void* arg, class error** error) OS_NOEXCEPT
 {
 
-    int result;
+    uint32_t result;
 
     pthread_attr_t attr;
 
@@ -83,7 +61,7 @@ bool thread_private::create(void* arg, class error** error) OS_NOEXCEPT
 
 
 
-    result = pthread_create (&t, &attr, handler, arg);
+    result = pthread_create (&t, &attr, h, arg);
     if(result && error)
     {
         switch (error_type(result))
@@ -103,41 +81,45 @@ bool thread_private::create(void* arg, class error** error) OS_NOEXCEPT
         }
     }
 
-#ifndef __MACH__
-    pthread_setname_np (t, name);
-#endif
+
+    if(strlen(name))
+    {
+        pthread_setname_np (t, name);
+    }
     return result == 0;
 }
 
-bool thread_private::exit() OS_NOEXCEPT
+bool thread::exit() OS_NOEXCEPT
 {
     pthread_exit(&t);
     return true;
 }
 
-
-thread* thread::build(const char* name, uint32_t priority, size_t stack_size, handler handler, class error** error) OS_NOEXCEPT
+bool thread::join(error** error)
 {
-    if(name == nullptr || handler == nullptr)
+    uint32_t result = pthread_join(t, nullptr);
+    if(result && error)
     {
-        if(error)
+        switch (error_type(result))
         {
-            *error = OS_ERROR_BUILD("Invalid argument.", error_type::OS_EINVAL);
+        case error_type::OS_EDEADLK:
+            *error = OS_ERROR_BUILD("A deadlock was detected or thread specifies the calling thread.", error_type::OS_EDEADLK);
+            break;
+        case error_type::OS_EINVAL:
+            *error = OS_ERROR_BUILD("Another thread is already waiting to join with this thread.", error_type::OS_EINVAL);
+            break;
+        case error_type::OS_ESRCH:
+            *error = OS_ERROR_BUILD("No thread with the ID thread could be found.", error_type::OS_ESRCH);
+            break;
+        default:
+            *error = OS_ERROR_BUILD("Unmanaged error", result);
+            break;
         }
-        return nullptr;
     }
 
-    thread* t = dynamic_cast<thread*>(new thread_private(name, priority, stack_size, handler));
-    if(t == nullptr)
-    {
-        if(error)
-        {
-            *error = OS_ERROR_BUILD("Out of memory.", error_type::OS_ENOMEM);
-        }
-        return nullptr;
-    }
-    return t;
+    return result == 0;
 }
+
 
 
 }
