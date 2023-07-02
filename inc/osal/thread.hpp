@@ -35,60 +35,60 @@ inline namespace v1
 {
 
 
+/**
+ * @class thread
+ * @brief Represents a thread abstraction.
+ */
+
+class thread final
+{
+public:
+
     /**
-    * @class thread
-    * @brief Represents a thread abstraction.
-    */
+     * @typedef handler
+     * @brief Function pointer type for the thread handler.
+     * @param arg The argument passed to the thread handler.
+     */
+    using handler = void* (*)(void* arg);
 
-    class thread final
-    {
-    public:
-
-        /**
-        * @typedef handler
-        * @brief Function pointer type for the thread handler.
-        * @param arg The argument passed to the thread handler.
-        */
-        using handler = void* (*)(void* arg);
-
-        thread(const char *name, uint32_t priority, size_t stack_size, handler handler);
-        thread(const thread&) = delete;
-        thread& operator = (const thread&) = delete;
-        thread(thread&&) = delete;
-        thread& operator = (thread&&) = delete;
+    thread(const char *name, uint32_t priority, size_t stack_size, handler handler);
+    thread(const thread&) = delete;
+    thread& operator = (const thread&) = delete;
+    thread(thread&&) = delete;
+    thread& operator = (thread&&) = delete;
 
 
-        /**
-        * @brief Default destructor for the thread class.
-        */
-        ~thread() OS_NOEXCEPT = default;
+    /**
+     * @brief Default destructor for the thread class.
+     */
+    ~thread() OS_NOEXCEPT = default;
 
-        /**
-        * @brief Creates a new thread.
-        * @param arg The argument to be passed to the thread handler.
-        * @return true if the thread was created successfully, false otherwise.
-        */
-        bool create(void* arg = nullptr, class error** error = nullptr) OS_NOEXCEPT;
+    /**
+     * @brief Creates a new thread.
+     * @param arg The argument to be passed to the thread handler.
+     * @return true if the thread was created successfully, false otherwise.
+     */
+    bool create(void* arg = nullptr, class error** error = nullptr) OS_NOEXCEPT;
 
-        /**
-         * @brief Exit from thread.
-         * @return true OK
-         * @return false KO
-         */
-        bool exit() OS_NOEXCEPT;
+    /**
+      * @brief Exit from thread.
+      * @return true OK
+      * @return false KO
+      */
+    bool exit() OS_NOEXCEPT;
 
-        bool join(error** error);
+    bool join(error** error);
 
 
 
-    private:
-        char name[33];
-        uint32_t priority;
-        size_t stack_size;
-        thread::handler h;
+private:
+    char name[33];
+    uint32_t priority;
+    size_t stack_size;
+    thread::handler h;
 
-        thread_data t {0};
-    };
+    thread_data t {0};
+};
 
 
 }

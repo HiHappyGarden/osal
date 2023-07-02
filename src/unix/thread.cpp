@@ -40,6 +40,17 @@ thread::thread(const char *name, uint32_t priority, size_t stack_size, thread::h
 }
 
 
+class MyClass final
+{
+    int integer = 0;
+public:
+    void* operator() (void * args) const
+    {
+        return nullptr;
+    }
+};
+
+
 bool thread::create(void* arg, class error** error) OS_NOEXCEPT
 {
 
@@ -59,9 +70,9 @@ bool thread::create(void* arg, class error** error) OS_NOEXCEPT
     priority = 0;
 #endif
 
+    MyClass a;
 
-
-    result = pthread_create (&t, &attr, h, arg);
+    result = pthread_create (&t, &attr, reinterpret_cast<void*(*)(void*) >(h), arg);
     if(result && error)
     {
         switch (error_type(result))

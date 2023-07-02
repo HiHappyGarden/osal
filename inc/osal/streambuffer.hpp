@@ -22,7 +22,10 @@ namespace osal
 {
 inline namespace v1
 {
+class stream_buffer
+{
 
+};
 }
 }
 

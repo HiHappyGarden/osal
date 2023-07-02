@@ -1,7 +1,7 @@
 /***************************************************************************
  *
- * OSAL
- * Copyright (C) 2023  Antonio Salsi <passy.linux@zresa.it>
+ * PROJECT
+ * Copyright (C) 202X  Antonio Salsi <passy.linux@zresa.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,33 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  ***************************************************************************/
-#include <gtest/gtest.h>
 
-#include"osal/osal.hpp"
+#pragma once
 
-namespace
+
+namespace project
 {
-
-bool check = false;
-
-
-void *thread_test(void *)
+inline namespace v1
 {
-    check = true;
-    return nullptr;
-}
 
 }
-
-
-TEST(thread_test, base)
-{
-    os::thread thread("test", 4, 1024, thread_test);
-
-    ASSERT_TRUE(thread.create());
-
-    os::us_sleep(1'000'000);
-
-    ASSERT_TRUE(check);
 }
 

@@ -20,29 +20,4 @@
 
 #include"osal/osal.hpp"
 
-namespace
-{
-
-bool check = false;
-
-
-void *thread_test(void *)
-{
-    check = true;
-    return nullptr;
-}
-
-}
-
-
-TEST(thread_test, base)
-{
-    os::thread thread("test", 4, 1024, thread_test);
-
-    ASSERT_TRUE(thread.create());
-
-    os::us_sleep(1'000'000);
-
-    ASSERT_TRUE(check);
-}
-
+#include <stdio.h>
