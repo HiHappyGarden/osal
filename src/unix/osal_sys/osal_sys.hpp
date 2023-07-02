@@ -82,7 +82,7 @@ struct timer_data
     bool oneshot;
 };
 
-struct stream_data
+struct stream_buffer_data
 {
     pthread_cond_t cond;
     pthread_mutex_t mutex;

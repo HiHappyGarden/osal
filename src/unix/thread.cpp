@@ -54,14 +54,14 @@ public:
 bool thread::create(void* arg, class error** error) OS_NOEXCEPT
 {
 
-    uint32_t result;
+    uint32_t result = 0;
 
-    pthread_attr_t attr;
+    pthread_attr_t attr{0};
 
     pthread_attr_init (&attr);
     pthread_attr_setstacksize (&attr, PTHREAD_STACK_MIN + stack_size);
 
-#if defined(USE_SCHED_FIFO)
+#if defined(OS_USE_SCHED_FIFO)
     struct sched_param param = {.sched_priority = static_cast<int>(priority)};
     pthread_attr_setinheritsched (&attr, PTHREAD_EXPLICIT_SCHED);
     pthread_attr_setschedpolicy (&attr, SCHED_FIFO);
@@ -70,9 +70,7 @@ bool thread::create(void* arg, class error** error) OS_NOEXCEPT
     priority = 0;
 #endif
 
-    MyClass a;
-
-    result = pthread_create (&t, &attr, reinterpret_cast<void*(*)(void*) >(h), arg);
+    result = pthread_create (&t, &attr, h, arg);
     if(result && error)
     {
         switch (error_type(result))

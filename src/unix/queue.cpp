@@ -24,12 +24,13 @@ inline namespace v1
 {
 
 queue::queue(size_t size, size_t message_size, error** error) OS_NOEXCEPT
+    : buffer_size(size * message_size)
 {
     // kiwi_os_mbox_t * mbox;
     pthread_mutexattr_t mattr{0};
     pthread_condattr_t cattr{0};
 
-    q.msg = (uint8_t*)malloc (size * message_size);
+    q.msg = new uint8_t[buffer_size];
     if (q.msg == NULL)
     {
         if(error)
@@ -39,7 +40,7 @@ queue::queue(size_t size, size_t message_size, error** error) OS_NOEXCEPT
         }
         return;
     }
-    memset(q.msg, 0, size * message_size);
+    memset(q.msg, 0, buffer_size);
 
     pthread_condattr_init (&cattr);
     pthread_condattr_setclock (&cattr, CLOCK_MONOTONIC);
@@ -58,7 +59,18 @@ queue::queue(size_t size, size_t message_size, error** error) OS_NOEXCEPT
 
 queue::~queue() OS_NOEXCEPT
 {
+    pthread_cond_destroy (&q.cond);
+    pthread_mutex_destroy (&q.mutex);
 
+    if(q.msg)
+    {
+        for(size_t i = 0; i < buffer_size; i++)
+        {
+            q.msg[i] = 0;
+        }
+        delete[] q.msg;
+        q.msg = NULL;
+    }
 }
 
 bool queue::fetch(void *msg, uint64_t time, error** _error) OS_NOEXCEPT
@@ -281,6 +293,11 @@ inline bool queue::post_from_isr(const uint8_t *msg, uint64_t time, error** erro
     return post(msg, time, error);
 }
 
+size_t queue::size() const OS_NOEXCEPT
+{
+
+    return q.count;
+}
 
 }
 }

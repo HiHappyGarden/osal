@@ -124,7 +124,14 @@ public:
      */
     bool post_from_isr (const uint8_t* msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
+    /**
+     * @brief Return size of element insert
+     * @return number of element
+     */
+    size_t size () const OS_NOEXCEPT;
+
 private:
+    size_t buffer_size = 0;
     queue_data q{0}; ///< Internal data for the queue.
 };
 

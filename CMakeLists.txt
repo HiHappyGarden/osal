@@ -88,7 +88,7 @@ elseif(UNIX)
 endif()
 
 add_definitions(-DOS_NOEXCEPT=)
-add_definitions(-DUSE_SCHED_FIFO)
+#add_definitions(-DOS_USE_SCHED_FIFO)
 add_compile_options(-fno-rtti -fno-exceptions)
 #target_compile_options(${PROJECT_NAME} PUBLIC -fno-rtti -fno-exceptions)
 add_library(${PROJECT_NAME} STATIC ${OSAL_SOURCES} ${OSAL_INCLUDE})

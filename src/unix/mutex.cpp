@@ -28,7 +28,7 @@ inline namespace v1
 
 mutex::mutex(class error** error) OS_NOEXCEPT
 {
-    int32_t result;
+    int32_t result = 0;
     pthread_mutexattr_t mattr{0};
 
     pthread_mutexattr_init (&mattr);
