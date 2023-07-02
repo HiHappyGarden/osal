@@ -92,10 +92,7 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return true if the semaphore became available, false if the wait timed out or encountered an error.
      */
-    inline bool wait_from_isr(uint64_t time, error** error = nullptr) OS_NOEXCEPT
-    {
-        return wait(time, error);
-    }
+    bool wait_from_isr(uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
     /**
      * @brief Signals the semaphore.
@@ -110,10 +107,7 @@ public:
      * This function is an ISR (Interrupt Service Routine) version of the signal() function.
      * It has the same behavior as signal(), but it is meant to be called from an ISR context.
      */
-    inline void signal_from_isr() OS_NOEXCEPT
-    {
-        signal();
-    }
+    void signal_from_isr() OS_NOEXCEPT;
 
 private:
     semaphore_data sem; ///< Internal data for the semaphore.

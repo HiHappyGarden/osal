@@ -18,6 +18,12 @@
  ***************************************************************************/
 #pragma once
 
+#include "osal/error.hpp"
+#include "osal_sys/osal_sys.hpp"
+
+#include <stdlib.h>
+
+
 namespace osal
 {
 inline namespace v1
@@ -25,7 +31,44 @@ inline namespace v1
 
 class queue final
 {
+public:
+    queue(size_t size, size_t message_size, error** error = nullptr) OS_NOEXCEPT;
 
+    /**
+     * @brief Deleted copy constructor.
+     */
+    queue(const queue&) = delete;
+
+    /**
+     * @brief Deleted copy assignment operator.
+     */
+    queue& operator=(const queue&) = delete;
+
+    /**
+     * @brief Deleted move constructor.
+     */
+    queue(queue&&) = delete;
+
+    /**
+     * @brief Deleted move assignment operator.
+     */
+    queue& operator=(queue&&) = delete;
+
+    /**
+     * @brief Virtual destructor.
+     */
+    ~queue() OS_NOEXCEPT;
+
+    bool fetch (void * msg, uint64_t time, error** error) OS_NOEXCEPT;
+
+    bool fetch_from_isr (void * msg, uint64_t time, error** error) OS_NOEXCEPT;
+
+    bool post (const uint8_t* msg, uint64_t time, error** error) OS_NOEXCEPT;
+
+    bool post_from_isr (const uint8_t* msg, uint64_t time, error** error) OS_NOEXCEPT;
+
+private:
+    queue_data q{0};
 };
 
 }

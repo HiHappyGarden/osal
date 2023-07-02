@@ -66,7 +66,8 @@ struct queue_data
     size_t w;
     size_t count;
     size_t size;
-    void * msg[];
+    size_t message_size;
+    uint8_t* msg;
 };
 
 struct timer_data

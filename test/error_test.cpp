@@ -30,7 +30,7 @@ TEST(error_test, base)
     ASSERT_TRUE(strcmp(err->get_msg(), "test") == 0);
     ASSERT_TRUE(strcmp(err->get_file(), "error_test.cpp") == 0);
     ASSERT_TRUE(strcmp(err->get_func(), "TestBody") == 0);
-    ASSERT_TRUE(err->get_line() == 275);
+    ASSERT_TRUE(err->get_line() == 28);
 
     delete err;
 }

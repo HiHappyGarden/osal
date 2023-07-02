@@ -77,15 +77,19 @@ bool semaphore::wait(uint64_t time, error** _error) OS_NOEXCEPT
                     {
                     case error_type::OS_ETIMEDOUT:
                         *_error = OS_ERROR_BUILD("The time specified by abstime to pthread_cond_timedwait() has passed.", error_type::OS_ETIMEDOUT);
+                        OS_ERROR_PTR_SET_POSITION(*_error);
                         break;
                     case error_type::OS_EINVAL:
                         *_error = OS_ERROR_BUILD("The value specified by abstime is invalid.", error_type::OS_EINVAL);
+                        OS_ERROR_PTR_SET_POSITION(*_error);
                         break;
                     case error_type::OS_EPERM:
                         *_error = OS_ERROR_BUILD("The mutex was not owned by the current thread at the time of the call.", error_type::OS_EPERM);
+                        OS_ERROR_PTR_SET_POSITION(*_error);
                         break;
                     default:
                         *_error = OS_ERROR_BUILD("Unmanaged error", error);
+                        OS_ERROR_PTR_SET_POSITION(*_error);
                         break;
                     }
                 }
@@ -103,12 +107,15 @@ bool semaphore::wait(uint64_t time, error** _error) OS_NOEXCEPT
                     {
                     case error_type::OS_ETIMEDOUT:
                         *_error = OS_ERROR_BUILD("The time specified by abstime to pthread_cond_timedwait() has passed.", error_type::OS_ETIMEDOUT);
+                        OS_ERROR_PTR_SET_POSITION(*_error);
                         break;
                     case error_type::OS_EINVAL:
                         *_error = OS_ERROR_BUILD("The value specified by abstime is invalid.", error_type::OS_EINVAL);
+                        OS_ERROR_PTR_SET_POSITION(*_error);
                         break;
                     default:
                         *_error = OS_ERROR_BUILD("Unmanaged error", error);
+                        OS_ERROR_PTR_SET_POSITION(*_error);
                         break;
                     }
                 }
@@ -124,12 +131,22 @@ timeout:
     return (error == 0);
 }
 
+bool semaphore::wait_from_isr(uint64_t time, error **error) OS_NOEXCEPT
+{
+    return wait(time, error);
+}
+
 void semaphore::signal()
 {
     pthread_mutex_lock (&sem.mutex);
     sem.count++;
     pthread_mutex_unlock (&sem.mutex);
     pthread_cond_signal (&sem.cond);
+}
+
+void semaphore::signal_from_isr() OS_NOEXCEPT
+{
+    signal();
 }
 
 

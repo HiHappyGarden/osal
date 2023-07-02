@@ -47,6 +47,8 @@ void* thread_runtime(void * arg)
     sem->signal();
 
     SUCCEED();
+
+    return nullptr;
 }
 
 

@@ -80,10 +80,7 @@ public:
      *
      * This function is pure virtual and should be implemented by derived classes to lock the mutex.
      */
-    inline void lock_from_isr() OS_NOEXCEPT
-    {
-        lock();
-    }
+    void lock_from_isr() OS_NOEXCEPT;
 
     /**
      * @brief Unlocks the mutex.
@@ -97,10 +94,7 @@ public:
      *
      * This function is pure virtual and should be implemented by derived classes to unlock the mutex.
      */
-    inline void unlock_from_isr() OS_NOEXCEPT
-    {
-        unlock();
-    }
+    void unlock_from_isr() OS_NOEXCEPT;
 private:
     mutex_data m = {0};
 };
