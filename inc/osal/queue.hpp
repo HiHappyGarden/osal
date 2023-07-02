@@ -29,9 +29,22 @@ namespace osal
 inline namespace v1
 {
 
+/**
+ * @brief Final class for queues.
+ *
+ * This class provides a queue implementation.
+ * It is a final class, meaning it cannot be derived from.
+ */
 class queue final
 {
 public:
+    /**
+     * @brief Constructor.
+     *
+     * @param size The maximum number of messages that can be stored in the queue.
+     * @param message_size The size (in bytes) of each message in the queue.
+     * @param error Optional pointer to an error object to be populated in case of failure.
+     */
     queue(size_t size, size_t message_size, error** error = nullptr) OS_NOEXCEPT;
 
     /**
@@ -59,16 +72,60 @@ public:
      */
     ~queue() OS_NOEXCEPT;
 
-    bool fetch (void * msg, uint64_t time, error** error) OS_NOEXCEPT;
+    /**
+     * @brief Fetches a message from the queue.
+     *
+     * This function retrieves a message from the queue and stores it in the specified `msg` buffer.
+     * It blocks the caller until a message is available or until the specified time has elapsed.
+     *
+     * @param msg Pointer to the buffer where the fetched message will be stored.
+     * @param time The maximum time to wait for a message (in milliseconds).
+     * @param error Optional pointer to an error object to be populated in case of failure.
+     * @return true if a message was fetched successfully, false if the fetch timed out or encountered an error.
+     */
+    bool fetch (void * msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
-    bool fetch_from_isr (void * msg, uint64_t time, error** error) OS_NOEXCEPT;
+    /**
+     * @brief Fetches a message from the queue from an ISR.
+     *
+     * This function is an ISR (Interrupt Service Routine) version of the fetch() function.
+     * It has the same behavior as fetch(), but it is meant to be called from an ISR context.
+     *
+     * @param msg Pointer to the buffer where the fetched message will be stored.
+     * @param time The maximum time to wait for a message (in milliseconds).
+     * @param error Optional pointer to an error object to be populated in case of failure.
+     * @return true if a message was fetched successfully, false if the fetch timed out or encountered an error.
+     */
+    bool fetch_from_isr (void * msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
-    bool post (const uint8_t* msg, uint64_t time, error** error) OS_NOEXCEPT;
+    /**
+     * @brief Posts a message to the queue.
+     *
+     * This function posts a message to the queue.
+     * It blocks the caller until there is space available in the queue or until the specified time has elapsed.
+     *
+     * @param msg Pointer to the message to be posted.
+     * @param time The maximum time to wait for space in the queue (in milliseconds).
+     * @param error Optional pointer to an error object to be populated in case of failure.
+     * @return true if the message was posted successfully, false if the post timed out or encountered an error.
+     */
+    bool post (const uint8_t* msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
-    bool post_from_isr (const uint8_t* msg, uint64_t time, error** error) OS_NOEXCEPT;
+    /**
+     * @brief Posts a message to the queue from an ISR.
+     *
+     * This function is an ISR (Interrupt Service Routine) version of the post() function.
+     * It has the same behavior as post(), but it is meant to be called from an ISR context.
+     *
+     * @param msg Pointer to the message to be posted.
+     * @param time The maximum time to wait for space in the queue (in milliseconds).
+     * @param error Optional pointer to an error object to be populated in case of failure.
+     * @return true if the message was posted successfully, false if the post timed out or encountered an error.
+     */
+    bool post_from_isr (const uint8_t* msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
 private:
-    queue_data q{0};
+    queue_data q{0}; ///< Internal data for the queue.
 };
 
 }

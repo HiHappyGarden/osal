@@ -26,8 +26,8 @@ inline namespace v1
 queue::queue(size_t size, size_t message_size, error** error) OS_NOEXCEPT
 {
     // kiwi_os_mbox_t * mbox;
-    pthread_mutexattr_t mattr;
-    pthread_condattr_t cattr;
+    pthread_mutexattr_t mattr{0};
+    pthread_condattr_t cattr{0};
 
     q.msg = (uint8_t*)malloc (size * message_size);
     if (q.msg == NULL)
@@ -63,7 +63,7 @@ queue::~queue() OS_NOEXCEPT
 
 bool queue::fetch(void *msg, uint64_t time, error** _error) OS_NOEXCEPT
 {
-    struct timespec ts;
+    struct timespec ts{0};
     uint8_t error     = 0;
     uint64_t nsec = (uint64_t)time * 1'000'000;
 
@@ -183,7 +183,7 @@ inline bool queue::fetch_from_isr(void *msg, uint64_t time, error** error) OS_NO
 
 bool queue::post(const uint8_t *msg, uint64_t time, error** _error) OS_NOEXCEPT
 {
-    struct timespec ts;
+    struct timespec ts{0};
     uint8_t error     = 0;
     uint64_t nsec = (uint64_t)time * 1000 * 1000;
 

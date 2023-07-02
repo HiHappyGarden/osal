@@ -29,8 +29,8 @@ inline namespace v1
 semaphore::semaphore(size_t count) OS_NOEXCEPT
 {
 
-    pthread_mutexattr_t mattr;
-    pthread_condattr_t cattr;
+    pthread_mutexattr_t mattr{0};
+    pthread_condattr_t cattr{0};
 
     pthread_condattr_init (&cattr);
     pthread_condattr_setclock (&cattr, CLOCK_MONOTONIC);
@@ -49,7 +49,7 @@ semaphore::~semaphore()
 
 bool semaphore::wait(uint64_t time, error** _error) OS_NOEXCEPT
 {
-    struct timespec ts;
+    struct timespec ts{0};
     uint8_t error     = 0;
     uint64_t nsec = (uint64_t)time * 1'000'000;
 

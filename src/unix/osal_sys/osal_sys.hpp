@@ -95,19 +95,6 @@ struct stream_data
     uint8_t* buffer;
 };
 
-struct stream
-{
-    pthread_cond_t cond;
-    pthread_mutex_t mutex;
-    size_t trigger_size;
-    size_t r;
-    size_t w;
-    size_t end;
-    size_t count;
-    size_t size;
-    uint8_t* buffer;
-};
-
 using tick = uint64_t;
 
 

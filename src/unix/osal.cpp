@@ -40,7 +40,7 @@ constexpr T min(T a, T b)
 
 void us_sleep (uint64_t usec) OS_NOEXCEPT
 {
-    struct timespec ts;
+    struct timespec ts{0};
     struct timespec remain;
 
     ts.tv_sec  = usec / USECS_PER_SEC;
@@ -53,7 +53,7 @@ void us_sleep (uint64_t usec) OS_NOEXCEPT
 
 uint64_t get_current_time_us (void) OS_NOEXCEPT
 {
-    struct timespec ts;
+    struct timespec ts{0};
 
     clock_gettime (CLOCK_MONOTONIC, &ts);
     return ts.tv_sec * 1'000'000 + ts.tv_nsec / 1'000;
@@ -61,7 +61,7 @@ uint64_t get_current_time_us (void) OS_NOEXCEPT
 
 tick tick_current (void) OS_NOEXCEPT
 {
-    struct timespec ts;
+    struct timespec ts{0};
     tick       tick;
 
     clock_gettime (CLOCK_MONOTONIC, &ts);
@@ -78,7 +78,7 @@ tick tick_from_us (uint64_t us) OS_NOEXCEPT
 
 void tick_sleep (tick tick) OS_NOEXCEPT
 {
-    struct timespec ts;
+    struct timespec ts{0};
     struct timespec remain;
 
     ts.tv_sec  = tick / NSECS_PER_SEC;
