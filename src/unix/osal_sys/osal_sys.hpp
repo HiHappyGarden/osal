@@ -22,17 +22,6 @@
 #include <pthread.h>
 #include <time.h>
 
-
-#define OS_THREAD_DATA
-#define OS_MUTEX_DATA
-#define OS_SEM_DATA
-#define OS_EVENT_DATA
-#define OS_MBOX_DATA
-#define OS_TIMER_DATA
-#define OS_TICK_DATA
-#define OS_STREAM_DATA
-
-
 namespace osal
 {
 inline namespace v1
