@@ -72,7 +72,7 @@ inline namespace v1
             return;
         }
 
-        gettimeofday(&tv, NULL);
+        gettimeofday(&tv, nullptr);
 
         millisec = lrint(tv.tv_usec/1000.0); // Round to nearest millisec
 

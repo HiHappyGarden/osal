@@ -29,9 +29,11 @@
 #include "osal/mutex.hpp"
 #include "osal/queue.hpp"
 #include "osal/semaphore.hpp"
+#include "osal/streambuffer.hpp"
 #include "osal/string.hpp"
 #include "osal/thread.hpp"
 #include "osal/timer.hpp"
+#include "osal/types.hpp"
 
 
 namespace osal

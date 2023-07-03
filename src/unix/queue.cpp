@@ -31,7 +31,7 @@ queue::queue(size_t size, size_t message_size, error** error) OS_NOEXCEPT
     pthread_condattr_t cattr{0};
 
     q.msg = new uint8_t[buffer_size];
-    if (q.msg == NULL)
+    if (q.msg == nullptr)
     {
         if(error)
         {
@@ -69,7 +69,7 @@ queue::~queue() OS_NOEXCEPT
             q.msg[i] = 0;
         }
         delete[] q.msg;
-        q.msg = NULL;
+        q.msg = nullptr;
     }
 }
 
@@ -79,7 +79,7 @@ bool queue::fetch(void *msg, uint64_t time, error** _error) OS_NOEXCEPT
     uint8_t error     = 0;
     uint64_t nsec = (uint64_t)time * 1'000'000;
 
-    if(msg == NULL)
+    if(msg == nullptr)
     {
         if(error)
         {
