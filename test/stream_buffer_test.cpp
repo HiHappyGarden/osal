@@ -249,8 +249,8 @@ TEST(buffer_test, task_wait)
                        {
                            while(run)
                            {
-                               char buffer[12];
-                               stream.receive(reinterpret_cast<uint8_t*>(buffer), sizeof(buffer) - 1, os::WAIT_FOREVER);
+                               uint8_t buffer[12];
+                               stream.receive(buffer, sizeof(buffer), os::WAIT_FOREVER);
                                cout << "thread1" << endl;
                                run = false;
                                //ASSERT_EQ(count_bytes, 4);
@@ -267,7 +267,7 @@ TEST(buffer_test, task_wait)
                            while(run)
                            {
 
-                               stream.send(reinterpret_cast<const uint8_t*>(&count_bytes), 1, 0);
+                               stream.send(&count_bytes, 1, 0);
                                cout << "thread2: " << now() << endl;
 
                                count_bytes++;
@@ -275,7 +275,7 @@ TEST(buffer_test, task_wait)
                                {
                                    count_bytes = 0;
                                }
-                               os::tick_sleep(os::ms_to_us(200));
+                               os::tick_sleep(os::sec_to_us(1));
                            }
                            return nullptr;
                        }};

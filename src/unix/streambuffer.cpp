@@ -94,6 +94,11 @@ size_t stream_buffer::send(const uint8_t *data, size_t size, uint64_t time, erro
 
     if(sb.count == sb.size)
     {
+        if(_error)
+        {
+            *_error = OS_ERROR_BUILD("sb.count == sb.size", error_type::OS_EINVAL);
+            OS_ERROR_PTR_SET_POSITION(*_error);
+        }
         return false;
     }
 
@@ -109,11 +114,14 @@ size_t stream_buffer::send(const uint8_t *data, size_t size, uint64_t time, erro
     pthread_mutex_lock (&sb.mutex);
 
     size_t ret = sb.count;
+    bool check_cond_wait_init = false;
 
     while (sb.count == sb.size)
     {
         if (time != WAIT_FOREVER)
         {
+            check_cond_wait_init = true;
+
             error = pthread_cond_timedwait (&sb.cond, &sb.mutex, &ts);
             if (error)
             {
@@ -250,7 +258,7 @@ size_t stream_buffer::send(const uint8_t *data, size_t size, uint64_t time, erro
 
 timeout:
     pthread_mutex_unlock (&sb.mutex);
-    pthread_cond_signal (&sb.cond);
+    if(check_cond_wait_init) pthread_cond_signal (&sb.cond);
 
     //return (error == 0);
     return error ? 0 : sb.count - ret;
@@ -265,11 +273,16 @@ size_t stream_buffer::receive(uint8_t *data, size_t size, uint64_t time, error *
 {
     struct timespec ts{0};
     uint8_t error     = 0;
-    uint64_t nsec = (uint64_t)time * 1000 * 1000;
+    uint64_t nsec = (uint64_t)time * 1'000'000;
     size_t already_received = 0;
 
     if(data == nullptr)
     {
+        if(_error)
+        {
+            *_error = OS_ERROR_BUILD("Data nullptr", error_type::OS_EINVAL);
+            OS_ERROR_PTR_SET_POSITION(*_error);
+        }
         return false;
     }
 
@@ -285,10 +298,13 @@ size_t stream_buffer::receive(uint8_t *data, size_t size, uint64_t time, error *
 
     pthread_mutex_lock (&sb.mutex);
 
+    bool check_cond_wait_init = false;
     while (sb.count < sb.trigger_size)
     {
         if (time != WAIT_FOREVER)
         {
+            check_cond_wait_init = true;
+
             error = pthread_cond_timedwait (&sb.cond, &sb.mutex, &ts);
             if (error)
             {
@@ -455,7 +471,7 @@ size_t stream_buffer::receive(uint8_t *data, size_t size, uint64_t time, error *
 
 timeout:
     pthread_mutex_unlock (&sb.mutex);
-    pthread_cond_signal (&sb.cond);
+    if(check_cond_wait_init) pthread_cond_signal (&sb.cond);
 
     // return (error == 0);
     return error ? 0 : already_received;
