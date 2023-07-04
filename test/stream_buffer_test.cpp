@@ -238,7 +238,7 @@ string now() {
 
 namespace
 {
-os::stream_buffer stream(10, 1);
+os::stream_buffer stream(10, 4);
 uint8_t count_bytes = 0;
 bool run = true;
 }
@@ -290,7 +290,7 @@ TEST(buffer_test, task_wait)
 
     status = thread2.create(nullptr);
 
-     os::tick_sleep(os::sec_to_us(6));
+    for(uint32_t i = 0; i < 0xFFFFFFFF; i++);
 
     ASSERT_EQ(count_bytes, 4);
 }

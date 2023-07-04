@@ -60,11 +60,11 @@ inline namespace v1
     void log(const char *tag, uint8_t type, const char *fmt, ...) OS_NOEXCEPT
     {
         va_list list;
-        time_t rawtime;
-        struct tm timestruct;
-        struct timeval tv;
-        char timestamp[26];
-        uint32_t millisec;
+        time_t rawtime{0};
+        tm timestruct{0};
+        timeval tv{0};
+        char timestamp[26]{0};
+        uint32_t millisec{0};
         bool enable_print = false;
 
         if( !(log_level & LOG_STATE_ON) )

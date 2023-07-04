@@ -18,6 +18,10 @@
  ***************************************************************************/
 #pragma once
 
+
+#include "osal/error.hpp"
+#include "osal_sys/osal_sys.hpp"
+
 #include <stdint.h>
 
 namespace osal
@@ -25,7 +29,46 @@ namespace osal
 inline namespace v1
 {
 
-constexpr const uint8_t TIMER_PRIO = 30;
+class timer final
+{
+
+public:
+
+    /**
+     * @typedef handler
+     * @brief Function pointer type for the thread handler.
+     * @param arg The argument passed to the thread handler.
+     */
+    using handler = void* (*)(timer*, void*);
+
+    timer(uint64_t us, handler fn, bool oneshot = false) OS_NOEXCEPT;
+    timer(const timer&) = delete;
+    timer& operator = (const timer&) = delete;
+    timer(timer&&) = delete;
+    timer& operator = (timer&&) = delete;
+    ~timer() OS_NOEXCEPT;
+
+    bool create(void * arg = nullptr, error** error = nullptr) OS_NOEXCEPT;
+
+    void set(uint64_t us) OS_NOEXCEPT;
+
+    void start() OS_NOEXCEPT;
+
+    void start_from_isr() OS_NOEXCEPT;
+
+    void stop() OS_NOEXCEPT;
+
+    void stop_from_isr() OS_NOEXCEPT;
+
+private:
+    uint64_t us;
+    handler fn;
+    bool oneshot;
+
+    timer_data t;
+
+    friend void* timer_thread (void *);
+};
 
 
 }

@@ -75,7 +75,7 @@ queue::~queue() OS_NOEXCEPT
 
 bool queue::fetch(void *msg, uint64_t time, error** _error) OS_NOEXCEPT
 {
-    struct timespec ts{0};
+    timespec ts{0};
     uint8_t error     = 0;
     uint64_t nsec = (uint64_t)time * 1'000'000;
 
@@ -195,7 +195,7 @@ inline bool queue::fetch_from_isr(void *msg, uint64_t time, error** error) OS_NO
 
 bool queue::post(const uint8_t *msg, uint64_t time, error** _error) OS_NOEXCEPT
 {
-    struct timespec ts{0};
+    timespec ts{0};
     uint8_t error     = 0;
     uint64_t nsec = (uint64_t)time * 1000 * 1000;
 

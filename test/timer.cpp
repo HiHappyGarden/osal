@@ -20,4 +20,28 @@
 
 #include"osal/osal.hpp"
 
-#include <stdio.h>
+#include <string.h>
+
+static char args[] = "args 1";
+
+os::timer timer{1000
+                , [](auto timer, auto args) ->void*
+                {
+                    EXPECT_EQ(strcmp(static_cast<char *>(args), "args 1"), 0);
+                    return nullptr;
+                }
+};
+
+
+TEST(timer_test, single_timer)
+{
+
+    if(!timer.create(args))
+    {
+        OS_LOG_ERROR("TIMER", "ko");
+        FAIL();
+    }
+
+    timer.start();
+
+}

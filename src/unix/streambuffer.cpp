@@ -78,7 +78,7 @@ stream_buffer::~stream_buffer()
 
 size_t stream_buffer::send(const uint8_t *data, size_t size, uint64_t time, error** _error) OS_NOEXCEPT
 {
-    struct timespec ts{0};
+    timespec ts{0};
     uint8_t error     = 0;
     uint64_t nsec = (uint64_t)time * 1'000'000;
 
@@ -258,7 +258,7 @@ size_t stream_buffer::send(const uint8_t *data, size_t size, uint64_t time, erro
 
 timeout:
     pthread_mutex_unlock (&sb.mutex);
-    if(check_cond_wait_init) pthread_cond_signal (&sb.cond);
+    pthread_cond_signal (&sb.cond);
 
     //return (error == 0);
     return error ? 0 : sb.count - ret;
@@ -271,7 +271,7 @@ inline size_t stream_buffer::send_from_isr(const uint8_t *data, size_t size, uin
 
 size_t stream_buffer::receive(uint8_t *data, size_t size, uint64_t time, error **_error) OS_NOEXCEPT
 {
-    struct timespec ts{0};
+    timespec ts{0};
     uint8_t error     = 0;
     uint64_t nsec = (uint64_t)time * 1'000'000;
     size_t already_received = 0;
@@ -471,7 +471,7 @@ size_t stream_buffer::receive(uint8_t *data, size_t size, uint64_t time, error *
 
 timeout:
     pthread_mutex_unlock (&sb.mutex);
-    if(check_cond_wait_init) pthread_cond_signal (&sb.cond);
+    pthread_cond_signal (&sb.cond);
 
     // return (error == 0);
     return error ? 0 : already_received;

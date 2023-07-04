@@ -49,7 +49,7 @@ semaphore::~semaphore()
 
 bool semaphore::wait(uint64_t time, error** _error) OS_NOEXCEPT
 {
-    struct timespec ts{0};
+    timespec ts{0};
     uint8_t error     = 0;
     uint64_t nsec = (uint64_t)time * 1'000'000;
 

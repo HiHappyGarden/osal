@@ -62,7 +62,7 @@ bool thread::create(void* arg, class error** error) OS_NOEXCEPT
     pthread_attr_setstacksize (&attr, PTHREAD_STACK_MIN + stack_size);
 
 #if defined(OS_USE_SCHED_FIFO)
-    struct sched_param param = {.sched_priority = static_cast<int>(priority)};
+    sched_param param = {.sched_priority = static_cast<int>(priority)};
     pthread_attr_setinheritsched (&attr, PTHREAD_EXPLICIT_SCHED);
     pthread_attr_setschedpolicy (&attr, SCHED_FIFO);
     pthread_attr_setschedparam (&attr, &param);
@@ -108,7 +108,7 @@ bool thread::exit() OS_NOEXCEPT
     return true;
 }
 
-bool thread::join(error** error)
+bool thread::join(error** error) OS_NOEXCEPT
 {
     uint32_t result = pthread_join(t, nullptr);
     if(result && error)

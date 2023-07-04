@@ -59,17 +59,6 @@ struct queue_data
     uint8_t* msg;
 };
 
-struct timer_data
-{
-    timer_t timerid;
-    //thread* thread;
-    pid_t thread_id;
-    bool exit;
-    void (*fn) (class timer *, void*);
-    void * arg;
-    uint32_t us;
-    bool oneshot;
-};
 
 struct stream_buffer_data
 {
@@ -82,6 +71,19 @@ struct stream_buffer_data
     size_t count;
     size_t size;
     uint8_t* buffer;
+};
+
+
+struct timer_data
+{
+    timer_t timerid;
+    class thread* thread;
+    pid_t thread_id;
+    bool exit;
+    void* (*fn) (class timer*, void*);
+    void * arg;
+    uint32_t us;
+    bool oneshot;
 };
 
 using tick = uint64_t;
