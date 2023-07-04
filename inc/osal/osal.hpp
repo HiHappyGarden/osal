@@ -35,6 +35,7 @@
 #include "osal/timer.hpp"
 #include "osal/types.hpp"
 
+#include "osal/config.h"
 
 namespace osal
 {
