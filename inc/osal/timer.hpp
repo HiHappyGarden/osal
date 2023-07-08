@@ -29,48 +29,107 @@ namespace osal
 inline namespace v1
 {
 
+/**
+ * @brief Final class for timers.
+ *
+ * This class provides a timer implementation.
+ * It is a final class, meaning it cannot be derived from.
+ */
 class timer final
 {
-
 public:
-
     /**
-     * @typedef handler
-     * @brief Function pointer type for the thread handler.
-     * @param arg The argument passed to the thread handler.
+     * @brief Function pointer type for the timer handler.
+     *
+     * @param timer Pointer to the timer object.
+     * @param arg The argument passed to the timer handler.
      */
     using handler = void* (*)(timer*, void*);
 
+    /**
+     * @brief Constructor.
+     *
+     * @param us The time interval for the timer (in microseconds).
+     * @param fn The handler function to be called when the timer expires.
+     * @param oneshot Flag indicating whether the timer is a one-shot timer (default: false).
+     */
     timer(uint64_t us, handler fn, bool oneshot = false) OS_NOEXCEPT;
+
+    /**
+     * @brief Deleted copy constructor.
+     */
     timer(const timer&) = delete;
-    timer& operator = (const timer&) = delete;
+
+    /**
+     * @brief Deleted copy assignment operator.
+     */
+    timer& operator=(const timer&) = delete;
+
+    /**
+     * @brief Deleted move constructor.
+     */
     timer(timer&&) = delete;
-    timer& operator = (timer&&) = delete;
+
+    /**
+     * @brief Deleted move assignment operator.
+     */
+    timer& operator=(timer&&) = delete;
+
+    /**
+     * @brief Destructor.
+     */
     ~timer() OS_NOEXCEPT;
 
-    bool create(void * arg = nullptr, error** error = nullptr) OS_NOEXCEPT;
+    /**
+     * @brief Creates the timer.
+     *
+     * @param arg The argument to be passed to the timer handler.
+     * @param error Optional pointer to an error object to be populated in case of failure.
+     * @return `true` if the timer was created successfully, `false` otherwise.
+     */
+    bool create(void* arg = nullptr, error** error = nullptr) OS_NOEXCEPT;
 
+    /**
+     * @brief Sets the time interval for the timer.
+     *
+     * @param us The time interval for the timer (in microseconds).
+     */
     void set(uint64_t us) OS_NOEXCEPT;
 
+    /**
+     * @brief Starts the timer.
+     */
     void start() OS_NOEXCEPT;
 
+    /**
+     * @brief Starts the timer from an ISR.
+     *
+     * This function is an ISR (Interrupt Service Routine) version of the start() function.
+     * It has the same behavior as start(), but it is meant to be called from an ISR context.
+     */
     void start_from_isr() OS_NOEXCEPT;
 
+    /**
+     * @brief Stops the timer.
+     */
     void stop() OS_NOEXCEPT;
 
+    /**
+     * @brief Stops the timer from an ISR.
+     *
+     * This function is an ISR (Interrupt Service Routine) version of the stop() function.
+     * It has the same behavior as stop(), but it is meant to be called from an ISR context.
+     */
     void stop_from_isr() OS_NOEXCEPT;
 
 private:
-    uint64_t us;
-    handler fn;
-    bool oneshot;
+    uint64_t us;    ///< The time interval for the timer (in microseconds).
+    handler fn;     ///< The handler function to be called when the timer expires.
+    bool oneshot;   ///< Flag indicating whether the timer is a one-shot timer.
+    timer_data t;   ///< Internal data for the timer.
 
-    timer_data t;
-
-    friend void* timer_thread (void *);
+    friend void* timer_thread(void*);
 };
-
-
 }
 }
 
