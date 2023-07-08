@@ -1,8 +1,9 @@
-cmake_minimum_required(VERSION 3.16...3.18)
+cmake_minimum_required(VERSION 3.16...3.24)
 
 if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
     cmake_policy(SET CMP0135 NEW)
 endif()
+
 PROJECT(osal VERSION 0.5.1 LANGUAGES CXX C)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
