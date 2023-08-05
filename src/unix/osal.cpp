@@ -19,12 +19,28 @@
 #include "osal/osal.hpp"
 
 #include <time.h>
-
+#include <signal.h>
 
 namespace osal
 {
 inline namespace v1
 {
+
+namespace
+{
+    bool done = false;
+    int32_t check = 0;
+
+    void ctrl_c_handler(int n)
+    {
+        if (n == SIGINT)
+        {
+            done = true;
+        }
+    }
+
+}
+
 
 template<typename T>
 constexpr T max(T a, T b)
@@ -88,5 +104,25 @@ void tick_sleep (tick tick) OS_NOEXCEPT
         ts = remain;
     }
 }
+
+void start_main_loop() OS_NOEXCEPT
+{
+    signal(SIGINT, ctrl_c_handler);
+    while(!done) {
+
+        //blocking check
+        while (!done && !check)
+        {
+            sleep(1);
+        }
+        check = 0;
+    }
+}
+
+void stop_main_loop() OS_NOEXCEPT
+{
+    check = 0;
+}
+
 }
 }

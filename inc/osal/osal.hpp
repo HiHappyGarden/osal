@@ -77,6 +77,10 @@ tick tick_from_us(uint64_t us) OS_NOEXCEPT;
   **/
 void tick_sleep(tick tick) OS_NOEXCEPT;
 
+void start_main_loop() OS_NOEXCEPT;
+
+void stop_main_loop() OS_NOEXCEPT;
+
 }
 }
 
