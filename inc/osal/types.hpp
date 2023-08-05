@@ -21,6 +21,12 @@
 
 #include <stdint.h>
 
+#define OS_NO_MOE_NO_COPY(clazz) \
+clazz(const clazz&) = delete; \
+clazz& operator=(const clazz&) = delete; \
+clazz(clazz&&) = delete; \
+clazz& operator=(clazz&&) = delete;
+
 namespace osal
 {
 inline namespace v1
