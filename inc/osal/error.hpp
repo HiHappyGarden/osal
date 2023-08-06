@@ -291,7 +291,7 @@ public:
 template<typename... Args>
 constexpr inline void printf_stack_error(const char* app_tag, const error &e, Args... args) OS_NOEXCEPT
 {
-    printf_stack_error(e, "", args...);
+    printf_stack_error(app_tag, e, "", args...);
 }
 
 /**

@@ -60,3 +60,9 @@ TEST(log_test, disable_log)
     OS_LOG_FATAL(APP_TAG, "fatal");
     os::reset_log_color();
 }
+
+TEST(log_test, builder)
+{
+    osal::error* error;
+
+}

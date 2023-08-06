@@ -20,6 +20,7 @@
 
 #include"osal/osal.hpp"
 
+constexpr const char APP_TAG[]  = "ERROR TEST";
 
 TEST(error_test, base)
 {
@@ -30,7 +31,7 @@ TEST(error_test, base)
     ASSERT_TRUE(strcmp(err->get_msg(), "test") == 0);
     ASSERT_TRUE(strcmp(err->get_file(), "error_test.cpp") == 0);
     ASSERT_TRUE(strcmp(err->get_func(), "TestBody") == 0);
-    ASSERT_TRUE(err->get_line() == 28);
+    ASSERT_TRUE(err->get_line() == 29);
 
     delete err;
 }
@@ -44,7 +45,7 @@ TEST(error_test, old_error)
 
     os::error err(*old, "test",30, osal::get_file_name(__FILE__), __FUNCTION__, __LINE__);
 
-    os::printf_stack_error(err);
+    os::printf_stack_error(APP_TAG, err);
 
 
     delete old;

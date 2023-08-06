@@ -85,7 +85,7 @@ inline namespace v1
             if(log_level & (LEVEL_DEBUG))
             {
                 enable_print = true;
-                printf (OS_ANSI_COLOR_BLUE "%s.%03d %s - DEBUG: ", timestamp, millisec, tag);
+                printf (OS_ANSI_COLOR_CYAN "%s.%03d %s - DEBUG: ", timestamp, millisec, tag);
             }
             break;
         case LEVEL_INFO:
@@ -99,7 +99,7 @@ inline namespace v1
             if(log_level & (LEVEL_DEBUG|LEVEL_INFO|LEVEL_WARNING))
             {
                 enable_print = true;
-                printf (OS_ANSI_COLOR_CYAN "%s.%03d %s - WARN : ", timestamp, millisec, tag);
+                printf (OS_ANSI_COLOR_YELLOW "%s.%03d %s - WARN : ", timestamp, millisec, tag);
             }
             break;
         case LEVEL_ERROR:

@@ -27,6 +27,8 @@ int shared_value = 0;
 // Mutex to synchronize access to shared_value
 os::mutex mutex;
 
+constexpr const char APP_TAG[]  = "MUTEX TEST";
+
 // Function to be executed by the threads
 void* thread_function(void*)
 {
@@ -60,7 +62,7 @@ TEST(thread_test, increment_test)
 
         if(threads[i]->create(nullptr, &e))
         {
-            os::printf_stack_error(e);
+            os::printf_stack_error(APP_TAG, e);
         }
     }
 
