@@ -57,7 +57,7 @@ inline namespace v1
         return (get_level_log(type) >= log_level) && (type & LOG_STATE_ON);
     }
 
-    void log(const char *tag, uint8_t type, const char *fmt, ...) OS_NOEXCEPT
+    void log(const char* tag, uint8_t type, const char* fmt, ...) OS_NOEXCEPT
     {
         va_list list;
         time_t rawtime{0};

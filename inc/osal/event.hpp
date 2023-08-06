@@ -57,9 +57,9 @@ public:
      */
     ~event() OS_NOEXCEPT;
 
-    bool wait (uint32_t mask, uint32_t * value, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    bool wait (uint32_t mask, uint32_t* value, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
-    bool wait_from_isr (uint32_t mask, uint32_t * value, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    bool wait_from_isr (uint32_t mask, uint32_t* value, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
     void set (uint32_t value) OS_NOEXCEPT;
 

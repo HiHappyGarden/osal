@@ -81,7 +81,7 @@ struct timer_data
     pid_t thread_id;
     bool exit;
     void* (*fn) (class timer*, void*);
-    void * arg;
+    void* arg;
     uint32_t us;
     bool oneshot;
 };

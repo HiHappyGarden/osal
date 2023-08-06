@@ -28,16 +28,20 @@ inline namespace v1
 
 namespace
 {
-    bool done = false;
-    int32_t check = 0;
 
-    void ctrl_c_handler(int n)
+uint8_t main_loop_sleep = 1;
+
+bool main_loop_started = false;
+bool done = false;
+bool check = false;
+
+void ctrl_c_handler(int n)
+{
+    if (n == SIGINT)
     {
-        if (n == SIGINT)
-        {
-            done = true;
-        }
+        done = true;
     }
+}
 
 }
 
@@ -94,35 +98,77 @@ tick tick_from_us (uint64_t us) OS_NOEXCEPT
 
 void tick_sleep (tick tick) OS_NOEXCEPT
 {
-    timespec ts{0};
-    timespec remain{0};
-
-    ts.tv_sec  = tick / NSECS_PER_SEC;
-    ts.tv_nsec = tick % NSECS_PER_SEC;
-    while (clock_nanosleep (CLOCK_MONOTONIC, 0, &ts, &remain) != 0)
+    if(!main_loop_started)
     {
-        ts = remain;
+        timespec ts{0};
+        timespec remain{0};
+
+        ts.tv_sec  = tick / NSECS_PER_SEC;
+        ts.tv_nsec = tick % NSECS_PER_SEC;
+        while (clock_nanosleep (CLOCK_MONOTONIC, 0, &ts, &remain) != 0)
+        {
+            ts = remain;
+        }
     }
+    else
+    {
+        osal::tick counter = 0;
+        while(!done && (counter < tick))
+        {
+
+            //blocking check
+            while (!done && !check && (counter < tick))
+            {
+                sleep(main_loop_sleep);
+                counter += main_loop_sleep;
+            }
+            check = false;
+        }
+        main_loop_started = false;
+        done = false;
+    }
+
+}
+
+void set_sleep_main_loop(uint16_t sleep_timing) OS_NOEXCEPT
+{
+    main_loop_sleep = sleep_timing;
+}
+
+uint16_t get_sleep_main_loop() OS_NOEXCEPT
+{
+    return main_loop_sleep;
+}
+
+void set_check_main_loop(bool check) OS_NOEXCEPT
+{
+    osal::check = check;
 }
 
 void start_main_loop() OS_NOEXCEPT
 {
+    main_loop_started = true;
     signal(SIGINT, ctrl_c_handler);
-    while(!done) {
+    while(!done)
+    {
 
         //blocking check
         while (!done && !check)
         {
-            sleep(1);
+            sleep(main_loop_sleep);
         }
-        check = 0;
+        check = false;
     }
+    main_loop_started = false;
+    done = false;
 }
 
 void stop_main_loop() OS_NOEXCEPT
 {
-    check = 0;
+    done = true;
 }
+
+
 
 }
 }

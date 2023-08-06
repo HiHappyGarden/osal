@@ -83,7 +83,7 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return true if a message was fetched successfully, false if the fetch timed out or encountered an error.
      */
-    bool fetch (void * msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    bool fetch (void* msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
     /**
      * @brief Fetches a message from the queue from an ISR.
@@ -96,7 +96,7 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return true if a message was fetched successfully, false if the fetch timed out or encountered an error.
      */
-    bool fetch_from_isr (void * msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    bool fetch_from_isr (void* msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
     /**
      * @brief Posts a message to the queue.

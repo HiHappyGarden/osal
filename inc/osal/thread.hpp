@@ -51,7 +51,7 @@ public:
      */
     using handler = void* (*)(void* arg);
 
-    thread(const char *name, uint32_t priority, size_t stack_size, handler handler) OS_NOEXCEPT;
+    thread(const char* name, uint32_t priority, size_t stack_size, handler handler) OS_NOEXCEPT;
     thread(const thread&) = delete;
     thread& operator = (const thread&) = delete;
     thread(thread&&) = delete;

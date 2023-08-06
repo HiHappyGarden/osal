@@ -77,8 +77,45 @@ tick tick_from_us(uint64_t us) OS_NOEXCEPT;
   **/
 void tick_sleep(tick tick) OS_NOEXCEPT;
 
+/**
+ * @brief Sets the main loop to sleep mode.
+ *
+ * This function sets the main loop to sleep mode, where the main application logic will be suspended or put into a low-power state.
+ * The main loop will remain in the sleep mode for the specified sleep timing, after which it will resume normal execution.
+ *
+ * @param sleep_timing The time duration (in milliseconds) for the main loop to remain in sleep mode.
+ */
+void set_sleep_main_loop(uint16_t sleep_timing) OS_NOEXCEPT;
+
+/**
+ * @brief Gets the sleep mode timing of the main loop.
+ *
+ * This function retrieves the sleep mode timing value that was previously set for the main loop.
+ *
+ * @return The time duration (in milliseconds) for the main loop to remain in sleep mode.
+ */
+uint16_t get_sleep_main_loop() OS_NOEXCEPT;
+
+/**
+ * @brief Set this valie permit to exape onlyone temporization in main loop
+ * @param check
+ */
+void set_check_main_loop(bool check) OS_NOEXCEPT;
+
+/**
+ * @brief Starts the main loop.
+ *
+ * This function starts the main loop, which is responsible for the continuous execution of the main application logic.
+ * The main loop will run until it is explicitly stopped or an exception occurs.
+ */
 void start_main_loop() OS_NOEXCEPT;
 
+/**
+ * @brief Stops the main loop.
+ *
+ * This function stops the main loop, which terminates the continuous execution of the main application logic.
+ * After calling this function, the main loop will exit and the application will be in a stopped state.
+ */
 void stop_main_loop() OS_NOEXCEPT;
 
 }

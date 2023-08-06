@@ -25,7 +25,7 @@ namespace osal
 inline namespace v1
 {
 
-    inline error::error(const char *msg, uint8_t code, const char *file, const char *func, uint32_t line) OS_NOEXCEPT
+    inline error::error(const char* msg, uint8_t code, const char* file, const char* func, uint32_t line) OS_NOEXCEPT
         : code(code)
         , line(line)
     {
@@ -64,7 +64,7 @@ inline namespace v1
         this->old_error = new error(old_error);
     }
 
-    void error::set_position(const char *file, const char *func, uint32_t line) OS_NOEXCEPT
+    void error::set_position(const char* file, const char* func, uint32_t line) OS_NOEXCEPT
     {
         strncpy(&this->file[0], file, sizeof(this->file));
         strncpy(&this->func[0], func, sizeof(this->func));

@@ -73,7 +73,7 @@ queue::~queue() OS_NOEXCEPT
     }
 }
 
-bool queue::fetch(void *msg, uint64_t time, error** _error) OS_NOEXCEPT
+bool queue::fetch(void* msg, uint64_t time, error** _error) OS_NOEXCEPT
 {
     timespec ts{0};
     uint8_t error     = 0;
@@ -188,12 +188,12 @@ timeout:
     return (error == 0);
 }
 
-inline bool queue::fetch_from_isr(void *msg, uint64_t time, error** error) OS_NOEXCEPT
+inline bool queue::fetch_from_isr(void* msg, uint64_t time, error** error) OS_NOEXCEPT
 {
     return fetch(msg, time, error);
 }
 
-bool queue::post(const uint8_t *msg, uint64_t time, error** _error) OS_NOEXCEPT
+bool queue::post(const uint8_t* msg, uint64_t time, error** _error) OS_NOEXCEPT
 {
     timespec ts{0};
     uint8_t error     = 0;
@@ -288,7 +288,7 @@ timeout:
 
 }
 
-inline bool queue::post_from_isr(const uint8_t *msg, uint64_t time, error** error) OS_NOEXCEPT
+inline bool queue::post_from_isr(const uint8_t* msg, uint64_t time, error** error) OS_NOEXCEPT
 {
     return post(msg, time, error);
 }
