@@ -17,8 +17,11 @@
  *
  ***************************************************************************/
 #include "osal/error.hpp"
+#include "osal/log.hpp"
 #include <stdio.h>
-
+//#include <time.h>
+//#include <sys/time.h>
+//#include <math.h>
 
 namespace osal
 {
@@ -72,7 +75,7 @@ inline namespace v1
     }
 
 
-    void printf_stack_error(const error &e, const char* fmt, ...)
+    void printf_stack_error(const char* app_tag, const error &e, const char* fmt, ...)
     {
         if(fmt && strlen(fmt))
         {
@@ -83,12 +86,16 @@ inline namespace v1
             va_end (list);
         }
 
+        char row[256];
+        memset(row, '\0', sizeof(row));
+
         uint16_t count = 0;
         const error *ptr = &e;
         while(ptr)
         {
             count++;
-            printf("%u. msg:%s code:%d (%s::%s(line: %u))\n", count, ptr->msg, ptr->code, ptr->file, ptr->func, ptr->line);
+            snprintf(row, sizeof(row), "%u. msg:%s code:%d (%s::%s line:%u)\n", count, ptr->msg, ptr->code, ptr->file, ptr->func, ptr->line);
+            OS_LOG_ERROR(app_tag, "%s", row);
             ptr = ptr->old_error;
         }
         fflush(stdout);

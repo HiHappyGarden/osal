@@ -20,7 +20,6 @@
 
 #include <math.h>
 #include <time.h>
-#include <time.h>
 #include <sys/time.h>
 
 
@@ -28,7 +27,7 @@ namespace osal
 {
 inline namespace v1
 {
-    uint8_t log_level = LEVEL_FATAL | LOG_STATE_ON;
+    uint8_t log_level = LEVEL_DEBUG | LOG_STATE_ON;
 
     void set_level_log(uint8_t t) OS_NOEXCEPT
     {
@@ -86,35 +85,35 @@ inline namespace v1
             if(log_level & (LEVEL_DEBUG))
             {
                 enable_print = true;
-                printf (OS_ANSI_COLOR_BLUE "[%s.%03d DEBUG] ", timestamp, millisec);
+                printf (OS_ANSI_COLOR_BLUE "%s.%03d %s - DEBUG: ", timestamp, millisec, tag);
             }
             break;
         case LEVEL_INFO:
             if(log_level & (LEVEL_DEBUG|LEVEL_INFO))
             {
                 enable_print = true;
-                printf (OS_ANSI_COLOR_GREEN "[%s.%03d INFO ] ", timestamp, millisec);
+                printf (OS_ANSI_COLOR_GREEN "%s.%03d %s - INFO : ", timestamp, millisec, tag);
             }
             break;
         case LEVEL_WARNING:
             if(log_level & (LEVEL_DEBUG|LEVEL_INFO|LEVEL_WARNING))
             {
                 enable_print = true;
-                printf (OS_ANSI_COLOR_CYAN "[%s.%03d WARN ] ", timestamp, millisec);
+                printf (OS_ANSI_COLOR_CYAN "%s.%03d %s - WARN : ", timestamp, millisec, tag);
             }
             break;
         case LEVEL_ERROR:
             if(log_level & (LEVEL_DEBUG|LEVEL_INFO|LEVEL_WARNING|LEVEL_ERROR))
             {
                 enable_print = true;
-                printf (OS_ANSI_COLOR_RED "[%s.%03d ERROR] ", timestamp, millisec);
+                printf (OS_ANSI_COLOR_RED "%s.%03d %s - ERROR: ", timestamp, millisec, tag);
             }
             break;
         case LEVEL_FATAL:
             if(log_level & (LEVEL_DEBUG|LEVEL_INFO|LEVEL_WARNING|LEVEL_ERROR|LEVEL_FATAL))
             {
                 enable_print = true;
-                printf (OS_ANSI_COLOR_MAGENTA "[%s.%03d FATAL] ", timestamp, millisec);
+                printf (OS_ANSI_COLOR_MAGENTA "%s.%03d %s - FATAL: ", timestamp, millisec, tag);
             }
             break;
         default:

@@ -60,32 +60,32 @@ inline namespace v1
 /**
  * @brief Debug log level.
  */
-constexpr inline const uint8_t LEVEL_DEBUG   = 0x00;
+constexpr inline const uint8_t LEVEL_DEBUG   = 0x01;
 
 /**
  * @brief Info log level.
  */
-constexpr inline const uint8_t LEVEL_INFO    = 0x01;
+constexpr inline const uint8_t LEVEL_INFO    = 0x02;
 
 /**
  * @brief Warning log level.
  */
-constexpr inline const uint8_t LEVEL_WARNING = 0x02;
+constexpr inline const uint8_t LEVEL_WARNING = 0x04;
 
 /**
  * @brief Error log level.
  */
-constexpr inline const uint8_t LEVEL_ERROR   = 0x03;
+constexpr inline const uint8_t LEVEL_ERROR   = 0x08;
 
 /**
  * @brief Fatal log level.
  */
-constexpr inline const uint8_t LEVEL_FATAL   = 0x04;
+constexpr inline const uint8_t LEVEL_FATAL   = 0x10;
 
 /**
  * @brief Log level mask.
  */
-constexpr inline const uint8_t LEVEL_MASK    = 0x0F;
+constexpr inline const uint8_t LEVEL_MASK    = 0x1F;
 
 /**
  * @brief Log state when enabled.

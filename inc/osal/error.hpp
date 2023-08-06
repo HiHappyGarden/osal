@@ -110,7 +110,7 @@ class error final
     uint32_t line = 0;              ///< The line number where the error occurred.
     osal::error* old_error = nullptr;  ///< Pointer to the previous error.
 
-    friend void printf_stack_error(const error &e, const char* fmt, ...) OS_NOEXCEPT;
+    friend void printf_stack_error(const char* app_tag, const error &e, const char* fmt, ...) OS_NOEXCEPT;
 
 public:
     /**
@@ -289,7 +289,7 @@ public:
  * @param args The additional arguments for formatting the error message.
  */
 template<typename... Args>
-constexpr inline void printf_stack_error(const error &e, Args... args) OS_NOEXCEPT
+constexpr inline void printf_stack_error(const char* app_tag, const error &e, Args... args) OS_NOEXCEPT
 {
     printf_stack_error(e, "", args...);
 }
@@ -309,9 +309,9 @@ constexpr inline void printf_stack_error(const error &e, Args... args) OS_NOEXCE
  * @param args The additional arguments for formatting the error message.
  */
 template<typename... Args>
-constexpr inline void printf_stack_error(error &&e, const char* fmt = nullptr, Args... args) OS_NOEXCEPT
+constexpr inline void printf_stack_error(const char* app_tag, error &&e, const char* fmt = nullptr, Args... args) OS_NOEXCEPT
 {
-    printf_stack_error(e, fmt, args...);
+    printf_stack_error(app_tag, e, fmt, args...);
 }
 
 /**
@@ -329,9 +329,9 @@ constexpr inline void printf_stack_error(error &&e, const char* fmt = nullptr, A
  * @param args The additional arguments for formatting the error message.
  */
 template<typename... Args>
-constexpr inline void printf_stack_error(const error* e, const char* fmt = nullptr, Args... args) OS_NOEXCEPT
+constexpr inline void printf_stack_error(const char* app_tag, const error* e, const char* fmt = nullptr, Args... args) OS_NOEXCEPT
 {
-    printf_stack_error(*e, fmt, args...);
+    printf_stack_error(app_tag, *e, fmt, args...);
 }
 
 
