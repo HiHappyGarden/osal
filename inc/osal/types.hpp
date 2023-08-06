@@ -21,7 +21,7 @@
 
 #include <stdint.h>
 
-#define OS_NO_MOE_NO_COPY(clazz) \
+#define OS_NO_COPY_NO_MOVE(clazz) \
 clazz(const clazz&) = delete; \
 clazz& operator=(const clazz&) = delete; \
 clazz(clazz&&) = delete; \
