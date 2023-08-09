@@ -27,6 +27,8 @@ clazz& operator=(const clazz&) = delete; \
 clazz(clazz&&) = delete; \
 clazz& operator=(clazz&&) = delete;
 
+#define OS_TO_STR(str) #str
+
 namespace osal
 {
 inline namespace v1
