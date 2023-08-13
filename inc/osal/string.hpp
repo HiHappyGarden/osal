@@ -113,6 +113,12 @@ public:
         return data;
     }
 
+    constexpr inline void clear() OS_NOEXCEPT
+    {
+        memset(&data, '\0', sizeof(data));
+        data_length = 0;
+    }
+
     /**
      * @brief Concatenates the current string with a char.
      *
