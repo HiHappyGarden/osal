@@ -36,6 +36,7 @@ class string
 {
     char data[Size]{};          ///< The character data storage.
     size_t data_length{0};      ///< The current length of the string.
+    static inline char str_terminator = '\0';
 public:
     /**
      * @brief Default constructor.
@@ -103,6 +104,36 @@ public:
     }
 
     /**
+     * @brief Returns a pointer to the C-style string representation.
+     *
+     * @return A pointer to the C-style string representation of the string.
+     */
+    constexpr inline char* c_str() OS_NOEXCEPT
+    {
+        return data;
+    }
+
+    /**
+     * @brief Concatenates the current string with a char.
+     *
+     * This function concatenates the current string with a char.
+     *
+     * @tparam SizeB The size of the character array to be concatenated.
+     * @param c The character to concatenate.
+     * @return A reference to the modified string.
+     */
+    template <size_t SizeB>
+    constexpr string<Size>&operator+(char c) OS_NOEXCEPT
+    {
+        if(data_length + 1 <= size())
+        {
+            data[data_length] = c;
+            data_length++;
+        }
+        return *this;
+    }
+
+    /**
      * @brief Concatenates the current string with a fixed-size character array.
      *
      * This function concatenates the current string with the provided character array.
@@ -141,6 +172,21 @@ public:
     constexpr inline string<Size> operator+(char(&&b)[SizeB]) OS_NOEXCEPT
     {
         return (*this) + b;
+    }
+
+    /**
+     * @brief Appends a character array to the current string.
+     *
+     * This function appends the provided character array to the current string.
+     *
+     * @tparam SizeB The size of the character array to be appended.
+     * @param b The character array to append.
+     * @return A reference to the modified string.
+     */
+    template <size_t SizeB>
+    constexpr inline string<Size>& operator+=(char c) OS_NOEXCEPT
+    {
+        return (*this) + c;
     }
 
     /**
@@ -297,13 +343,15 @@ public:
      * @param idx The index of the character to access.
      * @return A pointer to the character at the specified index, or nullptr if the index is out of bounds.
      */
-    constexpr char* operator[](size_t idx) OS_NOEXCEPT
+    constexpr char& operator[](size_t idx) OS_NOEXCEPT
     {
+
         if(idx >= data_length)
         {
-            return nullptr;
+            str_terminator = '\0';
+            return str_terminator;
         }
-        return &data[idx];
+        return data[idx];
     }
 
     /**
@@ -314,13 +362,15 @@ public:
      * @param idx The index of the character to access.
      * @return A pointer to the character at the specified index, or nullptr if the index is out of bounds.
      */
-    constexpr const char* operator[](size_t idx) const OS_NOEXCEPT
+    constexpr const char& operator[](size_t idx) const OS_NOEXCEPT
     {
+
         if(idx >= data_length)
         {
-            return nullptr;
+            str_terminator = '\0';
+            return str_terminator;
         }
-        return &data[idx];
+        return data[idx];
     }
 
     /**
