@@ -37,6 +37,11 @@
 
 #include "osal/config.h"
 
+#if !defined(RTTI_ENABLED)
+#define dynamic_cast static_cast
+#endif
+
+
 namespace osal
 {
 
