@@ -172,7 +172,40 @@ public:
     template <size_t SizeB>
     constexpr inline string<Size> operator+(char(&&b)[SizeB]) OS_NOEXCEPT
     {
-        return string<Size>{*this} + b;
+        return (string<Size>{*this} + b);
+    }
+
+    /**
+     * @brief Operator to concatenate a C-style string to the string.
+     *
+     * @param b The C-style string to concatenate.
+     * @return A reference to the modified string.
+     */
+    constexpr string<Size>& operator+(const char* b) OS_NOEXCEPT
+    {
+        size_t size_b = strnlen(b, Size);
+        if(data_length + size_b <= size())
+        {
+            strncpy(data + data_length, b, Size - 1);
+            data_length += size_b;
+        }
+        else
+        {
+            strncpy(data + data_length, b, size() - length());
+            data_length = size();
+        }
+        return *this;
+    }
+
+    /**
+     * @brief Operator to concatenate a C-style string to the string (compound assignment version).
+     *
+     * @param b The C-style string to concatenate.
+     * @return A reference to the modified string.
+     */
+    constexpr inline string<Size>& operator+=(const char* b) OS_NOEXCEPT
+    {
+        return ((*this) + b);
     }
 
     /**
@@ -186,7 +219,12 @@ public:
      */
     constexpr inline string<Size>& operator+=(char c) OS_NOEXCEPT
     {
-        return (*this) + c;
+        if(data_length + 1 <= size())
+        {
+            data[data_length] = c;
+            data_length++;
+        }
+        return *this;
     }
 
     /**
@@ -201,7 +239,7 @@ public:
     template <size_t SizeB>
     constexpr inline string<Size>& operator+=(char(&&b)[SizeB]) OS_NOEXCEPT
     {
-        return (*this) + b;
+        return ((*this) + b);
     }
 
     /**
@@ -216,7 +254,7 @@ public:
     template <size_t SizeB>
     constexpr inline string<Size>& operator+=(const char(&b)[SizeB]) OS_NOEXCEPT
     {
-        return (*this) + b;
+        return ((*this) + b);
     }
 
     /**
@@ -244,6 +282,19 @@ public:
      */
     template <size_t SizeB>
     constexpr inline bool operator==(const char(&b)[SizeB]) OS_NOEXCEPT
+    {
+        return strncmp(data, b, size()) == 0;
+    }
+
+    /**
+     * @brief Equality operator with a C-style string.
+     *
+     * This operator checks if the current string is equal to a C-style string.
+     *
+     * @param b The C-style string to compare with.
+     * @return true if the strings are equal, false otherwise.
+     */
+    constexpr inline bool operator==(const char* b) OS_NOEXCEPT
     {
         return strncmp(data, b, size()) == 0;
     }
@@ -277,52 +328,6 @@ public:
     }
 
     /**
-     * @brief Operator to concatenate a C-style string to the string.
-     *
-     * @param b The C-style string to concatenate.
-     * @return A reference to the modified string.
-     */
-    constexpr string<Size>& operator+(const char* b) OS_NOEXCEPT
-    {
-        size_t size_b = strnlen(b, Size);
-        if(data_length + size_b <= size())
-        {
-            strncpy(data + data_length, b, Size - 1);
-            data_length += size_b;
-        }
-        else
-        {
-            strncpy(data + data_length, b, size() - length());
-            data_length = size();
-        }
-        return *this;
-    }
-
-    /**
-     * @brief Operator to concatenate a C-style string to the string (compound assignment version).
-     *
-     * @param b The C-style string to concatenate.
-     * @return A reference to the modified string.
-     */
-    constexpr inline string<Size>& operator+=(const char* b) OS_NOEXCEPT
-    {
-        return (*this) + b;
-    }
-
-    /**
-     * @brief Equality operator with a C-style string.
-     *
-     * This operator checks if the current string is equal to a C-style string.
-     *
-     * @param b The C-style string to compare with.
-     * @return true if the strings are equal, false otherwise.
-     */
-    constexpr inline bool operator==(const char* b) OS_NOEXCEPT
-    {
-        return strncmp(data, b, size()) == 0;
-    }
-
-    /**
      * @brief Inequality operator with a C-style string.
      *
      * This operator checks if the current string is not equal to a C-style string.
@@ -334,6 +339,7 @@ public:
     {
         return strncmp(data, b, size()) != 0;
     }
+
 
     /**
      * @brief Indexing operator to access characters of the string.
