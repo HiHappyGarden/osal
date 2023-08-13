@@ -122,15 +122,15 @@ public:
      * @param c The character to concatenate.
      * @return A reference to the modified string.
      */
-    template <size_t SizeB>
     constexpr string<Size>&operator+(char c) OS_NOEXCEPT
     {
-        if(data_length + 1 <= size())
+        string<Size> ret = *this;
+        if(ret.data_length + 1 <= ret.size())
         {
-            data[data_length] = c;
-            data_length++;
+            ret.data[data_length] = c;
+            ret.data_length++;
         }
-        return *this;
+        return ret;
     }
 
     /**
@@ -145,18 +145,19 @@ public:
     template <size_t SizeB>
     constexpr string<Size>&operator+(const char(&b)[SizeB]) OS_NOEXCEPT
     {
+        string<Size> ret = *this;
         size_t size_b = strnlen(b, SizeB);
-        if(data_length + size_b <= size())
+        if(ret.data_length + size_b <= ret.size())
         {
-            strncpy(data + data_length, b, Size - 1);
-            data_length += size_b;
+            strncpy(ret.data + ret.data_length, b, Size - 1);
+            ret.data_length += size_b;
         }
         else
         {
-            strncpy(data + data_length, b, size() - length());
-            data_length = size();
+            strncpy(ret.data + ret.data_length, b, ret.size() - length());
+            ret.data_length = ret.size();
         }
-        return *this;
+        return ret;
     }
 
     /**
@@ -171,7 +172,7 @@ public:
     template <size_t SizeB>
     constexpr inline string<Size> operator+(char(&&b)[SizeB]) OS_NOEXCEPT
     {
-        return (*this) + b;
+        return string<Size>{*this} + b;
     }
 
     /**
@@ -183,7 +184,6 @@ public:
      * @param b The character array to append.
      * @return A reference to the modified string.
      */
-    template <size_t SizeB>
     constexpr inline string<Size>& operator+=(char c) OS_NOEXCEPT
     {
         return (*this) + c;
