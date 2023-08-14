@@ -91,10 +91,10 @@ TEST(string_test, unarray)
 {
     os::string s("test");
 
-    char* c =  s[1];
-    ASSERT_EQ(*c, 'e');
+    char c =  s[1];
+    ASSERT_EQ(c, 'e');
     c = s[4];
-    ASSERT_TRUE(c == nullptr);
+    ASSERT_TRUE(c == '\0');
 }
 
 TEST(string_test, assignment)
