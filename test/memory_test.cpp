@@ -28,6 +28,30 @@ struct base
     int c;
 };
 
+
+struct virt
+{
+    ~virt() = default;
+
+    virtual int get_i() = 0;
+};
+
+struct derived : public virt
+{
+
+    int i;
+    derived(int i) : i(i) {}
+    ~derived() = default;
+
+
+    int get_i() override
+    {
+        return i;
+    }
+};
+
+
+
 TEST(memory_test, base)
 {
     os::unique_ptr test = new base{1,2,3};
@@ -67,28 +91,6 @@ TEST(memory_test, array)
         ASSERT_EQ(test[i], i);
     }
 }
-
-struct virt
-{
-    ~virt() = default;
-
-    virtual int get_i() = 0;
-};
-
-struct derived : public virt
-{
-
-    int i;
-    derived(int i) : i(i) {}
-    ~derived() = default;
-
-
-    int get_i() override
-    {
-        return i;
-    }
-};
-
 
 TEST(memory_test, switch)
 {
