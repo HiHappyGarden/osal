@@ -18,7 +18,6 @@
  ***************************************************************************/
 #pragma once
 
-
 #include "osal/error.hpp"
 #include "osal_sys/osal_sys.hpp"
 

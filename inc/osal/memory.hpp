@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include "osal/types.hpp"
 
 namespace osal
 {
@@ -49,25 +50,26 @@ template <typename T>
 inline constexpr bool is_lvalue_reference_v = is_lvalue_reference<T>::value;
 
 template <class T>
-constexpr T&& forward(remove_reference<T>& t) noexcept
+constexpr T&& forward(remove_reference<T>& t) OS_NOEXCEPT
 {
     return static_cast<T&&>(t);
 }
 
 template <class T>
-constexpr T&& forward(remove_reference<T>&& t) noexcept
+constexpr T&& forward(remove_reference<T>&& t) OS_NOEXCEPT
 {
     static_assert(!is_lvalue_reference_v<T>);
     return static_cast<T&&>(t);
 }
 
 template <typename T>
-typename remove_reference<T>::type&& move(T&& arg)
+typename remove_reference<T>::type&& move(T&& arg) OS_NOEXCEPT
 {
     return static_cast<typename remove_reference<T>::type&&>(arg);
 }
 
-template<typename T> void swap(T& t1, T& t2) {
+template<typename T> void swap(T& t1, T& t2) OS_NOEXCEPT
+{
     T temp = move(t1);
     t1 = move(t2);
     t2 = move(temp);
@@ -78,7 +80,10 @@ template <typename T>
 struct default_delete
 {
     default_delete() = default;
-    void operator()(T* ptr) const { delete ptr; }
+    inline void operator()(T* ptr) const OS_NOEXCEPT
+    {
+        delete ptr;
+    }
 };
 
 template <typename T, typename Deleter = default_delete<T>>
@@ -88,56 +93,59 @@ class unique_ptr {
     Deleter deleter = Deleter();
 public:
     unique_ptr() = default;
-    unique_ptr(T* ptr) : ptr(ptr) {}
-    unique_ptr(T* ptr, const Deleter& deleter) : ptr(ptr), deleter(deleter) {}
+    unique_ptr(T* ptr) OS_NOEXCEPT : ptr(ptr) {}
+    unique_ptr(T* ptr, const Deleter& deleter) OS_NOEXCEPT : ptr(ptr), deleter(deleter) {}
 
-    inline ~unique_ptr() { deleter(ptr); }
+    inline ~unique_ptr()
+    {
+        deleter(ptr);
+    }
 
     unique_ptr(const unique_ptr& other) = delete;
 
-    inline unique_ptr(unique_ptr&& other) noexcept
+    inline unique_ptr(unique_ptr&& other) OS_NOEXCEPT
         : ptr(other.release()),
         deleter(other.deleter)
     {}
 
     // generalized move ctor
     template <typename U, typename E>
-    unique_ptr(unique_ptr<U, E>&& other) noexcept
+    unique_ptr(unique_ptr<U, E>&& other) OS_NOEXCEPT
         : ptr(other.release())
         , deleter(forward<E>(other.get_deleter()))
     {}
 
     unique_ptr& operator=(const unique_ptr& other) = delete;
 
-    unique_ptr& operator=(unique_ptr&& other) noexcept
+    unique_ptr& operator=(unique_ptr&& other) OS_NOEXCEPT
     {
         unique_ptr(move(other)).swap(*this);
         return *this;
     }
 
-    void reset(T* ptr) noexcept
+    void reset(T* ptr) OS_NOEXCEPT
     {
         deleter(ptr);
         ptr = ptr;
     }
 
-    T* release() noexcept
+    T* release() OS_NOEXCEPT
     {
         auto old_ptr = ptr;
         ptr = nullptr;
         return old_ptr;
     }
 
-    void swap(unique_ptr& other) noexcept
+    inline void swap(unique_ptr& other) OS_NOEXCEPT
     {
         swap(ptr, other.ptr);
     }
 
-    T& operator*() const noexcept { return *ptr; }
-    T* operator->() const noexcept { return ptr; }
-    T* get() const noexcept { return ptr; }
-    Deleter get_deleter() const noexcept { return deleter; }
-    explicit operator bool() { return ptr != nullptr; }
+    inline T& operator*() const OS_NOEXCEPT { return *ptr; }
+    inline T* operator->() const OS_NOEXCEPT { return ptr; }
+    inline T* get() const OS_NOEXCEPT { return ptr; }
+    inline Deleter get_deleter() const OS_NOEXCEPT { return deleter; }
+    inline explicit operator bool() OS_NOEXCEPT { return ptr != nullptr; }
 };
 
 }

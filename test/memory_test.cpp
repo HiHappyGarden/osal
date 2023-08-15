@@ -38,12 +38,6 @@ TEST(memory_test, base)
 
 }
 
-class test_deleter : public os::default_delete<base>
-{
-    test_deleter() = delete;
-    void operator()(base* ptr) const { delete ptr; }
-};
-
 TEST(memory_test, deleter)
 {
     os::unique_ptr<base, void(*)(base*)> test(new base{1,2,3}, [](auto ptr) { delete ptr; });
@@ -63,3 +57,23 @@ TEST(memory_test, deleter)
     ASSERT_EQ(release->b, b.b);
     ASSERT_EQ(release->c, b.c);    
 }
+
+
+struct array_deleter {
+    void operator()(int* ptr) const {
+        printf("Deleting Array[]!\n");
+        delete [] ptr;
+    }
+};
+
+TEST(memory_test, array)
+{
+    array_deleter t;
+    os::unique_ptr test( new char[10], t);
+
+    test.get()[0] = 4;
+    ASSERT_EQ(test.get()[0], 4);
+    ASSERT_EQ(test.get()[1], 2);
+    ASSERT_EQ(test.get()[2], 3);
+}
+

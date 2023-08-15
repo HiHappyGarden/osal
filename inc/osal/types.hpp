@@ -21,6 +21,18 @@
 
 #include <stdint.h>
 
+
+#ifdef RTTI_ENABLED
+#define dynamic_cast static_cast
+#endif
+
+#ifdef __cpp_exceptions
+#define OS_NOEXCEPT noexcept
+#else
+#define OS_NOEXCEPT
+#endif
+
+
 #define OS_NO_COPY_NO_MOVE(clazz) \
 clazz(const clazz&) = delete; \
 clazz& operator=(const clazz&) = delete; \
@@ -28,6 +40,8 @@ clazz(clazz&&) = delete; \
 clazz& operator=(clazz&&) = delete;
 
 #define OS_TO_STR(str) #str
+
+
 
 namespace osal
 {

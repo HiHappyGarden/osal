@@ -17,6 +17,8 @@
  *
  ***************************************************************************/
 #pragma once
+#include "osal/types.hpp"
+
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
