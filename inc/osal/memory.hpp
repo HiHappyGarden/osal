@@ -140,12 +140,6 @@ public:
     explicit operator bool() { return ptr != nullptr; }
 };
 
-
-template<typename T, typename... Params>
-decltype(auto) make_unique(Params&&... params) {
-    return unique_ptr<T>(new T(forward<Params>(params)...));
-}
-
 }
 }
 

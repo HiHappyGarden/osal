@@ -30,7 +30,7 @@ struct base
 
 TEST(memory_test, base)
 {
-    os::unique_ptr<base> test(new base{1,2,3});
+    os::unique_ptr test = new base{1,2,3};
 
     ASSERT_EQ(test->a, 1);
     ASSERT_EQ(test->b, 2);
@@ -61,6 +61,5 @@ TEST(memory_test, deleter)
 
     ASSERT_EQ(release->a, b.a);
     ASSERT_EQ(release->b, b.b);
-    ASSERT_EQ(release->c, b.c);
-
+    ASSERT_EQ(release->c, b.c);    
 }
