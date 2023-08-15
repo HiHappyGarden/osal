@@ -149,6 +149,7 @@ public:
         other.ptr = temp;
     }
 
+    inline bool is_null() OS_NOEXCEPT { return ptr == nullptr; }
     inline ssize_t size() OS_NOEXCEPT { return sizeof(T); }
     inline T& operator[](size_t idx) OS_NOEXCEPT { return ptr[idx]; }
     inline const T& operator[](size_t idx) const OS_NOEXCEPT { return ptr[idx]; }
