@@ -27,9 +27,9 @@ bool check = false;
 
 }
 
-
-TEST(thiming_test, base)
+TEST(timing_test, base)
 {
+
     os::thread thread_start_main_loop("test", 4, 1024, [](void*) -> void*
     {
 

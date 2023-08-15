@@ -61,10 +61,41 @@ TEST(memory_test, deleter)
 TEST(memory_test, array)
 {
     os::unique_ptr test( new int[10], os::array_deleter_int);
+    for(int i = 0; i < 10; i++)
+    {
+        test[i] = i;
+        ASSERT_EQ(test[i], i);
+    }
+}
 
-    test[0] = 4;
-    ASSERT_EQ(test[0], 0);
-    ASSERT_EQ(test[1], 1);
-    ASSERT_EQ(test[2], 2);
+struct virt
+{
+    ~virt() = default;
+
+    virtual int get_i() = 0;
+};
+
+struct derived : public virt
+{
+
+    int i;
+    derived(int i) : i(i) {}
+    ~derived() = default;
+
+
+    int get_i() override
+    {
+        return i;
+    }
+};
+
+
+TEST(memory_test, switch)
+{
+    os::unique_ptr<virt> test1 = new derived(1);
+
+    test1 = new derived(2);
+
+    ASSERT_EQ(test1->get_i(), 2);
 }
 

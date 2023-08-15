@@ -70,13 +70,6 @@ typename remove_reference<T>::type&& move(T&& arg) OS_NOEXCEPT
     return static_cast<typename remove_reference<T>::type&&>(arg);
 }
 
-template<typename T> void swap(T& t1, T& t2) OS_NOEXCEPT
-{
-    T temp = move(t1);
-    t1 = move(t2);
-    t2 = move(temp);
-}
-
 
 template <typename T>
 struct default_delete
@@ -111,6 +104,7 @@ public:
     inline ~unique_ptr()
     {
         deleter(ptr);
+        ptr = nullptr;
     }
 
     unique_ptr(const unique_ptr& other) = delete;
@@ -150,9 +144,12 @@ public:
 
     inline void swap(unique_ptr& other) OS_NOEXCEPT
     {
-        swap(ptr, other.ptr);
+        T* temp = ptr;
+        ptr = other.ptr;
+        other.ptr = temp;
     }
 
+    inline ssize_t size() OS_NOEXCEPT { return sizeof(T); }
     inline T& operator[](size_t idx) OS_NOEXCEPT { return ptr[idx]; }
     inline const T& operator[](size_t idx) const OS_NOEXCEPT { return ptr[idx]; }
     inline T& operator*() const OS_NOEXCEPT { return *ptr; }
@@ -160,6 +157,7 @@ public:
     inline T* get() const OS_NOEXCEPT { return ptr; }
     inline Deleter get_deleter() const OS_NOEXCEPT { return deleter; }
     inline explicit operator bool() OS_NOEXCEPT { return ptr != nullptr; }
+
 };
 
 extern array_deleter<bool> array_deleter_bool;
