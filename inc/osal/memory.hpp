@@ -21,6 +21,8 @@
 
 #include "osal/types.hpp"
 
+#include <stdlib.h>
+
 namespace osal
 {
 inline namespace v1
@@ -86,6 +88,16 @@ struct default_delete
     }
 };
 
+template<typename T>
+struct array_deleter
+{
+    void operator()(T* ptr) const OS_NOEXCEPT
+    {
+        delete [] ptr;
+    }
+};
+
+
 template <typename T, typename Deleter = default_delete<T>>
 //template <typename T, typename Deleter>
 class unique_ptr {
@@ -141,12 +153,30 @@ public:
         swap(ptr, other.ptr);
     }
 
+    inline T& operator[](size_t idx) OS_NOEXCEPT { return ptr[idx]; }
+    inline const T& operator[](size_t idx) const OS_NOEXCEPT { return ptr[idx]; }
     inline T& operator*() const OS_NOEXCEPT { return *ptr; }
     inline T* operator->() const OS_NOEXCEPT { return ptr; }
     inline T* get() const OS_NOEXCEPT { return ptr; }
     inline Deleter get_deleter() const OS_NOEXCEPT { return deleter; }
     inline explicit operator bool() OS_NOEXCEPT { return ptr != nullptr; }
 };
+
+extern array_deleter<bool> array_deleter_bool;
+extern array_deleter<char> array_deleter_char;
+extern array_deleter<short> array_deleter_short;
+extern array_deleter<int> array_deleter_int;
+extern array_deleter<long> array_deleter_long;
+extern array_deleter<float> array_deleter_float;
+extern array_deleter<double> array_deleter_double;
+extern array_deleter<int8_t> array_deleter_uint8;
+extern array_deleter<uint8_t> array_deleter_int8;
+extern array_deleter<int16_t> array_deleter_uint16;
+extern array_deleter<uint16_t> array_deleter_int16;
+extern array_deleter<int32_t> array_deleter_uint32;
+extern array_deleter<uint32_t> array_deleter_int32;
+extern array_deleter<int64_t> array_deleter_uint64;
+extern array_deleter<uint64_t> array_deleter_int64;
 
 }
 }

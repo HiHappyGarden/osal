@@ -58,22 +58,13 @@ TEST(memory_test, deleter)
     ASSERT_EQ(release->c, b.c);    
 }
 
-
-struct array_deleter {
-    void operator()(int* ptr) const {
-        printf("Deleting Array[]!\n");
-        delete [] ptr;
-    }
-};
-
 TEST(memory_test, array)
 {
-    array_deleter t;
-    os::unique_ptr test( new char[10], t);
+    os::unique_ptr test( new int[10], os::array_deleter_int);
 
-    test.get()[0] = 4;
-    ASSERT_EQ(test.get()[0], 4);
-    ASSERT_EQ(test.get()[1], 2);
-    ASSERT_EQ(test.get()[2], 3);
+    test[0] = 4;
+    ASSERT_EQ(test[0], 0);
+    ASSERT_EQ(test[1], 1);
+    ASSERT_EQ(test[2], 2);
 }
 

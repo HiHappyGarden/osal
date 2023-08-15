@@ -81,7 +81,7 @@ if(UNIX)
     set(PLATFORM_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/unix)
     include_directories(${PLATFORM_INCLUDE})
     file(GLOB_RECURSE OSAL_INCLUDES CONFIGURE_DEPENDS "inc/*.hpp" "src/unix/osal_sys/*.hpp")
-    file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/unix/*.cpp")
+    file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/*.cpp" "src/unix/*.cpp")
 
 endif()
 
