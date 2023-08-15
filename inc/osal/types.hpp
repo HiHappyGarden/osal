@@ -22,14 +22,20 @@
 #include <stdint.h>
 
 
-#ifdef RTTI_ENABLED
-#define dynamic_cast static_cast
+#ifndef RTTI_ENABLED
+    #ifndef dynamic_cast
+        #define dynamic_cast static_cast
+    #endif
 #endif
 
 #ifdef __cpp_exceptions
-#define OS_NOEXCEPT noexcept
+    #ifndef OS_NOEXCEPT
+        #define OS_NOEXCEPT noexcept
+    #endif
 #else
-#define OS_NOEXCEPT
+    #ifndef OS_NOEXCEPT
+        #define OS_NOEXCEPT
+    #endif
 #endif
 
 
