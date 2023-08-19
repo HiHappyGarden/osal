@@ -30,9 +30,18 @@ inline namespace v1
         : code(code)
         , line(line)
     {
-        strncpy(&this->msg[0], msg, sizeof(this->msg));
-        strncpy(&this->file[0], file, sizeof(this->file));
-        strncpy(&this->func[0], func, sizeof(this->func));
+        if(msg)
+        {
+            strncpy(&this->msg[0], msg, sizeof(this->msg));
+        }
+        if(file)
+        {
+            strncpy(&this->file[0], file, sizeof(this->file));
+        }
+        if(func)
+        {
+            strncpy(&this->func[0], func, sizeof(this->func));
+        }
     }
 
     error::error(const error& old_error, const char* msg, uint8_t code, const char* file, const char* func, uint32_t line) OS_NOEXCEPT
@@ -79,8 +88,14 @@ inline namespace v1
 
     void error::set_position(const char* file, const char* func, uint32_t line) OS_NOEXCEPT
     {
-        strncpy(&this->file[0], file, sizeof(this->file));
-        strncpy(&this->func[0], func, sizeof(this->func));
+        if(file)
+        {
+            strncpy(&this->file[0], file, sizeof(this->file));
+        }
+        if(func)
+        {
+            strncpy(&this->func[0], func, sizeof(this->func));
+        }
         this->line = line;
     }
 
