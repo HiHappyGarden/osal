@@ -183,7 +183,7 @@ public:
      * @param func The function name where the error occurred.
      * @param line The line number where the error occurred.
      */
-    error(const error* old_error, const char* msg, uint8_t code = 0, const char* file = get_file_name(__FILE__), const char* func = "", uint32_t line = __LINE__) OS_NOEXCEPT;
+    error(error* old_error, const char* msg, uint8_t code = 0, const char* file = get_file_name(__FILE__), const char* func = "", uint32_t line = __LINE__) OS_NOEXCEPT;
 
     /**
      * @brief Constructs an error object with the given previous error, message, error type, file, function, and line number.
@@ -195,8 +195,8 @@ public:
      * @param func The function name where the error occurred.
      * @param line The line number where the error occurred.
      */
-    error(const error* old_error, const char* msg, error_type code = error_type::OS_ENO, const char* file = get_file_name(__FILE__), const char* func = "", uint32_t line = __LINE__) OS_NOEXCEPT
-        : error(msg, static_cast<uint8_t>(code), file, func, line) {}
+    error(error* old_error, const char* msg, error_type code = error_type::OS_ENO, const char* file = get_file_name(__FILE__), const char* func = "", uint32_t line = __LINE__) OS_NOEXCEPT
+        : error(old_error, msg, static_cast<uint8_t>(code), file, func, line) {}
 
     /**
      * @brief Copy constructor.

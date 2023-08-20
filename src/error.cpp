@@ -55,7 +55,7 @@ inline namespace v1
         this->old_error = new error(old_error);
     }
 
-    error::error(const error* old_error, const char* msg, uint8_t code, const char* file, const char* func, uint32_t line) OS_NOEXCEPT
+    error::error(error* old_error, const char* msg, uint8_t code, const char* file, const char* func, uint32_t line) OS_NOEXCEPT
         : error(msg, code, file, func, line)
     {
         if(this->old_error)
@@ -63,8 +63,7 @@ inline namespace v1
             delete this->old_error;
             this->old_error = nullptr;
         }
-        this->old_error = new error(*old_error);
-        delete old_error;
+        this->old_error = old_error;
     }
 
     error::~error() OS_NOEXCEPT
@@ -119,7 +118,7 @@ inline namespace v1
         while(ptr)
         {
             count++;
-            snprintf(row, sizeof(row), "%u. msg:%s code:%d (%s::%s line:%u)\n", count, ptr->msg, ptr->code, ptr->file, ptr->func, ptr->line);
+            snprintf(row, sizeof(row), "%u. msg:%s code:%d (%s::%s line:%u)", count, ptr->msg, ptr->code, ptr->file, ptr->func, ptr->line);
             OS_LOG_ERROR(app_tag, "%s", row);
             ptr = ptr->old_error;
         }
