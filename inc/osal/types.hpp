@@ -54,6 +54,11 @@ namespace osal
 inline namespace v1
 {
 
+struct true_type { static constexpr inline const bool value = true; };
+
+struct false_type { static constexpr inline const bool value = false; };
+
+
 /**
  * @brief Type definition for the null pointer constant.
  *

@@ -35,6 +35,7 @@
 #include "osal/timer.hpp"
 #include "osal/types.hpp"
 #include "osal/memory.hpp"
+#include "osal/traits.hpp"
 
 #include "osal/config.h"
 

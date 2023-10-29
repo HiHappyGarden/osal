@@ -1,7 +1,7 @@
 /***************************************************************************
  *
- * PROJECT
- * Copyright (C) 202X  Antonio Salsi <passy.linux@zresa.it>
+ * OSAL
+ * Copyright (C) 2023  Antonio Salsi <passy.linux@zresa.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "osal/types.hpp"
+#include "osal/traits.hpp"
 
 #include <stdlib.h>
 
@@ -37,19 +37,14 @@ struct remove_reference<T&> { typedef T type; };
 template <class T>
 struct remove_reference<T&&> { typedef T type; };
 
-
-struct true_type { static constexpr inline const bool value = true; };
-
-struct false_type { static constexpr inline const bool value = false; };
-
-template<typename>
-struct is_lvalue_reference : public false_type { };
-
-template<typename T>
-struct is_lvalue_reference<T&> : public true_type { };
-
 template <typename T>
 inline constexpr bool is_lvalue_reference_v = is_lvalue_reference<T>::value;
+
+template <typename T>
+typename remove_reference<T>::type&& move(T&& arg) OS_NOEXCEPT
+{
+    return static_cast<typename remove_reference<T>::type&&>(arg);
+}
 
 template <class T>
 constexpr T&& forward(remove_reference<T>& t) OS_NOEXCEPT
@@ -62,12 +57,6 @@ constexpr T&& forward(remove_reference<T>&& t) OS_NOEXCEPT
 {
     static_assert(!is_lvalue_reference_v<T>);
     return static_cast<T&&>(t);
-}
-
-template <typename T>
-typename remove_reference<T>::type&& move(T&& arg) OS_NOEXCEPT
-{
-    return static_cast<typename remove_reference<T>::type&&>(arg);
 }
 
 
@@ -92,7 +81,6 @@ struct array_deleter
 
 
 template <typename T, typename Deleter = default_delete<T>>
-//template <typename T, typename Deleter>
 class unique_ptr {
     T* ptr = nullptr;
     Deleter deleter = Deleter();
