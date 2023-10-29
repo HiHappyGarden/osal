@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <stdlib.h>
 #include <stdint.h>
 
 
@@ -227,6 +228,9 @@ constexpr const uint64_t USECS_PER_SEC = 1'000'000;
 constexpr const uint64_t NSECS_PER_SEC = 1'000'000'000;
 
 constexpr const uint64_t WAIT_FOREVER = 0xFFFFFFFFFFFFFFFF;
+
+constexpr const bool OK = EXIT_SUCCESS;
+constexpr const bool KO = EXIT_FAILURE;
 
 }
 }
