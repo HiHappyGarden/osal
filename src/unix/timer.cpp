@@ -84,7 +84,7 @@ timer::~timer() OS_NOEXCEPT
     timer_delete (t.timerid);
 }
 
-bool timer::create(void *arg, error** error)
+exit timer::create(void *arg, error** error)
 {
     sigevent sev{0};
     sigset_t sigset{0};
@@ -111,16 +111,16 @@ bool timer::create(void *arg, error** error)
             *error = OS_ERROR_BUILD("Out off memory.", error_type::OS_ENOMEM);
             OS_ERROR_PTR_SET_POSITION(*error);
         }
-        return false;
+        return exit::KO;
     }
-    if(!t.thread->create(this))
+    if(t.thread->create(this) == exit::KO)
     {
         if(error)
         {
             *error = OS_ERROR_BUILD("Impossible create timer.", error_type::OS_ENODATA);
             OS_ERROR_PTR_SET_POSITION(*error);
         }
-        return false;
+        return exit::KO;
     }
 
     /* Wait until timer thread sets its (kernel) thread id */
@@ -139,9 +139,9 @@ bool timer::create(void *arg, error** error)
     if (timer_create (CLOCK_MONOTONIC, &sev, &t.timerid) == -1)
     {
         // free (timer);
-        return false;
+        return exit::KO;
     }
-    return true;
+    return exit::OK;
 }
 
 void timer::set(uint64_t us) OS_NOEXCEPT
