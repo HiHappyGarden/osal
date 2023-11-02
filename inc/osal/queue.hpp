@@ -81,9 +81,9 @@ public:
      * @param msg Pointer to the buffer where the fetched message will be stored.
      * @param time The maximum time to wait for a message (in milliseconds).
      * @param error Optional pointer to an error object to be populated in case of failure.
-     * @return true if a message was fetched successfully, false if the fetch timed out or encountered an error.
+     * @return OK if a message was fetched successfully, KO if the fetch timed out or encountered an error.
      */
-    bool fetch (void* msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    exit fetch (void* msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
     /**
      * @brief Fetches a message from the queue from an ISR.
@@ -94,9 +94,9 @@ public:
      * @param msg Pointer to the buffer where the fetched message will be stored.
      * @param time The maximum time to wait for a message (in milliseconds).
      * @param error Optional pointer to an error object to be populated in case of failure.
-     * @return true if a message was fetched successfully, false if the fetch timed out or encountered an error.
+     * @return OK if a message was fetched successfully, KO if the fetch timed out or encountered an error.
      */
-    bool fetch_from_isr (void* msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    exit fetch_from_isr (void* msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
     /**
      * @brief Posts a message to the queue.
@@ -107,9 +107,9 @@ public:
      * @param msg Pointer to the message to be posted.
      * @param time The maximum time to wait for space in the queue (in milliseconds).
      * @param error Optional pointer to an error object to be populated in case of failure.
-     * @return true if the message was posted successfully, false if the post timed out or encountered an error.
+     * @return OK if the message was posted successfully, KO if the post timed out or encountered an error.
      */
-    bool post (const uint8_t* msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    exit post (const uint8_t* msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
     /**
      * @brief Posts a message to the queue from an ISR.
@@ -120,9 +120,9 @@ public:
      * @param msg Pointer to the message to be posted.
      * @param time The maximum time to wait for space in the queue (in milliseconds).
      * @param error Optional pointer to an error object to be populated in case of failure.
-     * @return true if the message was posted successfully, false if the post timed out or encountered an error.
+     * @return OK if the message was posted successfully, KO if the post timed out or encountered an error.
      */
-    bool post_from_isr (const uint8_t* msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    exit post_from_isr (const uint8_t* msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
     /**
      * @brief Return size of element insert

@@ -51,7 +51,7 @@ public:
 };
 
 
-bool thread::create(void* arg, class error** error) OS_NOEXCEPT
+exit thread::create(void* arg, class error** error) OS_NOEXCEPT
 {
 
     uint32_t result = 0;
@@ -99,16 +99,16 @@ bool thread::create(void* arg, class error** error) OS_NOEXCEPT
     {
         pthread_setname_np (t, name);
     }
-    return result == 0;
+    return (result == 0) ? exit::OK : exit::KO;
 }
 
-bool thread::exit() OS_NOEXCEPT
+exit thread::exit() OS_NOEXCEPT
 {
     pthread_exit(&t);
-    return true;
+    return exit::OK;
 }
 
-bool thread::join(error** error) OS_NOEXCEPT
+exit thread::join(error** error) OS_NOEXCEPT
 {
     uint32_t result = pthread_join(t, nullptr);
     if(result && error)
@@ -134,7 +134,7 @@ bool thread::join(error** error) OS_NOEXCEPT
         }
     }
 
-    return result == 0;
+    return (result == 0) ? exit::OK : exit::KO;
 }
 
 

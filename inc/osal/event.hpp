@@ -65,9 +65,9 @@ public:
      * @param value Pointer to a variable where the value of the event will be stored.
      * @param time The maximum time to wait for the event to be set (in milliseconds).
      * @param error Optional pointer to an error object to be populated in case of failure.
-     * @return `true` if the event was set, `false` if a timeout occurred.
+     * @return `OK` if the event was set, `KO` if a timeout occurred.
      */
-    bool wait(uint32_t mask, uint32_t* value, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    exit wait(uint32_t mask, uint32_t* value, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
     /**
      * @brief Waits for an event to be set from an ISR.
@@ -81,7 +81,7 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return `true` if the event was set, `false` if a timeout occurred.
      */
-    bool wait_from_isr(uint32_t mask, uint32_t* value, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    exit wait_from_isr(uint32_t mask, uint32_t* value, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
     /**
      * @brief Sets event bits.

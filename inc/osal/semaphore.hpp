@@ -78,9 +78,9 @@ public:
      *
      * @param time The maximum time to wait for the semaphore (in milliseconds).
      * @param error Optional pointer to an error object to be populated in case of failure.
-     * @return true if the semaphore became available, false if the wait timed out or encountered an error.
+     * @return OK if the semaphore became available, KO if the wait timed out or encountered an error.
      */
-    bool wait(uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    exit wait(uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
     /**
      * @brief Waits for the semaphore to become available from an ISR.
@@ -90,9 +90,9 @@ public:
      *
      * @param time The maximum time to wait for the semaphore (in milliseconds).
      * @param error Optional pointer to an error object to be populated in case of failure.
-     * @return true if the semaphore became available, false if the wait timed out or encountered an error.
+     * @return OK if the semaphore became available, KO if the wait timed out or encountered an error.
      */
-    bool wait_from_isr(uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    exit wait_from_isr(uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
     /**
      * @brief Signals the semaphore.

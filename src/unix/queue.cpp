@@ -73,7 +73,7 @@ queue::~queue() OS_NOEXCEPT
     }
 }
 
-bool queue::fetch(void* msg, uint64_t time, error** _error) OS_NOEXCEPT
+exit queue::fetch(void* msg, uint64_t time, error** _error) OS_NOEXCEPT
 {
     timespec ts{0};
     uint8_t error     = 0;
@@ -86,7 +86,7 @@ bool queue::fetch(void* msg, uint64_t time, error** _error) OS_NOEXCEPT
             *_error = OS_ERROR_BUILD("Invalid argument.", error_type::OS_EINVAL);
             OS_ERROR_PTR_SET_POSITION(*_error);
         }
-        return false;
+        return exit::KO;
     }
 
 
@@ -169,7 +169,7 @@ bool queue::fetch(void* msg, uint64_t time, error** _error) OS_NOEXCEPT
             *_error = OS_ERROR_BUILD("Message size 0.", error_type::OS_EUCLEAN);
             OS_ERROR_PTR_SET_POSITION(*_error);
         }
-        return false;
+        return exit::KO;
     }
 
     memcpy(msg, q.msg + ( q.r * q.message_size), q.message_size);
@@ -185,15 +185,15 @@ timeout:
     pthread_mutex_unlock (&q.mutex);
     pthread_cond_signal (&q.cond);
 
-    return (error == 0);
+    return (error == 0) ? exit::OK : exit::KO;
 }
 
-inline bool queue::fetch_from_isr(void* msg, uint64_t time, error** error) OS_NOEXCEPT
+inline exit queue::fetch_from_isr(void* msg, uint64_t time, error** error) OS_NOEXCEPT
 {
     return fetch(msg, time, error);
 }
 
-bool queue::post(const uint8_t* msg, uint64_t time, error** _error) OS_NOEXCEPT
+exit queue::post(const uint8_t* msg, uint64_t time, error** _error) OS_NOEXCEPT
 {
     timespec ts{0};
     uint8_t error     = 0;
@@ -284,11 +284,10 @@ timeout:
     pthread_mutex_unlock (&q.mutex);
     pthread_cond_signal (&q.cond);
 
-    return (error == 0);
-
+    return (error == 0) ? exit::OK : exit::KO;
 }
 
-inline bool queue::post_from_isr(const uint8_t* msg, uint64_t time, error** error) OS_NOEXCEPT
+inline exit queue::post_from_isr(const uint8_t* msg, uint64_t time, error** error) OS_NOEXCEPT
 {
     return post(msg, time, error);
 }

@@ -37,6 +37,5 @@ TEST(traits_test, is_type)
 TEST(traits_test, is_class)
 {
 
-
 }
 
