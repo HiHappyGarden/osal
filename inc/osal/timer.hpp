@@ -87,7 +87,7 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return `true` if the timer was created successfully, `false` otherwise.
      */
-    exit create(void* arg = nullptr, error** error = nullptr) OS_NOEXCEPT;
+    osal::exit create(void* arg = nullptr, error** error = nullptr) OS_NOEXCEPT;
 
     /**
      * @brief Sets the time interval for the timer.

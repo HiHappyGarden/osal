@@ -93,14 +93,14 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return `true` if the thread was created successfully, `false` otherwise.
      */
-    exit create(void* arg = nullptr, class error** error = nullptr) OS_NOEXCEPT;
+    osal::exit create(void* arg = nullptr, class error** error = nullptr) OS_NOEXCEPT;
 
     /**
      * @brief Exits from the thread.
      *
      * @return `true` if the thread was successfully exited, `false` otherwise.
      */
-    exit exit() OS_NOEXCEPT;
+    osal::exit exit() OS_NOEXCEPT;
 
     /**
      * @brief Joins the thread.
@@ -110,7 +110,7 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return `true` if the thread was successfully joined, `false` otherwise.
      */
-    exit join(error** error = nullptr) OS_NOEXCEPT;
+    osal::exit join(error** error = nullptr) OS_NOEXCEPT;
 
 private:
     char name[33];                  ///< The name of the thread.

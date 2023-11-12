@@ -67,7 +67,7 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return `OK` if the event was set, `KO` if a timeout occurred.
      */
-    exit wait(uint32_t mask, uint32_t* value, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    osal::exit wait(uint32_t mask, uint32_t* value, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
     /**
      * @brief Waits for an event to be set from an ISR.
@@ -81,7 +81,7 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return `true` if the event was set, `false` if a timeout occurred.
      */
-    exit wait_from_isr(uint32_t mask, uint32_t* value, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    osal::exit wait_from_isr(uint32_t mask, uint32_t* value, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
     /**
      * @brief Sets event bits.

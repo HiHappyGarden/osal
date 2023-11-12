@@ -80,7 +80,7 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return OK if the semaphore became available, KO if the wait timed out or encountered an error.
      */
-    exit wait(uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    osal::exit wait(uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
     /**
      * @brief Waits for the semaphore to become available from an ISR.
@@ -92,7 +92,7 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return OK if the semaphore became available, KO if the wait timed out or encountered an error.
      */
-    exit wait_from_isr(uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    osal::exit wait_from_isr(uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
     /**
      * @brief Signals the semaphore.

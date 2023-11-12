@@ -73,7 +73,7 @@ queue::~queue() OS_NOEXCEPT
     }
 }
 
-exit queue::fetch(void* msg, uint64_t time, error** _error) OS_NOEXCEPT
+osal::exit queue::fetch(void* msg, uint64_t time, error** _error) OS_NOEXCEPT
 {
     timespec ts{0};
     uint8_t error     = 0;
@@ -193,7 +193,7 @@ inline exit queue::fetch_from_isr(void* msg, uint64_t time, error** error) OS_NO
     return fetch(msg, time, error);
 }
 
-exit queue::post(const uint8_t* msg, uint64_t time, error** _error) OS_NOEXCEPT
+osal::exit queue::post(const uint8_t* msg, uint64_t time, error** _error) OS_NOEXCEPT
 {
     timespec ts{0};
     uint8_t error     = 0;

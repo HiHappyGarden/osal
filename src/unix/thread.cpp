@@ -51,7 +51,7 @@ public:
 };
 
 
-exit thread::create(void* arg, class error** error) OS_NOEXCEPT
+osal::exit thread::create(void* arg, class error** error) OS_NOEXCEPT
 {
 
     uint32_t result = 0;
@@ -102,13 +102,13 @@ exit thread::create(void* arg, class error** error) OS_NOEXCEPT
     return (result == 0) ? exit::OK : exit::KO;
 }
 
-exit thread::exit() OS_NOEXCEPT
+osal::exit thread::exit() OS_NOEXCEPT
 {
     pthread_exit(&t);
     return exit::OK;
 }
 
-exit thread::join(error** error) OS_NOEXCEPT
+osal::exit thread::join(error** error) OS_NOEXCEPT
 {
     uint32_t result = pthread_join(t, nullptr);
     if(result && error)

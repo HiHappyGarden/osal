@@ -47,7 +47,7 @@ semaphore::~semaphore()
     pthread_mutex_destroy (&sem.mutex);
 }
 
-exit semaphore::wait(uint64_t time, error** _error) OS_NOEXCEPT
+osal::exit semaphore::wait(uint64_t time, error** _error) OS_NOEXCEPT
 {
     timespec ts{0};
     uint8_t error     = 0;
@@ -131,7 +131,7 @@ timeout:
     return (error == 0) ? exit::OK : exit::KO;
 }
 
-exit semaphore::wait_from_isr(uint64_t time, error **error) OS_NOEXCEPT
+osal::exit semaphore::wait_from_isr(uint64_t time, error **error) OS_NOEXCEPT
 {
     return wait(time, error);
 }

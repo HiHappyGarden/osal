@@ -83,7 +83,7 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return OK if a message was fetched successfully, KO if the fetch timed out or encountered an error.
      */
-    exit fetch (void* msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    osal::exit fetch (void* msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
     /**
      * @brief Fetches a message from the queue from an ISR.
@@ -96,7 +96,7 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return OK if a message was fetched successfully, KO if the fetch timed out or encountered an error.
      */
-    exit fetch_from_isr (void* msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    osal::exit fetch_from_isr (void* msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
     /**
      * @brief Posts a message to the queue.
@@ -109,7 +109,7 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return OK if the message was posted successfully, KO if the post timed out or encountered an error.
      */
-    exit post (const uint8_t* msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    osal::exit post (const uint8_t* msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
     /**
      * @brief Posts a message to the queue from an ISR.
@@ -122,7 +122,7 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return OK if the message was posted successfully, KO if the post timed out or encountered an error.
      */
-    exit post_from_isr (const uint8_t* msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    osal::exit post_from_isr (const uint8_t* msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
     /**
      * @brief Return size of element insert
