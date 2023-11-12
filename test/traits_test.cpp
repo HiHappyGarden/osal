@@ -34,8 +34,23 @@ TEST(traits_test, is_type)
 
 }
 
-TEST(traits_test, is_class)
+class smart_call_test
 {
+public:
+    void test_func(int i)
+    {
+        printf("test_func %d", i);
+        fflush(stdout);
+    }
+
+};
+
+TEST(traits_test, smart_call)
+{
+
+    smart_call_test t;
+
+    smart_call<smart_call_test, void, int>::invoke(&t, &smart_call_test::test_func, 43);
 
 }
 
