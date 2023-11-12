@@ -206,6 +206,34 @@ public:
     }
 };
 
+template<typename TClass, typename TResult, typename ... Type>
+struct smart_call {
+    // call for non-const class methods
+    static TResult invoke(TClass* context, TResult (TClass::*method)(Type...), Type... args)
+    {
+        return (context->*(method))(args ...);
+    }
+
+    // call for const class methods
+    static TResult invoke(TClass* context, TResult (TClass::*method)(Type...) const, Type... args)
+    {
+        return (context->*(method))(args ...);
+    }
+};
+
+// SmartCall specialization for 'void' return type
+template<typename TClass, typename ... Type>
+struct smart_call<TClass, void, Type...> {
+    static void invoke(TClass* context, void (TClass::*method)(Type...), Type... args)
+    {
+        (context->*(method))(args ...);
+    }
+    static void invoke(TClass* context, void(TClass::*method)(Type...) const, Type... args)
+    {
+        return (context->*(method))(args ...);
+    }
+};
+
 
 }
 }
