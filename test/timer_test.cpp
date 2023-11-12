@@ -36,7 +36,7 @@ os::timer timer{1000
 TEST(timer_test, single_timer)
 {
 
-    if(!timer.create(args))
+    if(timer.create(args) == osal::exit::KO)
     {
         OS_LOG_ERROR("TIMER", "ko");
         FAIL();

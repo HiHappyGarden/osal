@@ -51,8 +51,8 @@ TEST(timing_test, base)
     });
 
 
-    ASSERT_TRUE(thread_start_main_loop.create());
-    ASSERT_TRUE(thread_stop_main_loop.create());
+    ASSERT_EQ(thread_start_main_loop.create(), osal::exit::OK);
+    ASSERT_EQ(thread_stop_main_loop.create(), osal::exit::OK);
 
     os::us_sleep(10'000'000);
 

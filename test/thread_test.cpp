@@ -39,7 +39,7 @@ TEST(thread_test, base)
 {
     os::thread thread("test", 4, 1024, thread_test);
 
-    ASSERT_TRUE(thread.create());
+    ASSERT_EQ(thread.create(), osal::exit::OK);
 
     os::us_sleep(1'000'000);
 

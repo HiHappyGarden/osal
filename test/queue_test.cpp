@@ -36,7 +36,7 @@ TEST(queue_test, single_thread)
 
     test_data.count = 0;
     test_data.field2 = 10;
-    if(mbox.post((uint8_t *)&test_data, 0))
+    if(mbox.post((uint8_t *)&test_data, 0) == osal::exit::OK)
     {
         OS_LOG_INFO(APP_TAG, "count:%u insert: %u", test_data.count, test_data.field2);
     }
@@ -48,7 +48,7 @@ TEST(queue_test, single_thread)
 
     test_data.count = 1;
     test_data.field2 = 20;
-    if(mbox.post((uint8_t *)&test_data, os::WAIT_FOREVER))
+    if(mbox.post((uint8_t *)&test_data, os::WAIT_FOREVER) == osal::exit::OK)
     {
         OS_LOG_INFO(APP_TAG, "count:%u insert: %u", test_data.count, test_data.field2);
     }
@@ -60,7 +60,7 @@ TEST(queue_test, single_thread)
 
     test_data.count = 2;
     test_data.field2 = 30;
-    if(mbox.post((uint8_t *)&test_data, os::WAIT_FOREVER))
+    if(mbox.post((uint8_t *)&test_data, os::WAIT_FOREVER) == osal::exit::OK)
     {
         OS_LOG_INFO(APP_TAG,  "count:%u insert: %u", test_data.count, test_data.field2);
     }
@@ -72,7 +72,7 @@ TEST(queue_test, single_thread)
 
 
     struct test_data_type data = {0};
-    if(mbox.fetch(&data, 0))
+    if(mbox.fetch(&data, 0) == osal::exit::OK)
     {
         OS_LOG_INFO(APP_TAG, "count:%d read:%u", data.count, data.field2);
         EXPECT_EQ(data.count, 0);
@@ -85,7 +85,7 @@ TEST(queue_test, single_thread)
     }
     EXPECT_EQ(mbox.size(), 2);
 
-    if(mbox.fetch(&data, os::WAIT_FOREVER))
+    if(mbox.fetch(&data, os::WAIT_FOREVER) == osal::exit::OK)
     {
         OS_LOG_INFO(APP_TAG,  "count:%d read:%u", data.count, data.field2);
         EXPECT_EQ(data.count, 1);
@@ -97,7 +97,7 @@ TEST(queue_test, single_thread)
     }
     EXPECT_EQ(mbox.size(), 1);
 
-    if(mbox.fetch(&data, os::WAIT_FOREVER))
+    if(mbox.fetch(&data, os::WAIT_FOREVER) == osal::exit::OK)
     {
         OS_LOG_INFO(APP_TAG, "count:%d read:%u", data.count, data.field2);
         EXPECT_EQ(data.count, 2);

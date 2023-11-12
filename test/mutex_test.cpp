@@ -60,7 +60,7 @@ TEST(thread_test, increment_test)
         os::error* e = nullptr;
         threads[i] = new os::thread("test", 1, 1024, thread_function);
 
-        if(threads[i]->create(nullptr, &e))
+        if(threads[i]->create(nullptr, &e) == osal::exit::KO)
         {
             os::printf_stack_error(APP_TAG, e);
         }

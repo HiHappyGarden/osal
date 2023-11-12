@@ -284,7 +284,7 @@ TEST(buffer_test, task_wait)
 
     memset(buffer, '\0', sizeof(buffer));
 
-    bool status;
+    osal::exit status;
 
     status = thread1.create(nullptr);
 
