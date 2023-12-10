@@ -24,13 +24,13 @@ using namespace os;
 
 class test_type {};
 
-TEST(traits_test, is_type)
+TEST(traits_test, get_type)
 {
 
-    ASSERT_EQ(is_type<uint8_t>::type, trait_type::UINT8);
-    ASSERT_EQ(is_type<char*>::type, trait_type::STR);
-    ASSERT_EQ(is_type<string<10>>::type, trait_type::STRING);
-    ASSERT_EQ(is_type<string<10>>::type, trait_type::STRING);
+    ASSERT_EQ(get_type<uint8_t>::type, trait_type::UINT8);
+    ASSERT_EQ(get_type<char*>::type, trait_type::STR);
+    ASSERT_EQ(get_type<string<10>>::type, trait_type::STRING);
+    ASSERT_EQ(get_type<string<10>>::type, trait_type::STRING);
 
 }
 
@@ -82,22 +82,34 @@ char func2(int a1, int a2)
     return 30;
 }
 
+class obj
+{
+    void operator()()
+    {
+        std::cout << "operator():" << (1) << std::endl;
+    }
+};
+
+
+
 TEST(traits_test, dynamic_function)
 {
     test1 t1;
     test2 t2;
 
     method m1(&t1, &test1::test_1);
-    method m2(&t2, &test2::test_2);
+    int32_t i =0;
+    method m2(&t2, &test2::test_2, trait_type::INT32);
     function f1 (func1);
-    function f2 (func2);
+    function f2 (func2, trait_type::INT32, trait_type::INT32);
 
-    func_reference* a1[4];
+    void (*f)() = [] {};
+    function l2 (f);
+
+    function_base* a1[4];
     a1[0] = &m1;
     a1[1] = &m2;
     a1[2] = &f1;
     a1[3] = &f2;
-
-
-
+    
 }

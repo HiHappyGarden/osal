@@ -75,7 +75,7 @@ public:
       * @brief Retrieves the size of the array.
       * @return The size of the array.
       */
-    constexpr inline size_t get_size() const OS_NOEXCEPT
+    [[nodiscard]] constexpr inline size_t get_size() const OS_NOEXCEPT
     {
         return Size;
     }
@@ -84,7 +84,7 @@ public:
       * @brief Retrieves the length of the data in the array.
       * @return The length of the data in the array.
       */
-    constexpr inline size_t get_length() const OS_NOEXCEPT
+    [[nodiscard]] constexpr inline size_t get_length() const OS_NOEXCEPT
     {
         return data_length;
     }
@@ -238,7 +238,7 @@ public:
       * @param first The first element to add to the array.
       * @param args The additional elements to add to the array.
       */
-    constexpr inline size_t size() const OS_NOEXCEPT
+    [[nodiscard]] constexpr inline size_t size() const OS_NOEXCEPT
     {
         return sizeof(data) / sizeof (data[0]);
     }
@@ -248,7 +248,7 @@ public:
       * @param first The first element to add to the array.
       * @param args The additional elements to add to the array.
       */
-    constexpr inline size_t length() const OS_NOEXCEPT
+    [[nodiscard]] constexpr inline size_t length() const OS_NOEXCEPT
     {
         return data_length;
     }
