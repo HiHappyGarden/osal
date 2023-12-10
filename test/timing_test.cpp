@@ -43,7 +43,7 @@ TEST(timing_test, base)
     os::thread thread_stop_main_loop("test", 4, 1024, [](void*) -> void*
     {
 
-        os::us_sleep(os::ms_to_us(500));
+        os::tick_sleep(2);
 
         os::stop_main_loop();
 
