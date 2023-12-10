@@ -72,7 +72,7 @@ if (ENABLE_FREERTOS)
     set(LIB_FREERTOS "freertos_kernel")
     message(STATUS "start ${LIB_FREERTOS} download")
 
-    subdirs(lib/FreeRTOS-Kernel)
+    add_subdirectory(lib/FreeRTOS-Kernel)
 endif()
 
 include_directories(inc)
