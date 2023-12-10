@@ -110,7 +110,7 @@ public:
     void signal_from_isr() OS_NOEXCEPT;
 
 private:
-    semaphore_data sem; ///< Internal data for the semaphore.
+    semaphore_data sem{}; ///< Internal data for the semaphore.
 };
 
 }

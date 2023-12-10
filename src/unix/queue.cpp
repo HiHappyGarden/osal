@@ -81,7 +81,7 @@ osal::exit queue::fetch(void* msg, uint64_t time, error** _error) OS_NOEXCEPT
 
     if(msg == nullptr)
     {
-        if(error)
+        if(_error)
         {
             *_error = OS_ERROR_BUILD("Invalid argument.", error_type::OS_EINVAL);
             OS_ERROR_PTR_SET_POSITION(*_error);
@@ -164,7 +164,7 @@ osal::exit queue::fetch(void* msg, uint64_t time, error** _error) OS_NOEXCEPT
     memset(msg, 0, q.message_size);
     if(q.count == 0)
     {
-        if(error)
+        if(_error)
         {
             *_error = OS_ERROR_BUILD("Message size 0.", error_type::OS_EUCLEAN);
             OS_ERROR_PTR_SET_POSITION(*_error);

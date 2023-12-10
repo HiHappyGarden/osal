@@ -141,7 +141,7 @@ public:
     void clear_from_isr(uint32_t value) OS_NOEXCEPT;
 
 private:
-    event_data e;  ///< Internal data for the event.
+    event_data e{};  ///< Internal data for the event.
 };
 
 

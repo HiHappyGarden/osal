@@ -37,7 +37,7 @@ constexpr const uint8_t TIMER_PRIO = 30;
 
 void* timer_thread (void * arg)
 {
-    timer* timer = static_cast<class timer*>(arg);
+    auto timer = static_cast<class timer*>(arg);
     sigset_t sigset{0};
     siginfo_t si{0};
     timespec tmo{0};
@@ -149,7 +149,7 @@ void timer::set(uint64_t us) OS_NOEXCEPT
     t.us = us;
 }
 
-void timer::start() OS_NOEXCEPT
+void timer::start() const OS_NOEXCEPT
 {
     itimerspec its{0};
 
@@ -162,12 +162,12 @@ void timer::start() OS_NOEXCEPT
     timer_settime (t.timerid, 0, &its, nullptr);
 }
 
-void timer::start_from_isr() OS_NOEXCEPT
+void timer::start_from_isr() const OS_NOEXCEPT
 {
     start();
 }
 
-void timer::stop() OS_NOEXCEPT
+void timer::stop() const OS_NOEXCEPT
 {
     itimerspec its {0};
 
@@ -179,7 +179,7 @@ void timer::stop() OS_NOEXCEPT
     timer_settime (t.timerid, 0, &its, nullptr);
 }
 
-void timer::stop_from_isr() OS_NOEXCEPT
+void timer::stop_from_isr() const OS_NOEXCEPT
 {
     stop();
 }

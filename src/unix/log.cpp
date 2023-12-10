@@ -59,12 +59,12 @@ inline namespace v1
     void log(const char* tag, uint8_t type, const char* fmt, ...) OS_NOEXCEPT
     {
         va_list list;
-        time_t rawtime{0};
-        tm timestruct{0};
+        time_t  raw_time{0};
+        tm      time_struct{0};
         timeval tv{0};
-        char timestamp[26]{0};
-        uint32_t millisec{0};
-        bool enable_print = false;
+        char     timestamp[26]{0};
+        uint32_t milli_sec{0};
+        bool     enable_print = false;
 
         if( !(log_level & LOG_STATE_ON) )
         {
@@ -73,11 +73,11 @@ inline namespace v1
 
         gettimeofday(&tv, nullptr);
 
-        millisec = lrint(tv.tv_usec/1000.0); // Round to nearest millisec
+        milli_sec = lrint(tv.tv_usec / 1'000l); // Round to nearest milli_sec
 
-        time (&rawtime);
-        localtime_r (&rawtime, &timestruct);
-        strftime (timestamp, sizeof (timestamp), "%H:%M:%S", &timestruct);
+        time (&raw_time);
+        localtime_r (&raw_time, &time_struct);
+        strftime (timestamp, sizeof (timestamp), "%H:%M:%S", &time_struct);
 
         switch (get_level_log(type))
         {
@@ -85,35 +85,35 @@ inline namespace v1
             if(log_level & (LEVEL_DEBUG))
             {
                 enable_print = true;
-                printf (OS_ANSI_COLOR_CYAN "%s.%03d %s - DEBUG: ", timestamp, millisec, tag);
+                printf (OS_ANSI_COLOR_CYAN "%s.%03d %s - DEBUG: ", timestamp, milli_sec, tag);
             }
             break;
         case LEVEL_INFO:
             if(log_level & (LEVEL_DEBUG|LEVEL_INFO))
             {
                 enable_print = true;
-                printf (OS_ANSI_COLOR_GREEN "%s.%03d %s - INFO : ", timestamp, millisec, tag);
+                printf (OS_ANSI_COLOR_GREEN "%s.%03d %s - INFO : ", timestamp, milli_sec, tag);
             }
             break;
         case LEVEL_WARNING:
             if(log_level & (LEVEL_DEBUG|LEVEL_INFO|LEVEL_WARNING))
             {
                 enable_print = true;
-                printf (OS_ANSI_COLOR_YELLOW "%s.%03d %s - WARN : ", timestamp, millisec, tag);
+                printf (OS_ANSI_COLOR_YELLOW "%s.%03d %s - WARN : ", timestamp, milli_sec, tag);
             }
             break;
         case LEVEL_ERROR:
             if(log_level & (LEVEL_DEBUG|LEVEL_INFO|LEVEL_WARNING|LEVEL_ERROR))
             {
                 enable_print = true;
-                printf (OS_ANSI_COLOR_RED "%s.%03d %s - ERROR: ", timestamp, millisec, tag);
+                printf (OS_ANSI_COLOR_RED "%s.%03d %s - ERROR: ", timestamp, milli_sec, tag);
             }
             break;
         case LEVEL_FATAL:
             if(log_level & (LEVEL_DEBUG|LEVEL_INFO|LEVEL_WARNING|LEVEL_ERROR|LEVEL_FATAL))
             {
                 enable_print = true;
-                printf (OS_ANSI_COLOR_MAGENTA "%s.%03d %s - FATAL: ", timestamp, millisec, tag);
+                printf (OS_ANSI_COLOR_MAGENTA "%s.%03d %s - FATAL: ", timestamp, milli_sec, tag);
             }
             break;
         default:

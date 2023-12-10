@@ -71,7 +71,7 @@ void us_sleep (uint64_t usec) OS_NOEXCEPT
     }
 }
 
-uint64_t get_current_time_us (void) OS_NOEXCEPT
+    [[maybe_unused]] uint64_t get_current_time_us () OS_NOEXCEPT
 {
     timespec ts{0};
 
@@ -79,7 +79,7 @@ uint64_t get_current_time_us (void) OS_NOEXCEPT
     return ts.tv_sec * 1'000'000 + ts.tv_nsec / 1'000;
 }
 
-tick tick_current (void) OS_NOEXCEPT
+tick tick_current () OS_NOEXCEPT
 {
     timespec ts{0};
     tick       tick;

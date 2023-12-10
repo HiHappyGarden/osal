@@ -44,7 +44,7 @@ class MyClass final
 {
     int integer = 0;
 public:
-    void* operator() (void * args) const
+    void* operator() (void*) const
     {
         return nullptr;
     }
@@ -53,9 +53,6 @@ public:
 
 osal::exit thread::create(void* arg, class error** error) OS_NOEXCEPT
 {
-
-    uint32_t result = 0;
-
     pthread_attr_t attr{0};
 
     pthread_attr_init (&attr);
@@ -70,7 +67,7 @@ osal::exit thread::create(void* arg, class error** error) OS_NOEXCEPT
     priority = 0;
 #endif
 
-    result = pthread_create (&t, &attr, h, arg);
+    int32_t result = pthread_create (&t, &attr, h, arg);
     if(result && error)
     {
         switch (error_type(result))
@@ -108,7 +105,7 @@ osal::exit thread::exit() OS_NOEXCEPT
     return exit::OK;
 }
 
-osal::exit thread::join(error** error) OS_NOEXCEPT
+osal::exit thread::join(error** error) const OS_NOEXCEPT
 {
     uint32_t result = pthread_join(t, nullptr);
     if(result && error)

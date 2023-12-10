@@ -36,7 +36,7 @@ TEST(string_test, char_array)
 {
 
     os::string<128> str;
-    ASSERT_EQ(str.size(), 127);
+   ASSERT_EQ(str.size(), 127);
 
     str += "hello world";
 

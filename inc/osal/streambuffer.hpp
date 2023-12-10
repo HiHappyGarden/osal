@@ -141,31 +141,31 @@ public:
      *
      * @return `true` if the stream buffer is empty, `false` otherwise.
      */
-    bool is_empty() OS_NOEXCEPT;
+    bool is_empty() const OS_NOEXCEPT;
 
     /**
      * @brief Checks if the stream buffer is full.
      *
      * @return `true` if the stream buffer is full, `false` otherwise.
      */
-    bool is_full() OS_NOEXCEPT;
+    bool is_full() const OS_NOEXCEPT;
 
     /**
      * @brief Returns the size of the stream buffer.
      *
      * @return The size of the stream buffer in bytes.
      */
-    size_t size() OS_NOEXCEPT;
+    size_t size() const OS_NOEXCEPT;
 
     /**
      * @brief Returns the number of bytes available in the stream buffer.
      *
      * @return The number of bytes available in the stream buffer.
      */
-    size_t bytes_free();
+    size_t bytes_free() const;
 
 private:
-    stream_buffer_data sb; ///< Internal data for the stream buffer.
+    stream_buffer_data sb{}; ///< Internal data for the stream buffer.
 };
 
 }

@@ -192,7 +192,7 @@ public:
         size_t size_b = strnlen(b, Size);
         if(data_length + size_b <= size())
         {
-            strncpy(data + data_length, b, Size - 1);
+            strncpy(data + data_length, b, size_b);
             data_length += size_b;
         }
         else

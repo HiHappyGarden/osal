@@ -110,10 +110,10 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return `true` if the thread was successfully joined, `false` otherwise.
      */
-    osal::exit join(error** error = nullptr) OS_NOEXCEPT;
+    osal::exit join(error** error = nullptr) const OS_NOEXCEPT;
 
 private:
-    char name[33];                  ///< The name of the thread.
+    char name[33]{};                  ///< The name of the thread.
     uint32_t priority;              ///< The priority of the thread.
     size_t stack_size;              ///< The stack size of the thread.
     thread::handler h;              ///< The thread handler function.

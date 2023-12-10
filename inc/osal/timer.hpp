@@ -99,7 +99,7 @@ public:
     /**
      * @brief Starts the timer.
      */
-    void start() OS_NOEXCEPT;
+    void start() const OS_NOEXCEPT;
 
     /**
      * @brief Starts the timer from an ISR.
@@ -107,12 +107,12 @@ public:
      * This function is an ISR (Interrupt Service Routine) version of the start() function.
      * It has the same behavior as start(), but it is meant to be called from an ISR context.
      */
-    void start_from_isr() OS_NOEXCEPT;
+    void start_from_isr() const OS_NOEXCEPT;
 
     /**
      * @brief Stops the timer.
      */
-    void stop() OS_NOEXCEPT;
+    void stop() const OS_NOEXCEPT;
 
     /**
      * @brief Stops the timer from an ISR.
@@ -120,13 +120,13 @@ public:
      * This function is an ISR (Interrupt Service Routine) version of the stop() function.
      * It has the same behavior as stop(), but it is meant to be called from an ISR context.
      */
-    void stop_from_isr() OS_NOEXCEPT;
+    void stop_from_isr() const OS_NOEXCEPT;
 
 private:
     uint64_t us;    ///< The time interval for the timer (in microseconds).
     handler fn;     ///< The handler function to be called when the timer expires.
     bool oneshot;   ///< Flag indicating whether the timer is a one-shot timer.
-    timer_data t;   ///< Internal data for the timer.
+    timer_data t{};   ///< Internal data for the timer.
 
     friend void* timer_thread(void*);
 };

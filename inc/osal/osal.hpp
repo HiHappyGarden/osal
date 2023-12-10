@@ -54,32 +54,32 @@ constexpr inline uint64_t sec_to_us(uint32_t sec) { return sec * 1'000'000ul; }
   * @brief Suspends the execution of the current thread for a specified number of microseconds.
   * @param us The number of microseconds to sleep.
   **/
-void us_sleep(uint64_t us) OS_NOEXCEPT;
+[[maybe_unused]] void us_sleep(uint64_t us) OS_NOEXCEPT;
 
 /**
   * @brief Retrieves the current time in microseconds.
   * @return The current time in microseconds.
   **/
-uint64_t get_current_time_us(void) OS_NOEXCEPT;
+[[maybe_unused]] uint64_t get_current_time_us() OS_NOEXCEPT;
 
 /**
   * @brief Retrieves the current tick value.
   * @return The current tick value.
   **/
-tick tick_current(void) OS_NOEXCEPT;
+[[maybe_unused]] tick tick_current() OS_NOEXCEPT;
 
 /**
   * @brief Converts a time value in microseconds to a tick value.
   * @param us The time value in microseconds.
   * @return The corresponding tick value.
   **/
-tick tick_from_us(uint64_t us) OS_NOEXCEPT;
+[[maybe_unused]] tick tick_from_us(uint64_t us) OS_NOEXCEPT;
 
 /**
   * @brief Suspends the execution of the current thread for the specified tick duration.
   * @param tick The tick duration to sleep.
   **/
-void tick_sleep(tick tick) OS_NOEXCEPT;
+[[maybe_unused]] void tick_sleep(tick tick) OS_NOEXCEPT;
 
 /**
  * @brief Sets the main loop to sleep mode.
@@ -89,7 +89,7 @@ void tick_sleep(tick tick) OS_NOEXCEPT;
  *
  * @param sleep_timing The time duration (in milliseconds) for the main loop to remain in sleep mode.
  */
-void set_sleep_main_loop(uint16_t sleep_timing) OS_NOEXCEPT;
+[[maybe_unused]] void set_sleep_main_loop(uint16_t sleep_timing) OS_NOEXCEPT;
 
 /**
  * @brief Gets the sleep mode timing of the main loop.
@@ -98,13 +98,13 @@ void set_sleep_main_loop(uint16_t sleep_timing) OS_NOEXCEPT;
  *
  * @return The time duration (in milliseconds) for the main loop to remain in sleep mode.
  */
-uint16_t get_sleep_main_loop() OS_NOEXCEPT;
+[[maybe_unused]] uint16_t get_sleep_main_loop() OS_NOEXCEPT;
 
 /**
  * @brief Set this valie permit to exape onlyone temporization in main loop
  * @param check
  */
-void set_check_main_loop(bool check) OS_NOEXCEPT;
+[[maybe_unused]] void set_check_main_loop(bool check) OS_NOEXCEPT;
 
 /**
  * @brief Starts the main loop.
@@ -112,7 +112,7 @@ void set_check_main_loop(bool check) OS_NOEXCEPT;
  * This function starts the main loop, which is responsible for the continuous execution of the main application logic.
  * The main loop will run until it is explicitly stopped or an exception occurs.
  */
-void start_main_loop() OS_NOEXCEPT;
+[[maybe_unused]] void start_main_loop() OS_NOEXCEPT;
 
 /**
  * @brief Stops the main loop.
@@ -120,7 +120,7 @@ void start_main_loop() OS_NOEXCEPT;
  * This function stops the main loop, which terminates the continuous execution of the main application logic.
  * After calling this function, the main loop will exit and the application will be in a stopped state.
  */
-void stop_main_loop() OS_NOEXCEPT;
+[[maybe_unused]] void stop_main_loop() OS_NOEXCEPT;
 
 }
 }

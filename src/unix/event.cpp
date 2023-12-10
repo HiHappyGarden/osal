@@ -125,12 +125,12 @@ osal::exit event::wait(uint32_t mask, uint32_t *value, uint64_t time, error** _e
 timeout:
     *value = e.flags & mask;
     pthread_mutex_unlock (&e.mutex);
-    return (error == 0) ? exit::KO : exit::KO;
+    return (error == 0) ? exit::OK : exit::KO;
 }
 
 inline osal::exit event::wait_from_isr(uint32_t mask, uint32_t *value, uint64_t time, error **error)
 {
-    return wait_from_isr(mask, value, time, error);
+    return wait(mask, value, time, error);
 }
 
 void event::set(uint32_t value)

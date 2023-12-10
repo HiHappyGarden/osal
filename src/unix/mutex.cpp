@@ -28,14 +28,13 @@ inline namespace v1
 
 mutex::mutex(class error** error) OS_NOEXCEPT
 {
-    int32_t result = 0;
     pthread_mutexattr_t mattr{0};
 
     pthread_mutexattr_init (&mattr);
     pthread_mutexattr_setprotocol (&mattr, PTHREAD_PRIO_INHERIT);
     pthread_mutexattr_settype (&mattr, PTHREAD_MUTEX_RECURSIVE);
 
-    result = pthread_mutex_init (&m, &mattr);
+    int32_t result = pthread_mutex_init (&m, &mattr);
     if (result && error)
     {
         switch (error_type(result)) {

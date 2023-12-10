@@ -114,13 +114,13 @@ size_t stream_buffer::send(const uint8_t *data, size_t size, uint64_t time, erro
     pthread_mutex_lock (&sb.mutex);
 
     size_t ret = sb.count;
-    bool check_cond_wait_init = false;
+//    bool check_cond_wait_init = false;
 
     while (sb.count == sb.size)
     {
         if (time != WAIT_FOREVER)
         {
-            check_cond_wait_init = true;
+//            check_cond_wait_init = true;
 
             error = pthread_cond_timedwait (&sb.cond, &sb.mutex, &ts);
             if (error)
@@ -298,12 +298,12 @@ size_t stream_buffer::receive(uint8_t *data, size_t size, uint64_t time, error *
 
     pthread_mutex_lock (&sb.mutex);
 
-    bool check_cond_wait_init = false;
+//    bool check_cond_wait_init = false;
     while (sb.count < sb.trigger_size)
     {
         if (time != WAIT_FOREVER)
         {
-            check_cond_wait_init = true;
+//            check_cond_wait_init = true;
 
             error = pthread_cond_timedwait (&sb.cond, &sb.mutex, &ts);
             if (error)
@@ -490,22 +490,22 @@ void stream_buffer::reset() OS_NOEXCEPT
     memset(sb.buffer, '\0', sb.size);
 }
 
-bool stream_buffer::is_empty() OS_NOEXCEPT
+bool stream_buffer::is_empty() const OS_NOEXCEPT
 {
     return sb.count == 0;
 }
 
-bool stream_buffer::is_full() OS_NOEXCEPT
+bool stream_buffer::is_full() const OS_NOEXCEPT
 {
     return (sb.size - sb.count) == 0;
 }
 
-size_t stream_buffer::size() OS_NOEXCEPT
+size_t stream_buffer::size() const OS_NOEXCEPT
 {
     return sb.count;
 }
 
-size_t stream_buffer::bytes_free()
+size_t stream_buffer::bytes_free() const
 {
     return sb.size - sb.count;
 }
