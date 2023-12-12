@@ -111,5 +111,9 @@ TEST(traits_test, dynamic_function)
     a1[1] = &m2;
     a1[2] = &f1;
     a1[3] = &f2;
+
+    const function_base& fb1 = m1;
+    function_base&& fb2 = method(&t2, &test2::test_2, trait_type::BOOL, trait_type::INT32);;
+
     
 }
