@@ -217,7 +217,18 @@ struct smart_call<T, void, Ts...> {
     }
 };
 
-struct function_base { };
+struct function_base
+{
+    enum type
+    {
+        METHOD,
+        FUNCTION
+    };
+
+    explicit function_base(enum type type) OS_NOEXCEPT : type(type) {}
+
+    enum type type;
+};
 
 template <typename T, typename V, typename R,
         typename A0 = no_class, typename A1 = no_class, typename A2 = no_class>
@@ -281,7 +292,8 @@ public:
 
 template<typename T, typename V, typename R, typename A0, typename A1, typename A2>
 method<T, V, R, A0, A1, A2>::method(T* target, R (V::*method)(), trait_type ret_type) OS_NOEXCEPT
-: target(target)
+: function_base(METHOD)
+, target(target)
 , ret_type(ret_type)
 {
     method_prt.method_no_arg = method;
@@ -289,7 +301,8 @@ method<T, V, R, A0, A1, A2>::method(T* target, R (V::*method)(), trait_type ret_
 
 template<typename T, typename V, typename R, typename A0, typename A1, typename A2>
 method<T, V, R, A0, A1, A2>::method(T* target, R (V::*method)(A0), trait_type ret_type, trait_type type0) OS_NOEXCEPT
-: args_count(1)
+: function_base(METHOD)
+, args_count(1)
 , target(target)
 , ret_type(ret_type)
 {
@@ -299,7 +312,8 @@ method<T, V, R, A0, A1, A2>::method(T* target, R (V::*method)(A0), trait_type re
 
 template<typename T, typename V, typename R, typename A0, typename A1, typename A2>
 method<T, V, R, A0, A1, A2>::method(T* target, R (V::*method)(const A0&), trait_type ret_type, trait_type type0) OS_NOEXCEPT
-: args_count(1)
+: function_base(METHOD)
+, args_count(1)
 , target(target)
 , ret_type(ret_type)
 , method_by_reference(true)
@@ -310,7 +324,8 @@ method<T, V, R, A0, A1, A2>::method(T* target, R (V::*method)(const A0&), trait_
 
 template<typename T, typename V, typename R, typename A0, typename A1, typename A2>
 method<T, V, R, A0, A1, A2>::method(T* target, R (V::*method)(A0, A1), trait_type ret_type, trait_type type0, trait_type type1) OS_NOEXCEPT
-: args_count(2)
+: function_base(METHOD)
+, args_count(2)
 , target(target)
 , ret_type(ret_type)
 {
@@ -321,7 +336,8 @@ method<T, V, R, A0, A1, A2>::method(T* target, R (V::*method)(A0, A1), trait_typ
 
 template<typename T, typename V, typename R, typename A0, typename A1, typename A2>
 method<T, V, R, A0, A1, A2>::method(T* target, R (V::*method)(const A0&, const A1&), trait_type ret_type, trait_type type0, trait_type type1) OS_NOEXCEPT
-: args_count(2)
+: function_base(METHOD)
+, args_count(2)
 , target(target)
 , ret_type(ret_type)
 , method_by_reference(true)
@@ -333,7 +349,8 @@ method<T, V, R, A0, A1, A2>::method(T* target, R (V::*method)(const A0&, const A
 
 template<typename T, typename V, typename R, typename A0, typename A1, typename A2>
 method<T, V, R, A0, A1, A2>::method(T* target, R (V::*method)(A0, A1, A2), trait_type ret_type, trait_type type0, trait_type type1, trait_type type2) OS_NOEXCEPT
-: args_count(3)
+: function_base(METHOD)
+, args_count(3)
 , target(target)
 , ret_type(ret_type)
 {
@@ -345,7 +362,8 @@ method<T, V, R, A0, A1, A2>::method(T* target, R (V::*method)(A0, A1, A2), trait
 
 template<typename T, typename V, typename R, typename A0, typename A1, typename A2>
 method<T, V, R, A0, A1, A2>::method(T* target, R (V::*method)(const A0&, const A1&, const A2&), trait_type ret_type, trait_type type0, trait_type type1, trait_type type2) OS_NOEXCEPT
-: args_count(3)
+: function_base(METHOD)
+, args_count(3)
 , target(target)
 , ret_type(ret_type)
 , method_by_reference(true)
@@ -412,15 +430,17 @@ public:
 
 template<typename R, typename A0, typename A1, typename A2>
 function<R, A0, A1, A2>::function( R (*function)(), trait_type ret_type) OS_NOEXCEPT
-: ret_type(ret_type)
+: function_base(FUNCTION)
+, ret_type(ret_type)
 {
     function_prt.function_no_arg = function;
 }
 
 template<typename R, typename A0, typename A1, typename A2>
 function<R, A0, A1, A2>::function( R (*function)(A0), trait_type ret_type, trait_type type0) OS_NOEXCEPT
-        : args_count(1)
-        , ret_type(ret_type)
+: function_base(FUNCTION)
+, args_count(1)
+, ret_type(ret_type)
 {
     args_type[0] = type0;
     function_prt.function_a0 = function;
@@ -428,9 +448,10 @@ function<R, A0, A1, A2>::function( R (*function)(A0), trait_type ret_type, trait
 
 template<typename R, typename A0, typename A1, typename A2>
 function<R, A0, A1, A2>::function( R (*function)(const A0&), trait_type ret_type, trait_type type0) OS_NOEXCEPT
-        : args_count(1)
-        , ret_type(ret_type)
-        , function_by_reference(true)
+: function_base(FUNCTION)
+, args_count(1)
+, ret_type(ret_type)
+, function_by_reference(true)
 {
     args_type[0] = type0;
     function_prt.function_ref_a0 = function;
@@ -438,8 +459,9 @@ function<R, A0, A1, A2>::function( R (*function)(const A0&), trait_type ret_type
 
 template<typename R, typename A0, typename A1, typename A2>
 function<R, A0, A1, A2>::function( R (*function)(A0, A1), trait_type ret_type, trait_type type0, trait_type type1) OS_NOEXCEPT
-        : args_count(2)
-        , ret_type(ret_type)
+: function_base(FUNCTION)
+, args_count(2)
+, ret_type(ret_type)
 {
     args_type[0] = type0;
     args_type[1] = type1;
@@ -448,9 +470,10 @@ function<R, A0, A1, A2>::function( R (*function)(A0, A1), trait_type ret_type, t
 
 template<typename R, typename A0, typename A1, typename A2>
 function<R, A0, A1, A2>::function( R (*function)(const A0&, const A1&), trait_type ret_type, trait_type type0, trait_type type1) OS_NOEXCEPT
-        : args_count(2)
-        , ret_type(ret_type)
-        , function_by_reference(true)
+: function_base(FUNCTION)
+, args_count(2)
+, ret_type(ret_type)
+, function_by_reference(true)
 {
     args_type[0] = type0;
     args_type[1] = type1;
@@ -459,8 +482,9 @@ function<R, A0, A1, A2>::function( R (*function)(const A0&, const A1&), trait_ty
 
 template<typename R, typename A0, typename A1, typename A2>
 function<R, A0, A1, A2>::function( R (*function)(A0, A1, A2), trait_type ret_type, trait_type type0, trait_type type1, trait_type type2) OS_NOEXCEPT
-        : args_count(3)
-        , ret_type(ret_type)
+: function_base(FUNCTION)
+,args_count(3)
+, ret_type(ret_type)
 {
     args_type[0] = type0;
     args_type[1] = type1;
@@ -470,7 +494,8 @@ function<R, A0, A1, A2>::function( R (*function)(A0, A1, A2), trait_type ret_typ
 
 template<typename R, typename A0, typename A1, typename A2>
 function<R, A0, A1, A2>::function( R (*function)(const A0&, const A1&, const A2&), trait_type ret_type, trait_type type0, trait_type type1, trait_type type2) OS_NOEXCEPT
-        : args_count(3)
+        : function_base(FUNCTION)
+        , args_count(3)
         , ret_type(ret_type)
         , function_by_reference(true)
 {
