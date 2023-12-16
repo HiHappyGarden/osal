@@ -232,7 +232,7 @@ struct function_base
 
 template <typename T, typename V, typename R,
         typename A0 = no_class, typename A1 = no_class, typename A2 = no_class>
-class method final : public function_base
+class method final : protected function_base
 {
     const uint8_t args_count = 0;
     trait_type args_type[MAX_PARAM] {trait_type::VOID, trait_type::VOID, trait_type::VOID};
@@ -279,9 +279,9 @@ public:
         return args_type;
     }
 
-    [[nodiscard]] inline const trait_type*  get_ret_type() const OS_NOEXCEPT
+    [[nodiscard]] inline trait_type  get_ret_type() const OS_NOEXCEPT
     {
-        return args_type;
+        return ret_type;
     }
 
     [[nodiscard]] inline bool  get_method_by_reference() const OS_NOEXCEPT
@@ -378,7 +378,7 @@ method<T, V, R, A0, A1, A2>::method(T* target, R (V::*method)(const A0&, const A
 
 template <typename R,
         typename A0 = no_class, typename A1 = no_class, typename A2 = no_class>
-class function final : public function_base
+class function final : protected function_base
 {
     const uint8_t args_count = 0;
     trait_type args_type[MAX_PARAM] {trait_type::VOID, trait_type::VOID, trait_type::VOID};
@@ -417,9 +417,9 @@ public:
         return args_type;
     }
 
-    [[nodiscard]] inline const trait_type*  get_ret_type() const OS_NOEXCEPT
+    [[nodiscard]] inline trait_type  get_ret_type() const OS_NOEXCEPT
     {
-        return args_type;
+        return ret_type;
     }
     
     [[nodiscard]] inline bool get_function_by_reference() const OS_NOEXCEPT
