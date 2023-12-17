@@ -227,11 +227,6 @@ struct function_base
 
     enum type type;
 
-    inline explicit function_base(enum type type, const uint8_t args_count = 0, trait_type ret_type = trait_type::VOID, bool by_reference = false) OS_NOEXCEPT : type(type), args_count(args_count), ret_type(ret_type), by_reference(by_reference)
-    {
-        memcpy(this->args_type, args_type, sizeof(this->args_type));
-    }
-
     [[nodiscard]] inline uint8_t get_args_count() const OS_NOEXCEPT
     {
         return args_count;
@@ -253,6 +248,11 @@ struct function_base
     }
 
 protected:
+    inline explicit function_base(enum type type, const uint8_t args_count = 0, trait_type ret_type = trait_type::VOID, bool by_reference = false) OS_NOEXCEPT : type(type), args_count(args_count), ret_type(ret_type), by_reference(by_reference)
+    {
+        memcpy(this->args_type, args_type, sizeof(this->args_type));
+    }
+
     trait_type args_type[MAX_PARAM] {trait_type::VOID, trait_type::VOID, trait_type::VOID};
     const uint8_t args_count;
     trait_type ret_type;
