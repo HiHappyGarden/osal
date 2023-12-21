@@ -39,18 +39,6 @@ thread::thread(const char *name, uint32_t priority, size_t stack_size, thread::h
     }
 }
 
-
-class MyClass final
-{
-    int integer = 0;
-public:
-    void* operator() (void*) const
-    {
-        return nullptr;
-    }
-};
-
-
 osal::exit thread::create(void* arg, class error** error) OS_NOEXCEPT
 {
     pthread_attr_t attr{0};

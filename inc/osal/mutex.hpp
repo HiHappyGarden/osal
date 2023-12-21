@@ -96,7 +96,7 @@ public:
      */
     void unlock_from_isr() OS_NOEXCEPT;
 private:
-    mutex_data m = {0};
+    mutex_data m{};
 };
 
 

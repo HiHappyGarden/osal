@@ -4,7 +4,7 @@ if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
     cmake_policy(SET CMP0135 NEW)
 endif()
 
-PROJECT(osal VERSION 0.7.0 LANGUAGES CXX C)
+PROJECT(osal VERSION 0.8.0 LANGUAGES CXX C)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -56,7 +56,7 @@ configure_file(config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/inc/osal/config.h)
 file(GLOB_RECURSE OSAL_TEST CONFIGURE_DEPENDS "test/*.cpp")
 
 include(FetchContent)
-message(STATUS "start googletest download")
+message(STATUS "Start googletest download")
 FetchContent_Declare(
   googletest
   URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
@@ -66,25 +66,60 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 
-
-#enable FreeRTOS
-if (ENABLE_FREERTOS)
-    set(LIB_FREERTOS "freertos_kernel")
-    message(STATUS "start ${LIB_FREERTOS} download")
-
-    add_subdirectory(lib/FreeRTOS-Kernel)
-endif()
-
 include_directories(inc)
 
 if(UNIX)
-    message(STATUS "OSAL for LINUX")
-    set(PLATFORM_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/unix)
-    include_directories(${PLATFORM_INCLUDE})
-    file(GLOB_RECURSE OSAL_INCLUDES CONFIGURE_DEPENDS "inc/*.hpp" "src/unix/osal_sys/*.hpp")
-    file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/*.cpp" "src/unix/*.cpp")
+    if (ENABLE_FREERTOS)
+        message(STATUS "OSAL for FreeRTOS linux emulation")
 
+        message(STATUS "Start freertos download")
+        FetchContent_Declare( freertos_kernel
+                GIT_REPOSITORY https://github.com/FreeRTOS/FreeRTOS-Kernel.git
+                GIT_TAG        V11.0.1
+        )
+
+        add_library(freertos_config INTERFACE)
+
+        target_include_directories(freertos_config SYSTEM
+                INTERFACE
+                include/src/freertos
+        )
+
+        target_compile_definitions(freertos_config
+                INTERFACE
+                projCOVERAGE_TEST=0
+        )
+
+        set( FREERTOS_HEAP "4" CACHE STRING "" FORCE)
+        # Select the native compile PORT
+        set( FREERTOS_PORT "GCC_POSIX" CACHE STRING "" FORCE)
+        # Select the cross-compile PORT
+#        if (CMAKE_CROSSCOMPILING)
+#            set(FREERTOS_PORT "GCC_ARM_CA9" CACHE STRING "" FORCE)
+#        endif()
+#        include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/include)
+#        include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/portable/ThirdParty/GCC/Posix/)
+
+        FetchContent_MakeAvailable(freertos_kernel)
+        set(PLATFORM_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/freertos)
+        include_directories(${PLATFORM_INCLUDE})
+        file(GLOB_RECURSE OSAL_INCLUDES CONFIGURE_DEPENDS "inc/*.hpp" "src/freertos/osal_sys/*.hpp")
+        file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/error.cpp" "memory.cpp" "src/freertos/*.cpp")
+    else()
+        message(STATUS "OSAL for LINUX")
+        set(PLATFORM_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/unix)
+        include_directories(${PLATFORM_INCLUDE})
+        file(GLOB_RECURSE OSAL_INCLUDES CONFIGURE_DEPENDS "inc/*.hpp" "src/unix/osal_sys/*.hpp")
+        file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/error.cpp" "memory.cpp" "src/unix/*.cpp")
+    endif()
 endif()
+
+message(STATUS "PROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}")
+message(STATUS "CMAKE_BINARY_DIR=${CMAKE_BINARY_DIR}")
+message(STATUS "OSAL_INCLUDES=${OSAL_INCLUDES}")
+message(STATUS "OSAL_SOURCES=${OSAL_SOURCES}")
+message(STATUS "PLATFORM_INCLUDE=${PLATFORM_INCLUDE}")
+
 
 #add_definitions(-DOS_USE_SCHED_FIFO)
 add_compile_options(-fno-rtti -fno-exceptions)
@@ -100,7 +135,7 @@ else()
 endif()
 
 if (CMAKE_PROJECT_NAME STREQUAL osal AND BUILD_TESTING)
-    message(STATUS "buld test")
+    message(STATUS "build test")
 
     add_executable(osal_test ${OSAL_TEST})
 

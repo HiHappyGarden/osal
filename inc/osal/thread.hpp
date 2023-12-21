@@ -118,7 +118,7 @@ private:
     size_t stack_size;              ///< The stack size of the thread.
     thread::handler h;              ///< The thread handler function.
 
-    thread_data t {0};              ///< Internal data for the thread.
+    thread_data t {};              ///< Internal data for the thread.
 };
 
 
