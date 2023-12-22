@@ -17,6 +17,7 @@
  *
  ***************************************************************************/
 #include "osal/semaphore.hpp"
+#include "osal/osal.hpp"
 
 
 namespace osal
@@ -24,35 +25,63 @@ namespace osal
 inline namespace v1
 {
 
-semaphore::semaphore(size_t count) OS_NOEXCEPT
-{
-
-}
+semaphore::semaphore(size_t count) OS_NOEXCEPT : sem {.handle = xSemaphoreCreateCounting (UINT32_MAX, count) } { }
 
 semaphore::~semaphore()
 {
-
+    if(sem.handle)
+    {
+        vSemaphoreDelete(sem.handle);
+        sem.handle = nullptr;
+    }
 }
 
 osal::exit semaphore::wait(uint64_t time, error** _error) OS_NOEXCEPT
 {
+    if(sem.handle == nullptr && _error)
+    {
+        *_error = OS_ERROR_BUILD("xSemaphoreCreateCounting() fail.", error_type::OS_EFAULT);
+        OS_ERROR_PTR_SET_POSITION(*_error);
+        return exit::KO;
+    }
+    if (xSemaphoreTake (sem.handle, ms_to_us(time)) == pdTRUE)
+    {
+        return exit::OK;
+    }
 
-    return exit::OK;
+    return exit::KO;
 }
 
-osal::exit semaphore::wait_from_isr(uint64_t time, error **error) OS_NOEXCEPT
+osal::exit semaphore::wait_from_isr(uint64_t time, error **_error) OS_NOEXCEPT
 {
-    return wait(time, error);
+    if(sem.handle == nullptr && _error)
+    {
+        *_error = OS_ERROR_BUILD("xSemaphoreCreateCounting() fail.", error_type::OS_EFAULT);
+        OS_ERROR_PTR_SET_POSITION(*_error);
+        return exit::KO;
+    }
+    if (xSemaphoreTakeFromISR (sem.handle, nullptr) == pdTRUE)
+    {
+        return exit::OK;
+    }
+
+    return exit::KO;
 }
 
 void semaphore::signal()
 {
-
+    if(sem.handle)
+    {
+        xSemaphoreGive(sem.handle);
+    }
 }
 
 void semaphore::signal_from_isr() OS_NOEXCEPT
 {
-    signal();
+    if(sem.handle)
+    {
+        xSemaphoreGiveFromISR(sem.handle, nullptr);
+    }
 }
 
 

@@ -24,13 +24,13 @@ inline namespace v1
 {
 
 queue::queue(size_t size, size_t message_size, error** error) OS_NOEXCEPT
-    : buffer_size(size * message_size)
 {
-    // kiwi_os_mbox_t * mbox;
+    q.buffer_size = size * message_size;
+
     pthread_mutexattr_t mattr{0};
     pthread_condattr_t cattr{0};
 
-    q.msg = new uint8_t[buffer_size];
+    q.msg = new uint8_t[q.buffer_size];
     if (q.msg == nullptr)
     {
         if(error)
@@ -40,7 +40,7 @@ queue::queue(size_t size, size_t message_size, error** error) OS_NOEXCEPT
         }
         return;
     }
-    memset(q.msg, 0, buffer_size);
+    memset(q.msg, 0, q.buffer_size);
 
     pthread_condattr_init (&cattr);
     pthread_condattr_setclock (&cattr, CLOCK_MONOTONIC);
@@ -64,7 +64,7 @@ queue::~queue() OS_NOEXCEPT
 
     if(q.msg)
     {
-        for(size_t i = 0; i < buffer_size; i++)
+        for(size_t i = 0; i < q.buffer_size; i++)
         {
             q.msg[i] = 0;
         }

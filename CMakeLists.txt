@@ -12,7 +12,7 @@ set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS ON)
 add_compile_options("$<$<STREQUAL:$<TARGET_PROPERTY:LINKER_LANGUAGE>,CXX>:-fno-rtti>")
-add_compile_options("$<$<STREQUAL:$<TARGET_PROPERTY:LINKER_LANGUAGE>,CXX>:-fexceptions>")
+add_compile_options("$<$<STREQUAL:$<TARGET_PROPERTY:LINKER_LANGUAGE>,CXX>:-fno-exceptions>")
 
 include(CheckIPOSupported)
 check_ipo_supported(RESULT supported OUTPUT error)
@@ -82,7 +82,7 @@ if(UNIX)
 
         target_include_directories(freertos_config SYSTEM
                 INTERFACE
-                include/src/freertos
+                src/freertos/config
         )
 
         target_compile_definitions(freertos_config
@@ -97,13 +97,14 @@ if(UNIX)
 #        if (CMAKE_CROSSCOMPILING)
 #            set(FREERTOS_PORT "GCC_ARM_CA9" CACHE STRING "" FORCE)
 #        endif()
-#        include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/include)
-#        include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/portable/ThirdParty/GCC/Posix/)
+        include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/include)
+        include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/portable/ThirdParty/GCC/Posix)
 
+        set(LIB_FREERTOS "freertos_kernel")
         FetchContent_MakeAvailable(freertos_kernel)
-        set(PLATFORM_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/freertos)
+        set(PLATFORM_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/freertos ${CMAKE_CURRENT_SOURCE_DIR}/src/freertos/config)
         include_directories(${PLATFORM_INCLUDE})
-        file(GLOB_RECURSE OSAL_INCLUDES CONFIGURE_DEPENDS "inc/*.hpp" "src/freertos/osal_sys/*.hpp")
+        file(GLOB_RECURSE OSAL_INCLUDES CONFIGURE_DEPENDS "inc/*.hpp" "src/freertos/osal_sys/*.hpp" "src/freertos/config/*.h")
         file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/error.cpp" "memory.cpp" "src/freertos/*.cpp")
     else()
         message(STATUS "OSAL for LINUX")

@@ -44,7 +44,7 @@ event::~event() OS_NOEXCEPT
     pthread_mutex_destroy (&e.mutex);
 }
 
-osal::exit event::wait(uint32_t mask, uint32_t *value, uint64_t time, error** _error) OS_NOEXCEPT
+osal::exit event::wait(uint32_t mask, uint32_t& value, uint64_t time, error** _error) OS_NOEXCEPT
 {
     struct timespec ts{0};
     uint8_t error     = 0;
@@ -123,12 +123,12 @@ osal::exit event::wait(uint32_t mask, uint32_t *value, uint64_t time, error** _e
     }
 
 timeout:
-    *value = e.flags & mask;
+    value = e.flags & mask;
     pthread_mutex_unlock (&e.mutex);
     return (error == 0) ? exit::OK : exit::KO;
 }
 
-inline osal::exit event::wait_from_isr(uint32_t mask, uint32_t *value, uint64_t time, error **error)
+inline osal::exit event::wait_from_isr(uint32_t mask, uint32_t& value, uint64_t time, error **error)
 {
     return wait(mask, value, time, error);
 }

@@ -20,9 +20,6 @@
 
 #include"osal/osal.hpp"
 
-#include <stdio.h>
-
-
 
 #define BIT1 0x01
 #define BIT2 0x02
@@ -39,7 +36,7 @@ void* thread_1 (void * arg)
     while(run)
     {
         uint32_t v = BIT1;
-        event.wait(BIT1|BIT2, &v, os::WAIT_FOREVER);
+        event.wait(BIT1|BIT2, v, os::WAIT_FOREVER);
         if(v & BIT1)
         {
 
@@ -58,7 +55,7 @@ static void thread_2 (void * arg)
     while(run)
     {
         uint32_t v = BIT2;
-        event.wait(BIT1|BIT2, &v, os::WAIT_FOREVER);
+        event.wait(BIT1|BIT2, v, os::WAIT_FOREVER);
         if(v & BIT2)
         {
 

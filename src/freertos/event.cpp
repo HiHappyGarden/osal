@@ -17,63 +17,103 @@
  *
  ***************************************************************************/
 #include "osal/event.hpp"
+#include "osal/osal.hpp"
 
 namespace osal
 {
 inline namespace v1
 {
 
-event::event() OS_NOEXCEPT
-{
-
-}
+event::event() OS_NOEXCEPT : e{ .handle = xEventGroupCreate() } { }
 
 event::~event() OS_NOEXCEPT
 {
-
+    if(e.handle)
+    {
+        vEventGroupDelete(e.handle);
+        e.handle = nullptr;
+    }
 }
 
-osal::exit event::wait(uint32_t mask, uint32_t *value, uint64_t time, error** _error) OS_NOEXCEPT
+
+osal::exit event::wait(uint32_t mask, uint32_t& value, uint64_t time, error** _error) OS_NOEXCEPT
 {
+    if(e.handle == nullptr)
+    {
+        if(_error)
+        {
+            *_error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
+            OS_ERROR_PTR_SET_POSITION(*_error);
+            return exit::KO;
+        }
+    }
+    value = xEventGroupWaitBits(
+            e.handle,
+            mask,
+            pdFALSE,
+            pdFALSE,
+            ms_to_us(time));
 
-    return exit::OK;
+    value &= mask;
+    return (value == 0) ? exit::OK : exit::KO;
 }
 
-inline osal::exit event::wait_from_isr(uint32_t mask, uint32_t *value, uint64_t time, error **error)
+osal::exit event::wait_from_isr(uint32_t mask, uint32_t& value, uint64_t time, error **error)
 {
     return wait(mask, value, time, error);
 }
 
 void event::set(uint32_t value)
 {
-
+    if(e.handle)
+    {
+        xEventGroupSetBits(e.handle, value);
+    }
 }
 
-inline void event::set_from_isr(uint32_t value)
+void event::set_from_isr(uint32_t value)
 {
-    return set(value);
+    if(e.handle)
+    {
+        xEventGroupSetBitsFromISR(e.handle, value, NULL);
+    }
 }
 
 uint32_t event::get() OS_NOEXCEPT
 {
-    uint32_t ret = 0;
-
-    return ret;
+    if(e.handle)
+    {
+        return xEventGroupGetBits(e.handle);
+    }
+    return 0;
 }
 
 uint32_t event::get_from_isr() OS_NOEXCEPT
 {
-    return get();
+    if(e.handle)
+    {
+        EventBits_t ret = xEventGroupGetBitsFromISR(e.handle);
+        portYIELD_FROM_ISR(pdFALSE);
+        return ret;
+    }
+    return 0;
 }
 
 void event::clear(uint32_t value)
 {
-
+    if(e.handle)
+    {
+        xEventGroupClearBits(e.handle, value);
+    }
 }
 
 inline void event::clear_from_isr(uint32_t value)
 {
-    clear(value);
+    if(e.handle)
+    {
+        xEventGroupClearBitsFromISR(e.handle, value);
+        portYIELD_FROM_ISR(pdFALSE);
+    }
 }
 
 }

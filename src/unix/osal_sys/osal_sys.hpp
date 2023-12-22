@@ -35,55 +35,56 @@ using mutex_data = pthread_mutex_t;
 
 struct semaphore_data
 {
-    pthread_cond_t cond;
-    pthread_mutex_t mutex;
-    size_t count;
+    pthread_cond_t cond{};
+    pthread_mutex_t mutex{};
+    size_t count = 0;
 };
 
 struct event_data
 {
-    pthread_cond_t cond;
-    pthread_mutex_t mutex;
-    uint32_t flags;
+    pthread_cond_t cond{};
+    pthread_mutex_t mutex{};
+    uint32_t flags = 0;
 };
 
 struct queue_data
 {
-    pthread_cond_t cond;
-    pthread_mutex_t mutex;
-    size_t r;
-    size_t w;
-    size_t count;
-    size_t size;
-    size_t message_size;
-    uint8_t* msg;
+    pthread_cond_t cond{};
+    pthread_mutex_t mutex{};
+    size_t r = 0;
+    size_t w = 0;
+    size_t count = 0;
+    size_t size = 0;
+    size_t message_size = 0;
+    uint8_t* msg = nullptr;
+    size_t buffer_size = 0;
 };
 
 
 struct stream_buffer_data
 {
-    pthread_cond_t cond;
-    pthread_mutex_t mutex;
-    size_t trigger_size;
-    size_t r;
-    size_t w;
-    size_t end;
-    size_t count;
-    size_t size;
-    uint8_t* buffer;
+    pthread_cond_t cond{};
+    pthread_mutex_t mutex{};
+    size_t trigger_size{};
+    size_t r = 0;
+    size_t w = 0;
+    size_t end = 0;
+    size_t count = 0;
+    size_t size = 0;
+    uint8_t* buffer = nullptr;
 };
 
 
 struct timer_data
 {
-    timer_t timerid;
-    class thread* thread;
-    pid_t thread_id;
-    bool exit;
-    void* (*fn) (class timer*, void*);
-    void* arg;
-    uint32_t us;
-    bool oneshot;
+    timer_t timerid{};
+    class thread* thread = nullptr;
+    pid_t thread_id{};
+    bool exit = false;
+    void* (*fn) (class timer*, void*) = nullptr;
+    void* arg = nullptr;
+    uint32_t us = 0;
+    bool oneshot = true;
 };
 
 using tick = uint64_t;

@@ -62,12 +62,12 @@ public:
      * This function blocks the caller until the specified event bits are set or until the specified time has elapsed.
      *
      * @param mask The event mask specifying which bits to wait for.
-     * @param value Pointer to a variable where the value of the event will be stored.
+     * @param value Reference to a variable where the value of the event will be stored.
      * @param time The maximum time to wait for the event to be set (in milliseconds).
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return `OK` if the event was set, `KO` if a timeout occurred.
      */
-    osal::exit wait(uint32_t mask, uint32_t* value, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    osal::exit wait(uint32_t mask, uint32_t& value, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
     /**
      * @brief Waits for an event to be set from an ISR.
@@ -76,12 +76,12 @@ public:
      * It has the same behavior as wait(), but it is meant to be called from an ISR context.
      *
      * @param mask The event mask specifying which bits to wait for.
-     * @param value Pointer to a variable where the value of the event will be stored.
+     * @param value Reference to a variable where the value of the event will be stored.
      * @param time The maximum time to wait for the event to be set (in milliseconds).
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return `true` if the event was set, `false` if a timeout occurred.
      */
-    osal::exit wait_from_isr(uint32_t mask, uint32_t* value, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    osal::exit wait_from_isr(uint32_t mask, uint32_t& value, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
 
     /**
      * @brief Sets event bits.

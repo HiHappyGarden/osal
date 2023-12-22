@@ -19,7 +19,10 @@
 #pragma once
 
 #include <FreeRTOS.h>
-
+#include <semphr.h>
+#include <event_groups.h>
+#include <queue.h>
+#include <stream_buffer.h>
 
 namespace osal
 {
@@ -28,24 +31,25 @@ inline namespace v1
 
 struct mutex_data
 {
-
+    SemaphoreHandle_t handle = nullptr;
 };
 
 struct semaphore_data
 {
-
+    SemaphoreHandle_t handle = nullptr;
 };
 
 struct event_data
 {
-
+    EventGroupHandle_t handle = nullptr;
 };
 
 struct queue_data
 {
-
+    size_t size = 0;
+    size_t count = 0;
+    QueueHandle_t handle = nullptr;
 };
-
 
 struct stream_buffer_data
 {

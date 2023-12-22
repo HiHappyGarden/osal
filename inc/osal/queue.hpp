@@ -131,7 +131,6 @@ public:
     size_t size () const OS_NOEXCEPT;
 
 private:
-    size_t buffer_size = 0;
     queue_data q{}; ///< Internal data for the queue.
 };
 

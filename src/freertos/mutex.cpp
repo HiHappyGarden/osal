@@ -25,34 +25,54 @@ inline namespace v1
 {
 
 
-mutex::mutex(class error** error) OS_NOEXCEPT
+mutex::mutex(class error** error) OS_NOEXCEPT : m { .handle = xSemaphoreCreateRecursiveMutex() }
 {
-
+    if(m.handle == nullptr && error)
+    {
+        *error = OS_ERROR_BUILD("xSemaphoreCreateRecursiveMutex() fail.", error_type::OS_EFAULT);
+        OS_ERROR_PTR_SET_POSITION(*error);
+    }
 }
 
 mutex::~mutex() OS_NOEXCEPT
 {
-
+    if(m.handle)
+    {
+        vSemaphoreDelete(m.handle);
+        m.handle = nullptr;
+    }
 }
 
 void mutex::lock() OS_NOEXCEPT
 {
-
+    if(m.handle)
+    {
+        xSemaphoreTakeRecursive(m.handle, portMAX_DELAY);
+    }
 }
 
-inline void mutex::lock_from_isr() OS_NOEXCEPT
+void mutex::lock_from_isr() OS_NOEXCEPT
 {
-    lock();
+    if(m.handle)
+    {
+        xSemaphoreTakeFromISR(m.handle, nullptr);
+    }
 }
 
 void mutex::unlock() OS_NOEXCEPT
 {
-
+    if(m.handle)
+    {
+        xSemaphoreGiveRecursive(m.handle);
+    }
 }
 
-inline void mutex::unlock_from_isr() OS_NOEXCEPT
+void mutex::unlock_from_isr() OS_NOEXCEPT
 {
-    unlock();
+    if(m.handle)
+    {
+        xSemaphoreGiveFromISR(m.handle, nullptr);
+    }
 }
 
 }

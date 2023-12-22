@@ -17,6 +17,7 @@
  *
  ***************************************************************************/
 #include "osal/queue.hpp"
+#include "osal/osal.hpp"
 
 namespace osal
 {
@@ -24,40 +25,109 @@ inline namespace v1
 {
 
 queue::queue(size_t size, size_t message_size, error** error) OS_NOEXCEPT
-    : buffer_size(size * message_size)
+    : q {
+       .size = size,
+       .count = 0,
+       .handle = xQueueCreate(size, message_size)
+    }
 {
-
-
+    if(q.handle == nullptr && error)
+    {
+        *error = OS_ERROR_BUILD("xQueueCreate() fail.", error_type::OS_EFAULT);
+        OS_ERROR_PTR_SET_POSITION(*error);
+    }
 }
 
 queue::~queue() OS_NOEXCEPT
 {
-
+    if(q.handle)
+    {
+        vQueueDelete(q.handle);
+        q.handle = nullptr;
+    }
 }
 
 osal::exit queue::fetch(void* msg, uint64_t time, error** _error) OS_NOEXCEPT
 {
-    return exit::OK;
+    if(q.handle == nullptr && _error)
+    {
+        *_error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
+        OS_ERROR_PTR_SET_POSITION(*_error);
+        return exit::KO;
+    }
+
+    if(xQueueReceive(q.handle, msg, ms_to_us(time)) == pdTRUE && q.count)
+    {
+        q.count--;
+        return exit::OK;
+    }
+
+    return exit::KO;
 }
 
-inline exit queue::fetch_from_isr(void* msg, uint64_t time, error** error) OS_NOEXCEPT
+inline exit queue::fetch_from_isr(void* msg, uint64_t time, error** _error) OS_NOEXCEPT
 {
-    return fetch(msg, time, error);
+    reinterpret_cast<void*>(time);
+    if(q.handle == nullptr && _error)
+    {
+        *_error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
+        OS_ERROR_PTR_SET_POSITION(*_error);
+        return exit::KO;
+    }
+
+    BaseType_t success = xQueueReceiveFromISR( q.handle, msg, nullptr);
+    portYIELD_FROM_ISR(pdFALSE);
+    if(success == pdTRUE && q.count)
+    {
+        q.count--;
+        return exit::OK;
+    }
+
+    return exit::KO;
 }
 
 osal::exit queue::post(const uint8_t* msg, uint64_t time, error** _error) OS_NOEXCEPT
 {
-   return exit::OK;;
+    if(q.handle == nullptr && _error)
+    {
+        *_error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
+        OS_ERROR_PTR_SET_POSITION(*_error);
+        return exit::KO;
+    }
+
+    if(xQueueSendToBack(q.handle, msg, ms_to_us(time)) == pdTRUE)
+    {
+        q.count++;
+        return exit::OK;
+    }
+
+    return exit::KO;
 }
 
-inline exit queue::post_from_isr(const uint8_t* msg, uint64_t time, error** error) OS_NOEXCEPT
+inline exit queue::post_from_isr(const uint8_t* msg, uint64_t time, error** _error) OS_NOEXCEPT
 {
-    return post(msg, time, error);
+    if(q.handle == nullptr && _error)
+    {
+        *_error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
+        OS_ERROR_PTR_SET_POSITION(*_error);
+        return exit::KO;
+    }
+
+    BaseType_t success = xQueueSendToBackFromISR(q.handle, msg, nullptr);
+    portYIELD_FROM_ISR(pdFALSE);
+
+    if(success == pdTRUE)
+    {
+        q.count++;
+        return exit::OK;
+    }
+
+    return exit::KO;
 }
 
 size_t queue::size() const OS_NOEXCEPT
 {
-    return 0;
+    return q.size;
 }
 
 }
