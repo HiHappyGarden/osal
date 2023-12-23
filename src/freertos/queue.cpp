@@ -67,7 +67,6 @@ osal::exit queue::fetch(void* msg, uint64_t time, error** _error) OS_NOEXCEPT
 
 inline exit queue::fetch_from_isr(void* msg, uint64_t time, error** _error) OS_NOEXCEPT
 {
-    reinterpret_cast<void*>(time);
     if(q.handle == nullptr && _error)
     {
         *_error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);

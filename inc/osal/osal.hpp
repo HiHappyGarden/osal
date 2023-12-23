@@ -122,6 +122,32 @@ constexpr inline uint64_t sec_to_us(uint32_t sec) { return sec * 1'000'000ul; }
  */
 [[maybe_unused]] void stop_main_loop() OS_NOEXCEPT;
 
+
+/**
+ * @brief Calculates the maximum of two values.
+ * @tparam T The type of values to compare.
+ * @param a The first value.
+ * @param b The second value.
+ * @return The maximum value between a and b.
+ */
+template<typename T>
+constexpr T max(T a, T b)
+{
+    return a > b ? a : b;
+}
+
+/**
+ * @brief Calculates the minimum of two values.
+ * @tparam T The type of values to compare.
+ * @param a The first value.
+ * @param b The second value.
+ * @return The minimum value between a and b.
+ */
+template<typename T>
+constexpr T min(T a, T b)
+{
+    return a < b ? a : b;
+}
 }
 }
 
