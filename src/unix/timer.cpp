@@ -81,7 +81,7 @@ timer::~timer() OS_NOEXCEPT
     t.thread->join();
     delete t.thread;
     t.thread = nullptr;
-    timer_delete (t.timerid);
+    timer_delete (t.timer_id);
 }
 
 exit timer::create(void *arg, error** error)
@@ -99,7 +99,7 @@ exit timer::create(void *arg, error** error)
     t.fn        = fn;
     t.arg       = arg;
     t.us        = us;
-    t.oneshot   = oneshot;
+    t.one_shot   = oneshot;
 
     /* Create timer thread */
     //kiwi_os_thread_create (&t.thread, "os_timer", TIMER_PRIO, 1024, os_timer_thread, this);
@@ -136,7 +136,7 @@ exit timer::create(void *arg, error** error)
     sev.sigev_signo             = SIGALRM;
     sev.sigev_notify_attributes = nullptr;
 
-    if (timer_create (CLOCK_MONOTONIC, &sev, &t.timerid) == -1)
+    if (timer_create (CLOCK_MONOTONIC, &sev, &t.timer_id) == -1)
     {
         // free (timer);
         return exit::KO;
@@ -157,9 +157,9 @@ void timer::start() const OS_NOEXCEPT
     /* Start timer */
     its.it_value.tv_sec     = 0;
     its.it_value.tv_nsec    = 1000 * t.us;
-    its.it_interval.tv_sec  = (t.oneshot) ? 0 : its.it_value.tv_sec;
-    its.it_interval.tv_nsec = (t.oneshot) ? 0 : its.it_value.tv_nsec;
-    timer_settime (t.timerid, 0, &its, nullptr);
+    its.it_interval.tv_sec  = (t.one_shot) ? 0 : its.it_value.tv_sec;
+    its.it_interval.tv_nsec = (t.one_shot) ? 0 : its.it_value.tv_nsec;
+    timer_settime (t.timer_id, 0, &its, nullptr);
 }
 
 void timer::start_from_isr() const OS_NOEXCEPT
@@ -176,7 +176,7 @@ void timer::stop() const OS_NOEXCEPT
     its.it_value.tv_nsec    = 0;
     its.it_interval.tv_sec  = 0;
     its.it_interval.tv_nsec = 0;
-    timer_settime (t.timerid, 0, &its, nullptr);
+    timer_settime (t.timer_id, 0, &its, nullptr);
 }
 
 void timer::stop_from_isr() const OS_NOEXCEPT

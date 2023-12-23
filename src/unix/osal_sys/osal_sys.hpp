@@ -77,14 +77,14 @@ struct stream_buffer_data
 
 struct timer_data
 {
-    timer_t timerid{};
+    timer_t timer_id{};
     class thread* thread = nullptr;
     pid_t thread_id{};
     bool exit = false;
     void* (*fn) (class timer*, void*) = nullptr;
     void* arg = nullptr;
     uint32_t us = 0;
-    bool oneshot = true;
+    bool one_shot = true;
 };
 
 using tick = uint64_t;
