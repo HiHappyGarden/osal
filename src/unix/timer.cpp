@@ -66,10 +66,10 @@ void* timer_thread (void * arg)
 
 
 
-timer::timer(uint64_t us, handler fn, bool oneshot) OS_NOEXCEPT
+timer::timer(uint64_t us, handler fn, bool one_shot) OS_NOEXCEPT
     : us(us)
     , fn(fn)
-    , oneshot(oneshot)
+    , one_shot(one_shot)
 {
 
 }
@@ -99,7 +99,7 @@ exit timer::create(void *arg, error** error)
     t.fn        = fn;
     t.arg       = arg;
     t.us        = us;
-    t.one_shot   = oneshot;
+    t.one_shot   = one_shot;
 
     /* Create timer thread */
     //kiwi_os_thread_create (&t.thread, "os_timer", TIMER_PRIO, 1024, os_timer_thread, this);
@@ -144,9 +144,14 @@ exit timer::create(void *arg, error** error)
     return exit::OK;
 }
 
-void timer::set(uint64_t us) OS_NOEXCEPT
+inline void timer::set(uint64_t us) OS_NOEXCEPT
 {
     t.us = us;
+}
+
+inline void timer::set_from_isr(uint64_t us) OS_NOEXCEPT
+{
+    timer::us = us;
 }
 
 void timer::start() const OS_NOEXCEPT
@@ -162,7 +167,7 @@ void timer::start() const OS_NOEXCEPT
     timer_settime (t.timer_id, 0, &its, nullptr);
 }
 
-void timer::start_from_isr() const OS_NOEXCEPT
+inline  void timer::start_from_isr() const OS_NOEXCEPT
 {
     start();
 }
@@ -179,12 +184,15 @@ void timer::stop() const OS_NOEXCEPT
     timer_settime (t.timer_id, 0, &its, nullptr);
 }
 
-void timer::stop_from_isr() const OS_NOEXCEPT
+inline void timer::stop_from_isr() const OS_NOEXCEPT
 {
     stop();
 }
 
-
+inline bool timer::is_active() const OS_NOEXCEPT
+{
+    return !t.exit;
+}
 
 }
 }

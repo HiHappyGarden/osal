@@ -156,7 +156,7 @@ uint32_t event::get() OS_NOEXCEPT
     return ret;
 }
 
-uint32_t event::get_from_isr() OS_NOEXCEPT
+inline uint32_t event::get_from_isr() OS_NOEXCEPT
 {
     return get();
 }

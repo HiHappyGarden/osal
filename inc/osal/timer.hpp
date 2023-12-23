@@ -97,6 +97,13 @@ public:
     void set(uint64_t us) OS_NOEXCEPT;
 
     /**
+     * @brief Sets the time interval for the timer from an ISR.
+     *
+     * @param us The time interval for the timer (in microseconds).
+     */
+    void set_from_isr(uint64_t us) OS_NOEXCEPT;
+
+    /**
      * @brief Starts the timer.
      */
     void start() const OS_NOEXCEPT;
@@ -122,13 +129,16 @@ public:
      */
     void stop_from_isr() const OS_NOEXCEPT;
 
+    bool is_active() const OS_NOEXCEPT;
+
 private:
     uint64_t us;    ///< The time interval for the timer (in microseconds).
     handler fn;     ///< The handler function to be called when the timer expires.
-    bool oneshot;   ///< Flag indicating whether the timer is a one-shot timer.
+    bool one_shot;   ///< Flag indicating whether the timer is a one-shot timer.
     timer_data t{};   ///< Internal data for the timer.
 
     friend void* timer_thread(void*);
+
 };
 }
 }

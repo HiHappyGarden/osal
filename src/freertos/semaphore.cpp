@@ -42,12 +42,15 @@ semaphore::~semaphore()
     }
 }
 
-osal::exit semaphore::wait(uint64_t time, error** _error) OS_NOEXCEPT
+osal::exit semaphore::wait(uint64_t time, error** error) OS_NOEXCEPT
 {
-    if(sem.handle == nullptr && _error)
+    if(sem.handle == nullptr)
     {
-        *_error = OS_ERROR_BUILD("xSemaphoreCreateCounting() fail.", error_type::OS_EFAULT);
-        OS_ERROR_PTR_SET_POSITION(*_error);
+        if(error)
+        {
+            *error = OS_ERROR_BUILD("xSemaphoreCreateCounting() fail.", error_type::OS_EFAULT);
+            OS_ERROR_PTR_SET_POSITION(*error);
+        }
         return exit::KO;
     }
     if (xSemaphoreTake (sem.handle, tmo_to_ticks(time)) == pdTRUE)
@@ -58,12 +61,15 @@ osal::exit semaphore::wait(uint64_t time, error** _error) OS_NOEXCEPT
     return exit::KO;
 }
 
-osal::exit semaphore::wait_from_isr(uint64_t time, error **_error) OS_NOEXCEPT
+osal::exit semaphore::wait_from_isr(uint64_t time, error **error) OS_NOEXCEPT
 {
-    if(sem.handle == nullptr && _error)
+    if(sem.handle == nullptr)
     {
-        *_error = OS_ERROR_BUILD("xSemaphoreCreateCounting() fail.", error_type::OS_EFAULT);
-        OS_ERROR_PTR_SET_POSITION(*_error);
+        if(error)
+        {
+            *error = OS_ERROR_BUILD("xSemaphoreCreateCounting() fail.", error_type::OS_EFAULT);
+            OS_ERROR_PTR_SET_POSITION(*error);
+        }
         return exit::KO;
     }
     if (xSemaphoreTakeFromISR (sem.handle, nullptr) == pdTRUE)

@@ -25,7 +25,7 @@ inline namespace v1
 {
 
 
-void thread_data::args_wrapper::wrap_func(void * arg)
+void thread_data::args_wrapper::wrap_func(void* arg)
 {
     if(arg == nullptr)
     {
@@ -57,6 +57,8 @@ thread::thread(const char *name, uint32_t priority, size_t stack_size, thread::h
 
 osal::exit thread::create(void* arg, class error** error) OS_NOEXCEPT
 {
+
+
     t.arg.arg = arg;
 
     configSTACK_DEPTH_TYPE stack_depth =  stack_size / sizeof (configSTACK_DEPTH_TYPE);
@@ -65,21 +67,29 @@ osal::exit thread::create(void* arg, class error** error) OS_NOEXCEPT
         return exit::OK;
     }
 
+    if(error)
+    {
+        *error = OS_ERROR_BUILD("xTaskCreate() fail.", error_type::OS_EFAULT);
+        OS_ERROR_PTR_SET_POSITION(*error);
+    }
     return exit::KO;
 }
 
 osal::exit thread::exit() OS_NOEXCEPT
 {
-    return exit::OK;
+    if(t.handle)
+    {
+        vTaskDelete(t.handle);
+        t.handle= NULL;
+        return exit::OK;
+    }
+    return exit::KO;
 }
 
 osal::exit thread::join(error** error) const OS_NOEXCEPT
 {
-
     return exit::OK;
 }
-
-
 
 }
 }

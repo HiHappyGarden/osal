@@ -46,12 +46,15 @@ queue::~queue() OS_NOEXCEPT
     }
 }
 
-osal::exit queue::fetch(void* msg, uint64_t time, error** _error) OS_NOEXCEPT
+osal::exit queue::fetch(void* msg, uint64_t time, error** error) OS_NOEXCEPT
 {
-    if(q.handle == nullptr && _error)
+    if(q.handle == nullptr)
     {
-        *_error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
-        OS_ERROR_PTR_SET_POSITION(*_error);
+        if(error)
+        {
+            *error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
+            OS_ERROR_PTR_SET_POSITION(*error);
+        }
         return exit::KO;
     }
 
@@ -66,10 +69,13 @@ osal::exit queue::fetch(void* msg, uint64_t time, error** _error) OS_NOEXCEPT
 
 inline exit queue::fetch_from_isr(void* msg, uint64_t, error** error) OS_NOEXCEPT
 {
-    if(q.handle == nullptr && error)
+    if(q.handle == nullptr)
     {
-        *error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
-        OS_ERROR_PTR_SET_POSITION(*error);
+        if(error)
+        {
+            *error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
+            OS_ERROR_PTR_SET_POSITION(*error);
+        }
         return exit::KO;
     }
 
@@ -86,10 +92,13 @@ inline exit queue::fetch_from_isr(void* msg, uint64_t, error** error) OS_NOEXCEP
 
 osal::exit queue::post(const uint8_t* msg, uint64_t time, error** error) OS_NOEXCEPT
 {
-    if(q.handle == nullptr && error)
+    if(q.handle == nullptr)
     {
-        *error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
-        OS_ERROR_PTR_SET_POSITION(*error);
+        if(error)
+        {
+            *error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
+            OS_ERROR_PTR_SET_POSITION(*error);
+        }
         return exit::KO;
     }
 
@@ -104,13 +113,16 @@ osal::exit queue::post(const uint8_t* msg, uint64_t time, error** error) OS_NOEX
 
 inline exit queue::post_from_isr(const uint8_t* msg, uint64_t, error** error) OS_NOEXCEPT
 {
-    if(q.handle == nullptr && error)
+    if(q.handle == nullptr)
     {
-        *error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
-        OS_ERROR_PTR_SET_POSITION(*error);
+        if(error)
+        {
+            *error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
+            OS_ERROR_PTR_SET_POSITION(*error);
+        }
         return exit::KO;
     }
-
+    
     BaseType_t success = xQueueSendToBackFromISR(q.handle, msg, nullptr);
     portYIELD_FROM_ISR(pdFALSE);
 

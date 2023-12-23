@@ -38,26 +38,35 @@ stream_buffer::~stream_buffer()
     if(sb.handle)
     {
         vStreamBufferDelete(sb.handle);
+        sb.handle = nullptr;
     }
 }
 
 size_t stream_buffer::send(const uint8_t *data, size_t size, uint64_t time, error** error) OS_NOEXCEPT
 {
-    if(sb.handle == nullptr && error)
+    if(sb.handle == nullptr)
     {
-        *error = OS_ERROR_BUILD("xStreamBufferCreate() fail.", error_type::OS_EFAULT);
-        OS_ERROR_PTR_SET_POSITION(*error);
+        if(error)
+        {
+            *error = OS_ERROR_BUILD("xStreamBufferCreate() fail.", error_type::OS_EFAULT);
+            OS_ERROR_PTR_SET_POSITION(*error);
+        }
+        return 0;
     }
 
     return xStreamBufferSend(sb.handle, data, size, tmo_to_ticks(time));
 }
 
-inline size_t stream_buffer::send_from_isr(const uint8_t *data, size_t size, uint64_t time, error **error) OS_NOEXCEPT
+size_t stream_buffer::send_from_isr(const uint8_t *data, size_t size, uint64_t time, error **error) OS_NOEXCEPT
 {
-    if(sb.handle == nullptr && error)
+    if(sb.handle == nullptr)
     {
-        *error = OS_ERROR_BUILD("xStreamBufferCreate() fail.", error_type::OS_EFAULT);
-        OS_ERROR_PTR_SET_POSITION(*error);
+        if(error)
+        {
+            *error = OS_ERROR_BUILD("xStreamBufferCreate() fail.", error_type::OS_EFAULT);
+            OS_ERROR_PTR_SET_POSITION(*error);
+        }
+        return 0;
     }
 
     BaseType_t higher_priority_task_woken = pdFALSE;
@@ -68,10 +77,14 @@ inline size_t stream_buffer::send_from_isr(const uint8_t *data, size_t size, uin
 
 size_t stream_buffer::receive(uint8_t *data, size_t size, uint64_t time, error **error) OS_NOEXCEPT
 {
-    if(sb.handle == nullptr && error)
+    if(sb.handle == nullptr)
     {
-        *error = OS_ERROR_BUILD("xStreamBufferCreate() fail.", error_type::OS_EFAULT);
-        OS_ERROR_PTR_SET_POSITION(*error);
+        if(error)
+        {
+            *error = OS_ERROR_BUILD("xStreamBufferCreate() fail.", error_type::OS_EFAULT);
+            OS_ERROR_PTR_SET_POSITION(*error);
+        }
+        return 0;
     }
 
     return xStreamBufferReceive(sb.handle, data, size, tmo_to_ticks(time));
@@ -79,10 +92,14 @@ size_t stream_buffer::receive(uint8_t *data, size_t size, uint64_t time, error *
 
 size_t stream_buffer::receive_from_isr(uint8_t *data, size_t size, uint64_t time, error **error) OS_NOEXCEPT
 {
-    if(sb.handle == nullptr && error)
+    if(sb.handle == nullptr)
     {
-        *error = OS_ERROR_BUILD("xStreamBufferCreate() fail.", error_type::OS_EFAULT);
-        OS_ERROR_PTR_SET_POSITION(*error);
+        if(error)
+        {
+            *error = OS_ERROR_BUILD("xStreamBufferCreate() fail.", error_type::OS_EFAULT);
+            OS_ERROR_PTR_SET_POSITION(*error);
+        }
+        return 0;
     }
 
     BaseType_t higher_priority_task_woken = pdFALSE;

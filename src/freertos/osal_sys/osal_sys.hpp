@@ -35,6 +35,8 @@ constexpr inline uint64_t tmo_to_ticks(uint64_t ms) OS_NOEXCEPT
     return ((ms == WAIT_FOREVER) ? portMAX_DELAY : (((ms) / portTICK_PERIOD_MS)) / 1000);
 }
 
+class timer;
+
 struct mutex_data
 {
     SemaphoreHandle_t handle = nullptr;
@@ -80,6 +82,16 @@ struct thread_data
 struct timer_data
 {
 
+    struct args_wrapper final
+    {
+        class timer* timer = nullptr;
+        void* arg = nullptr;
+        void* (*fn)(class timer*, void*) = nullptr;
+
+        static void wrap_func( TimerHandle_t xTimer );
+    };
+    TimerHandle_t handle = nullptr;
+    args_wrapper arg{};
 };
 
 using tick = uint64_t;

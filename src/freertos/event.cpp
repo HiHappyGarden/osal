@@ -50,8 +50,8 @@ osal::exit event::wait(uint32_t mask, uint32_t& value, uint64_t time, error** er
         {
             *error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
             OS_ERROR_PTR_SET_POSITION(*error);
-            return exit::KO;
         }
+        return exit::KO;
     }
     value = xEventGroupWaitBits(
             e.handle,
