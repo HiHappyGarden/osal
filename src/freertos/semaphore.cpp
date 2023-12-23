@@ -17,7 +17,6 @@
  *
  ***************************************************************************/
 #include "osal/semaphore.hpp"
-#include "osal/osal.hpp"
 
 
 namespace osal
@@ -25,7 +24,14 @@ namespace osal
 inline namespace v1
 {
 
-semaphore::semaphore(size_t count) OS_NOEXCEPT : sem {.handle = xSemaphoreCreateCounting (UINT32_MAX, count) } { }
+semaphore::semaphore(size_t count, error** error) OS_NOEXCEPT : sem {.handle = xSemaphoreCreateCounting (UINT32_MAX, count) }
+{
+    if(sem.handle == nullptr && error)
+    {
+        *error = OS_ERROR_BUILD("xSemaphoreCreateCounting() fail.", error_type::OS_EFAULT);
+        OS_ERROR_PTR_SET_POSITION(*error);
+    }
+}
 
 semaphore::~semaphore()
 {
@@ -44,7 +50,7 @@ osal::exit semaphore::wait(uint64_t time, error** _error) OS_NOEXCEPT
         OS_ERROR_PTR_SET_POSITION(*_error);
         return exit::KO;
     }
-    if (xSemaphoreTake (sem.handle, ms_to_us(time)) == pdTRUE)
+    if (xSemaphoreTake (sem.handle, tmo_to_ticks(time)) == pdTRUE)
     {
         return exit::OK;
     }

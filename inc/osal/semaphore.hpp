@@ -44,7 +44,7 @@ public:
      *
      * @param count The initial count for the semaphore.
      */
-    explicit semaphore(size_t count) OS_NOEXCEPT;
+    explicit semaphore(size_t count, error** error = nullptr) OS_NOEXCEPT;
 
     /**
      * @brief Deleted copy constructor.

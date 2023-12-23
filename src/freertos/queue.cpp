@@ -17,7 +17,6 @@
  *
  ***************************************************************************/
 #include "osal/queue.hpp"
-#include "osal/osal.hpp"
 
 namespace osal
 {
@@ -56,7 +55,7 @@ osal::exit queue::fetch(void* msg, uint64_t time, error** _error) OS_NOEXCEPT
         return exit::KO;
     }
 
-    if(xQueueReceive(q.handle, msg, ms_to_us(time)) == pdTRUE && q.count)
+    if(xQueueReceive(q.handle, msg, tmo_to_ticks(time)) == pdTRUE && q.count)
     {
         q.count--;
         return exit::OK;
@@ -65,12 +64,12 @@ osal::exit queue::fetch(void* msg, uint64_t time, error** _error) OS_NOEXCEPT
     return exit::KO;
 }
 
-inline exit queue::fetch_from_isr(void* msg, uint64_t time, error** _error) OS_NOEXCEPT
+inline exit queue::fetch_from_isr(void* msg, uint64_t, error** error) OS_NOEXCEPT
 {
-    if(q.handle == nullptr && _error)
+    if(q.handle == nullptr && error)
     {
-        *_error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
-        OS_ERROR_PTR_SET_POSITION(*_error);
+        *error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
+        OS_ERROR_PTR_SET_POSITION(*error);
         return exit::KO;
     }
 
@@ -85,16 +84,16 @@ inline exit queue::fetch_from_isr(void* msg, uint64_t time, error** _error) OS_N
     return exit::KO;
 }
 
-osal::exit queue::post(const uint8_t* msg, uint64_t time, error** _error) OS_NOEXCEPT
+osal::exit queue::post(const uint8_t* msg, uint64_t time, error** error) OS_NOEXCEPT
 {
-    if(q.handle == nullptr && _error)
+    if(q.handle == nullptr && error)
     {
-        *_error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
-        OS_ERROR_PTR_SET_POSITION(*_error);
+        *error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
+        OS_ERROR_PTR_SET_POSITION(*error);
         return exit::KO;
     }
 
-    if(xQueueSendToBack(q.handle, msg, ms_to_us(time)) == pdTRUE)
+    if(xQueueSendToBack(q.handle, msg, tmo_to_ticks(time)) == pdTRUE)
     {
         q.count++;
         return exit::OK;
@@ -103,12 +102,12 @@ osal::exit queue::post(const uint8_t* msg, uint64_t time, error** _error) OS_NOE
     return exit::KO;
 }
 
-inline exit queue::post_from_isr(const uint8_t* msg, uint64_t time, error** _error) OS_NOEXCEPT
+inline exit queue::post_from_isr(const uint8_t* msg, uint64_t, error** error) OS_NOEXCEPT
 {
-    if(q.handle == nullptr && _error)
+    if(q.handle == nullptr && error)
     {
-        *_error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
-        OS_ERROR_PTR_SET_POSITION(*_error);
+        *error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
+        OS_ERROR_PTR_SET_POSITION(*error);
         return exit::KO;
     }
 

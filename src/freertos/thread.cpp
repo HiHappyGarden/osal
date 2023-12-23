@@ -25,6 +25,18 @@ inline namespace v1
 {
 
 
+void thread_data::args_wrapper::wrap_func(void * arg)
+{
+    if(arg == nullptr)
+    {
+        return;
+    }
+
+    auto wrapper = static_cast<thread_data::args_wrapper*>(arg);
+    wrapper->handler(wrapper->arg);
+}
+
+
 thread::thread(const char *name, uint32_t priority, size_t stack_size, thread::handler handler) OS_NOEXCEPT
     : priority(priority)
     , stack_size(stack_size)
@@ -34,13 +46,26 @@ thread::thread(const char *name, uint32_t priority, size_t stack_size, thread::h
     {
         strncpy(this->name, name, sizeof(name) - 1);
     }
+    else
+    {
+        memset(this->name, '\0', sizeof(name));
+    }
+    t.arg.handler = handler;
 }
+
 
 
 osal::exit thread::create(void* arg, class error** error) OS_NOEXCEPT
 {
+    t.arg.arg = arg;
 
-    return exit::OK;
+    configSTACK_DEPTH_TYPE stack_depth =  stack_size / sizeof (configSTACK_DEPTH_TYPE);
+    if (xTaskCreate (&thread_data::args_wrapper::wrap_func, name, stack_depth, &t.arg, priority, &t.handle) == pdPASS)
+    {
+        return exit::OK;
+    }
+
+    return exit::KO;
 }
 
 osal::exit thread::exit() OS_NOEXCEPT

@@ -18,6 +18,7 @@
  ***************************************************************************/
 #pragma once
 
+#include <osal/types.hpp>
 #include <FreeRTOS.h>
 #include <semphr.h>
 #include <event_groups.h>
@@ -28,6 +29,11 @@ namespace osal
 {
 inline namespace v1
 {
+
+constexpr inline uint64_t tmo_to_ticks(uint64_t ms) OS_NOEXCEPT
+{
+    return ((ms == WAIT_FOREVER) ? portMAX_DELAY : (((ms) / portTICK_PERIOD_MS)) / 1000);
+}
 
 struct mutex_data
 {
@@ -53,12 +59,21 @@ struct queue_data
 
 struct stream_buffer_data
 {
-
+    StreamBufferHandle_t handle;
 };
 
 struct thread_data
 {
+    struct args_wrapper final
+    {
+        void* arg = nullptr;
+        void* (*handler)(void* arg) = nullptr;
 
+        static void wrap_func(void * arg);
+    };
+
+    TaskHandle_t handle = nullptr;
+    args_wrapper arg{};
 };
 
 

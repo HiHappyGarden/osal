@@ -24,57 +24,115 @@ inline namespace v1
 {
 
 stream_buffer::stream_buffer(size_t size, size_t trigger_size, error** error) OS_NOEXCEPT
+: sb { .handle = xStreamBufferCreate(size, trigger_size) }
 {
-
+    if(sb.handle == nullptr && error)
+    {
+        *error = OS_ERROR_BUILD("xStreamBufferCreate() fail.", error_type::OS_EFAULT);
+        OS_ERROR_PTR_SET_POSITION(*error);
+    }
 }
 
 stream_buffer::~stream_buffer()
 {
-
+    if(sb.handle)
+    {
+        vStreamBufferDelete(sb.handle);
+    }
 }
 
-size_t stream_buffer::send(const uint8_t *data, size_t size, uint64_t time, error** _error) OS_NOEXCEPT
+size_t stream_buffer::send(const uint8_t *data, size_t size, uint64_t time, error** error) OS_NOEXCEPT
 {
-    return 0;
+    if(sb.handle == nullptr && error)
+    {
+        *error = OS_ERROR_BUILD("xStreamBufferCreate() fail.", error_type::OS_EFAULT);
+        OS_ERROR_PTR_SET_POSITION(*error);
+    }
+
+    return xStreamBufferSend(sb.handle, data, size, tmo_to_ticks(time));
 }
 
 inline size_t stream_buffer::send_from_isr(const uint8_t *data, size_t size, uint64_t time, error **error) OS_NOEXCEPT
 {
-    return send(data, size, time, error);
+    if(sb.handle == nullptr && error)
+    {
+        *error = OS_ERROR_BUILD("xStreamBufferCreate() fail.", error_type::OS_EFAULT);
+        OS_ERROR_PTR_SET_POSITION(*error);
+    }
+
+    BaseType_t higher_priority_task_woken = pdFALSE;
+    size_t ret = xStreamBufferSendFromISR(sb.handle, data, size, &higher_priority_task_woken);
+    portYIELD_FROM_ISR(pdFALSE);
+    return ret;
 }
 
-size_t stream_buffer::receive(uint8_t *data, size_t size, uint64_t time, error **_error) OS_NOEXCEPT
+size_t stream_buffer::receive(uint8_t *data, size_t size, uint64_t time, error **error) OS_NOEXCEPT
 {
-    return 0;
+    if(sb.handle == nullptr && error)
+    {
+        *error = OS_ERROR_BUILD("xStreamBufferCreate() fail.", error_type::OS_EFAULT);
+        OS_ERROR_PTR_SET_POSITION(*error);
+    }
+
+    return xStreamBufferReceive(sb.handle, data, size, tmo_to_ticks(time));
 }
 
 size_t stream_buffer::receive_from_isr(uint8_t *data, size_t size, uint64_t time, error **error) OS_NOEXCEPT
 {
-    return receive(data, size, time, error);
+    if(sb.handle == nullptr && error)
+    {
+        *error = OS_ERROR_BUILD("xStreamBufferCreate() fail.", error_type::OS_EFAULT);
+        OS_ERROR_PTR_SET_POSITION(*error);
+    }
+
+    BaseType_t higher_priority_task_woken = pdFALSE;
+    size_t ret = xStreamBufferReceiveFromISR(sb.handle, data, size, &higher_priority_task_woken);
+    portYIELD_FROM_ISR(pdFALSE);
+
+    return ret;
 }
 
 void stream_buffer::reset() OS_NOEXCEPT
 {
-
+    if(sb.handle)
+    {
+        xStreamBufferReset(sb.handle);
+    }
 }
 
 bool stream_buffer::is_empty() const OS_NOEXCEPT
 {
-    return true;
+    if(sb.handle)
+    {
+        return xStreamBufferIsEmpty(sb.handle) == pdTRUE;
+    }
+    return false;
 }
 
 bool stream_buffer::is_full() const OS_NOEXCEPT
 {
+    if(sb.handle)
+    {
+        return xStreamBufferIsFull(sb.handle) == pdTRUE;
+    }
     return false;
 }
 
 size_t stream_buffer::size() const OS_NOEXCEPT
 {
+    if(sb.handle)
+    {
+        return xStreamBufferBytesAvailable(sb.handle);
+    }
     return 0;
 }
 
 size_t stream_buffer::bytes_free() const
 {
+    if(sb.handle)
+    {
+        return xStreamBufferSpacesAvailable(sb.handle);
+    }
     return 0;
 }
 

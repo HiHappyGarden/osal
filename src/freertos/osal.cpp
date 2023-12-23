@@ -27,6 +27,7 @@ namespace osal
 inline namespace v1
 {
 
+
 void us_sleep (uint64_t us) OS_NOEXCEPT
 {
     vTaskDelay ((us / portTICK_PERIOD_MS) / 1'000);

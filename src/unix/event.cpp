@@ -24,7 +24,7 @@ namespace osal
 inline namespace v1
 {
 
-event::event() OS_NOEXCEPT
+event::event(error**) OS_NOEXCEPT
 {
     pthread_mutexattr_t mattr{0};
     pthread_condattr_t cattr{0};

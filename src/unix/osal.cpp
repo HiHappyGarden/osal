@@ -45,19 +45,6 @@ void ctrl_c_handler(int n)
 
 }
 
-
-template<typename T>
-constexpr T max(T a, T b)
-{
-    return a > b ? a : b;
-}
-
-template<typename T>
-constexpr T min(T a, T b)
-{
-    return a < b ? a : b;
-}
-
 void us_sleep (uint64_t usec) OS_NOEXCEPT
 {
     timespec ts{0};

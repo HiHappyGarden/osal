@@ -61,6 +61,12 @@ public:
      */
     thread(const char* name, uint32_t priority, size_t stack_size, handler handler) OS_NOEXCEPT;
 
+    inline thread(const char* name, uint32_t priority, size_t stack_size, handler handler, void* arg, class error** error = nullptr) OS_NOEXCEPT
+    : thread(name, priority, stack_size, handler)
+    {
+        create(arg, error);
+    }
+
     /**
      * @brief Deleted copy constructor.
      */

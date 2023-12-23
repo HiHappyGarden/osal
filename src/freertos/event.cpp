@@ -17,14 +17,20 @@
  *
  ***************************************************************************/
 #include "osal/event.hpp"
-#include "osal/osal.hpp"
 
 namespace osal
 {
 inline namespace v1
 {
 
-event::event() OS_NOEXCEPT : e{ .handle = xEventGroupCreate() } { }
+event::event(error** error) OS_NOEXCEPT : e{ .handle = xEventGroupCreate() }
+{
+    if(e.handle == nullptr && error)
+    {
+        *error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
+        OS_ERROR_PTR_SET_POSITION(*error);
+    }
+}
 
 event::~event() OS_NOEXCEPT
 {
@@ -36,14 +42,14 @@ event::~event() OS_NOEXCEPT
 }
 
 
-osal::exit event::wait(uint32_t mask, uint32_t& value, uint64_t time, error** _error) OS_NOEXCEPT
+osal::exit event::wait(uint32_t mask, uint32_t& value, uint64_t time, error** error) OS_NOEXCEPT
 {
     if(e.handle == nullptr)
     {
-        if(_error)
+        if(error)
         {
-            *_error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
-            OS_ERROR_PTR_SET_POSITION(*_error);
+            *error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
+            OS_ERROR_PTR_SET_POSITION(*error);
             return exit::KO;
         }
     }
@@ -52,7 +58,7 @@ osal::exit event::wait(uint32_t mask, uint32_t& value, uint64_t time, error** _e
             mask,
             pdFALSE,
             pdFALSE,
-            ms_to_us(time));
+            tmo_to_ticks(time));
 
     value &= mask;
     return (value == 0) ? exit::OK : exit::KO;

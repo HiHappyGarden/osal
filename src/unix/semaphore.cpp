@@ -26,7 +26,7 @@ namespace osal
 inline namespace v1
 {
 
-semaphore::semaphore(size_t count) OS_NOEXCEPT
+semaphore::semaphore(size_t count, error**) OS_NOEXCEPT
 {
 
     pthread_mutexattr_t mattr{0};
