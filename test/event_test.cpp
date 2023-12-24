@@ -19,6 +19,7 @@
 #include <gtest/gtest.h>
 
 #include"osal/osal.hpp"
+#include"common_test.hpp"
 
 
 #define BIT1 0x01
@@ -26,8 +27,8 @@
 
 static void* thread_1 (void * arg);
 
-static os::thread thread1{"test_1", 4, 1024, thread_1};
-static os::thread thread2{"test_2", 4, 1024, thread_1};
+static os::thread thread1{"test_1", 4, OASL_TASK_HEAP, thread_1};
+static os::thread thread2{"test_2", 4, OASL_TASK_HEAP, thread_1};
 os::event event;
 static bool run = true;
 

@@ -19,6 +19,7 @@
 #include <gtest/gtest.h>
 
 #include "osal/osal.hpp"
+#include"common_test.hpp"
 
 namespace
 {
@@ -28,8 +29,8 @@ namespace
 void* thread_runtime(void * arg);
 
 os::semaphore* sem;
-os::thread thread1{"Test1", 4, 1024, thread_runtime};
-os::thread thread2{"Test1", 4, 1024, thread_runtime};
+os::thread thread1{"Test1", 4, OASL_TASK_HEAP, thread_runtime};
+os::thread thread2{"Test1", 4, OASL_TASK_HEAP, thread_runtime};
 
 void* thread_runtime(void * arg)
 {

@@ -19,18 +19,26 @@
 #include <gtest/gtest.h>
 
 #include"osal/osal.hpp"
+#include"common_test.hpp"
 
 namespace
 {
 
 bool check = false;
+constexpr inline const char APP_TAG[] = "TIMING TEST";
+}
 
+TEST(timing_test, check_sleep)
+{
+    osal::log_debug(APP_TAG, "start");
+    os::us_sleep(1'000'000);
+    osal::log_debug(APP_TAG, "end");
 }
 
 TEST(timing_test, base)
 {
 
-    os::thread thread_start_main_loop("test", 4, 1024, [](void*) -> void*
+    os::thread thread_start_main_loop("test", 4, OASL_TASK_HEAP, [](void*) -> void*
     {
 
         check = true;
@@ -41,7 +49,7 @@ TEST(timing_test, base)
         return nullptr;
     });
 
-    os::thread thread_stop_main_loop("test", 4, 1024, [](void*) -> void*
+    os::thread thread_stop_main_loop("test", 4, OASL_TASK_HEAP, [](void*) -> void*
     {
 
         os::tick_sleep(2);

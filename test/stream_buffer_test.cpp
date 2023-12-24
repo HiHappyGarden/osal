@@ -23,6 +23,7 @@
 
 #include <string.h>
 #include <iostream>
+#include"common_test.hpp"
 using namespace std;
 
 TEST(buffer_test, filling_and_emptying)
@@ -245,7 +246,7 @@ bool run = true;
 
 TEST(buffer_test, task_wait)
 {
-    os::thread thread1{"thread1", 4, 1024, [](void * arg) -> void*
+    os::thread thread1{"thread1", 4, OASL_TASK_HEAP, [](void * arg) -> void*
                        {
                            while(run)
                            {
@@ -260,7 +261,7 @@ TEST(buffer_test, task_wait)
     };
     os::thread thread2{"thread2"
                        , 4
-                       , 1024
+                       , OASL_TASK_HEAP
                        , [](void * arg) -> void*
                        {
                            count_bytes = 0;

@@ -30,7 +30,7 @@ TEST(log_test, base)
     OS_LOG_WARNING(APP_TAG, "warning");
     OS_LOG_ERROR(APP_TAG, "error");
     OS_LOG_FATAL(APP_TAG, "fatal");
-    os::reset_log_color();
+    os::reset_color_log();
 }
 
 
@@ -44,7 +44,7 @@ TEST(log_test, set_level)
     OS_LOG_WARNING(APP_TAG, "warning");
     OS_LOG_ERROR(APP_TAG, "error");
     OS_LOG_FATAL(APP_TAG, "fatal");
-    os::reset_log_color();
+    os::reset_color_log();
 }
 
 
@@ -58,7 +58,7 @@ TEST(log_test, disable_log)
     OS_LOG_WARNING(APP_TAG, "warning");
     OS_LOG_ERROR(APP_TAG, "error");
     OS_LOG_FATAL(APP_TAG, "fatal");
-    os::reset_log_color();
+    os::reset_color_log();
 }
 
 TEST(log_test, builder)

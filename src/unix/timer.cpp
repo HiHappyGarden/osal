@@ -32,7 +32,8 @@ inline namespace v1
 
 namespace
 {
-constexpr const uint8_t TIMER_PRIO = 30;
+constexpr inline const uint8_t TIMER_PRIO = 30;
+constexpr inline const uint32_t TIMER_HEAP = 1024;
 }
 
 void* timer_thread (void * arg)
@@ -103,7 +104,7 @@ exit timer::create(void *arg, error** error)
 
     /* Create timer thread */
     //kiwi_os_thread_create (&t.thread, "os_timer", TIMER_PRIO, 1024, os_timer_thread, this);
-    t.thread = new thread("os_timer", TIMER_PRIO, 1024, timer_thread);
+    t.thread = new thread("os_timer", TIMER_PRIO, TIMER_HEAP, timer_thread);
     if(t.thread == nullptr)
     {
         if(error)

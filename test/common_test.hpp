@@ -18,3 +18,11 @@
  ***************************************************************************/
 
 #pragma once
+
+#include <stdint.h>
+
+#ifdef __linux__
+constexpr uint32_t OASL_TASK_HEAP = (4 * 1024);
+#else
+
+#endif

@@ -147,7 +147,7 @@ bool is_enabled_log(uint8_t type) OS_NOEXCEPT;
  * @param fmt The format string for the log message.
  * @param ... The variadic arguments for formatting the log message.
  */
-void log(const char* tag, uint8_t type, const char* fmt, ...) OS_NOEXCEPT;
+void sys_log(const char* tag, uint8_t type, const char* fmt, ...) OS_NOEXCEPT;
 
 /**
  * @brief Writes a debug log message with the given tag and formatted message.
@@ -160,7 +160,7 @@ void log(const char* tag, uint8_t type, const char* fmt, ...) OS_NOEXCEPT;
 template<typename... Args>
 constexpr inline void log_debug(const char* tag, const char* fmt, Args... args) OS_NOEXCEPT
 {
-    log(tag, LEVEL_DEBUG, fmt, args...);
+    sys_log(tag, LEVEL_DEBUG, fmt, args...);
 }
 
 /**
@@ -174,7 +174,7 @@ constexpr inline void log_debug(const char* tag, const char* fmt, Args... args) 
 template<typename... Args>
 constexpr inline void log_info(const char* tag, const char* fmt, Args... args) OS_NOEXCEPT
 {
-    log(tag, LEVEL_INFO, fmt, args...);
+    sys_log(tag, LEVEL_INFO, fmt, args...);
 }
 
 /**
@@ -188,7 +188,7 @@ constexpr inline void log_info(const char* tag, const char* fmt, Args... args) O
 template<typename... Args>
 constexpr inline void log_warning(const char* tag, const char* fmt, Args... args) OS_NOEXCEPT
 {
-    log(tag, LEVEL_WARNING, fmt, args...);
+    sys_log(tag, LEVEL_WARNING, fmt, args...);
 }
 
 /**
@@ -202,7 +202,7 @@ constexpr inline void log_warning(const char* tag, const char* fmt, Args... args
 template<typename... Args>
 constexpr inline void log_error(const char* tag, const char* fmt, Args... args) OS_NOEXCEPT
 {
-    log(tag, LEVEL_ERROR, fmt, args...);
+    sys_log(tag, LEVEL_ERROR, fmt, args...);
 }
 
 /**
@@ -216,13 +216,13 @@ constexpr inline void log_error(const char* tag, const char* fmt, Args... args) 
 template<typename... Args>
 constexpr inline void log_fatal(const char* tag, const char* fmt, Args... args) OS_NOEXCEPT
 {
-    log(tag, LEVEL_FATAL, fmt, args...);
+    sys_log(tag, LEVEL_FATAL, fmt, args...);
 }
 
 /**
  * @brief Resets the log color settings.
  */
-inline void reset_log_color() OS_NOEXCEPT
+inline void reset_color_log() OS_NOEXCEPT
 {
     printf(OS_ANSI_COLOR_RESET "");
     fflush(stdout);

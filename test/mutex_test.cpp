@@ -19,6 +19,7 @@
 #include <gtest/gtest.h>
 
 #include"osal/osal.hpp"
+#include"common_test.hpp"
 
 
 // Global variable to store the shared value
@@ -58,7 +59,7 @@ TEST(thread_test, increment_test)
     // Create the threads
     for (int i = 0; i < num_threads; ++i) {
         os::error* e = nullptr;
-        threads[i] = new os::thread("test", 1, 1024, thread_function);
+        threads[i] = new os::thread("test", 1, OASL_TASK_HEAP, thread_function);
 
         if(threads[i]->create(nullptr, &e) == osal::exit::KO)
         {

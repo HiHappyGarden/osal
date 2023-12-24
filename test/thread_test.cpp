@@ -19,6 +19,7 @@
 #include <gtest/gtest.h>
 
 #include"osal/osal.hpp"
+#include"common_test.hpp"
 
 namespace
 {
@@ -37,7 +38,7 @@ void *thread_test(void *)
 
 TEST(thread_test, base)
 {
-    os::thread thread("test", 4, 1024, thread_test);
+    os::thread thread("test", 4, OASL_TASK_HEAP, thread_test);
 
     ASSERT_EQ(thread.create(), osal::exit::OK);
 
