@@ -17,31 +17,4 @@
  *
  ***************************************************************************/
 
-#include "osal/memory.hpp"
-
-#include <stdint.h>
-
-namespace osal
-{
-inline namespace v1
-{
-
-array_deleter<bool> array_deleter_bool;
-array_deleter<char> array_deleter_char;
-array_deleter<short> array_deleter_short;
-array_deleter<int> array_deleter_int;
-array_deleter<long> array_deleter_long;
-array_deleter<float> array_deleter_float;
-array_deleter<double> array_deleter_double;
-array_deleter<int8_t> array_deleter_uint8;
-array_deleter<uint8_t> array_deleter_int8;
-array_deleter<int16_t> array_deleter_uint16;
-array_deleter<uint16_t> array_deleter_int16;
-array_deleter<int32_t> array_deleter_uint32;
-array_deleter<uint32_t> array_deleter_int32;
-array_deleter<int64_t> array_deleter_uint64;
-array_deleter<uint64_t> array_deleter_int64;
-
-}
-}
-
+#pragma once

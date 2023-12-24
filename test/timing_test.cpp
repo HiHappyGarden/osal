@@ -1,7 +1,7 @@
 /***************************************************************************
  *
  * OSAL
- * Copyright (C) 2023  Antonio Salsi <passy.linux@zresa.it>
+ * Copyright (C) 2023 / 2024  Antonio Salsi <passy.linux@zresa.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,9 +33,10 @@ TEST(timing_test, base)
     os::thread thread_start_main_loop("test", 4, 1024, [](void*) -> void*
     {
 
-        os::start_main_loop();
-
         check = true;
+
+        os::us_sleep(1'000'000);
+
 
         return nullptr;
     });
@@ -54,7 +55,8 @@ TEST(timing_test, base)
     ASSERT_EQ(thread_start_main_loop.create(), osal::exit::OK);
     ASSERT_EQ(thread_stop_main_loop.create(), osal::exit::OK);
 
-    os::us_sleep(10'000'000);
+    os::start_main_loop();
+
 
     ASSERT_TRUE(check);
 }
