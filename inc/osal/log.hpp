@@ -53,6 +53,10 @@
 #define OS_LOG_FATAL(tag, ...) osal::log_fatal (tag, __VA_ARGS__)
 #endif
 
+#ifndef OS_LOG_PRINTF
+#define OS_LOG_PRINTF(...) printf (__VA_ARGS__)
+#endif
+
 namespace osal
 {
 inline namespace v1
