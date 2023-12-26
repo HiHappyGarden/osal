@@ -50,6 +50,11 @@ inline namespace v1
 constexpr inline uint64_t ms_to_us(uint32_t millis) { return millis * 1'000ul; }
 constexpr inline uint64_t sec_to_us(uint32_t sec) { return sec * 1'000'000ul; }
 
+constexpr inline uint64_t operator""_ms( unsigned long long ms ) {  return ms_to_us(ms); }
+constexpr inline uint64_t operator""_s( unsigned long long secs ) {  return sec_to_us(secs); }
+
+
+
 /**
   * @brief Suspends the execution of the current thread for a specified number of microseconds.
   * @param us The number of microseconds to sleep.

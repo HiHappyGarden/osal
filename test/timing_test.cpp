@@ -19,6 +19,8 @@
 #include <gtest/gtest.h>
 
 #include"osal/osal.hpp"
+using namespace os;
+
 #include"common_test.hpp"
 
 namespace
@@ -31,7 +33,7 @@ constexpr inline const char APP_TAG[] = "TIMING TEST";
 TEST(timing_test, check_sleep)
 {
     osal::log_debug(APP_TAG, "start");
-    os::us_sleep(1'000'000);
+    os::us_sleep(1_s);
     osal::log_debug(APP_TAG, "end");
 }
 
@@ -43,7 +45,7 @@ TEST(timing_test, base)
 
         check = true;
 
-        os::us_sleep(1'000'000);
+        os::us_sleep(1_s);
 
 
         return nullptr;
@@ -69,3 +71,8 @@ TEST(timing_test, base)
     ASSERT_TRUE(check);
 }
 
+TEST(timing_test, literal)
+{
+    ASSERT_EQ(1_s, sec_to_us(1));
+    ASSERT_EQ(1_ms, ms_to_us(1));
+}
