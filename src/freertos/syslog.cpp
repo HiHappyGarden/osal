@@ -21,12 +21,20 @@
 
 #include <math.h>
 #include <time.h>
-#ifdef __linux__
-#include <sys/time.h>
+#include <sys/timeb.h>
+
+static inline uint64_t system_current_time_millis() OS_NOEXCEPT
+{
+#if defined(_WIN32) || defined(_WIN64)
+    struct _timeb timebuffer;
+    _ftime(&timebuffer);
+    return (uint64_t)(((timebuffer.time * 1000) + timebuffer.millitm));
+#else
+    struct timeb timebuffer;
+    ftime(&timebuffer);
+    return (uint64_t)(((timebuffer.time * 1000) + timebuffer.millitm));
 #endif
-// #if defined(__WIN32__)
-// #   define localtime_r(T,Tm) (localtime_s(Tm,T) ? NULL : Tm)
-// #endif
+}
 
 namespace osal
 {
@@ -37,79 +45,67 @@ namespace osal
 
         void sys_log(const char* tag, uint8_t type, const char* fmt, ...) OS_NOEXCEPT
         {
-    //         va_list list;
-    //         time_t  raw_time{0};
-    //         tm      time_struct{0};
-    //         timeval tv{0};
-    //         char     timestamp[26]{0};
-    //         uint32_t milli_sec{0};
-    //         bool     enable_print = false;
+            va_list list;
+            bool     enable_print = false;
 
-    //         if( !(log_level & LOG_STATE_ON) )
-    //         {
-    //             return;
-    //         }
+            uint32_t milli_sec = system_current_time_millis();
 
-    //         gettimeofday(&tv, nullptr);
+            if( !(log_level & LOG_STATE_ON) )
+            {
+                return;
+            }
 
-    //         milli_sec = lrint(tv.tv_usec / 1'000l); // Round to nearest milli_sec
+            switch (get_level_log(type))
+            {
+                case LEVEL_DEBUG:
+                    if(log_level & (LEVEL_DEBUG))
+                    {
+                        enable_print = true;
+                        OS_LOG_PRINTF (OS_ANSI_COLOR_CYAN "%u - DEBUG: ", milli_sec, tag);
+                    }
+                    break;
+                case LEVEL_INFO:
+                    if(log_level & (LEVEL_DEBUG|LEVEL_INFO))
+                    {
+                        enable_print = true;
+                        OS_LOG_PRINTF (OS_ANSI_COLOR_GREEN "%u - INFO : ", milli_sec, tag);
+                    }
+                    break;
+                case LEVEL_WARNING:
+                    if(log_level & (LEVEL_DEBUG|LEVEL_INFO|LEVEL_WARNING))
+                    {
+                        enable_print = true;
+                        OS_LOG_PRINTF (OS_ANSI_COLOR_YELLOW "%u - WARN : ", milli_sec, tag);
+                    }
+                    break;
+                case LEVEL_ERROR:
+                    if(log_level & (LEVEL_DEBUG|LEVEL_INFO|LEVEL_WARNING|LEVEL_ERROR))
+                    {
+                        enable_print = true;
+                        OS_LOG_PRINTF (OS_ANSI_COLOR_RED "%u - ERROR: ", milli_sec, tag);
+                    }
+                    break;
+                case LEVEL_FATAL:
+                    if(log_level & (LEVEL_DEBUG|LEVEL_INFO|LEVEL_WARNING|LEVEL_ERROR|LEVEL_FATAL))
+                    {
+                        enable_print = true;
+                        OS_LOG_PRINTF (OS_ANSI_COLOR_MAGENTA "%u - FATAL: ", milli_sec, tag);
+                    }
+                    break;
+                default:
+                    enable_print = false;
+                    break;
+            }
 
-    //         time (&raw_time);
-            
-    //         // localtime_r (&raw_time, &time_struct);
-    //         strftime (timestamp, sizeof (timestamp), "%H:%M:%S", &time_struct);
-
-    //         switch (get_level_log(type))
-    //         {
-    //             case LEVEL_DEBUG:
-    //                 if(log_level & (LEVEL_DEBUG))
-    //                 {
-    //                     enable_print = true;
-    //                     OS_LOG_PRINTF (OS_ANSI_COLOR_CYAN "%s.%03d %s - DEBUG: ", timestamp, milli_sec, tag);
-    //                 }
-    //                 break;
-    //             case LEVEL_INFO:
-    //                 if(log_level & (LEVEL_DEBUG|LEVEL_INFO))
-    //                 {
-    //                     enable_print = true;
-    //                     OS_LOG_PRINTF (OS_ANSI_COLOR_GREEN "%s.%03d %s - INFO : ", timestamp, milli_sec, tag);
-    //                 }
-    //                 break;
-    //             case LEVEL_WARNING:
-    //                 if(log_level & (LEVEL_DEBUG|LEVEL_INFO|LEVEL_WARNING))
-    //                 {
-    //                     enable_print = true;
-    //                     OS_LOG_PRINTF (OS_ANSI_COLOR_YELLOW "%s.%03d %s - WARN : ", timestamp, milli_sec, tag);
-    //                 }
-    //                 break;
-    //             case LEVEL_ERROR:
-    //                 if(log_level & (LEVEL_DEBUG|LEVEL_INFO|LEVEL_WARNING|LEVEL_ERROR))
-    //                 {
-    //                     enable_print = true;
-    //                     OS_LOG_PRINTF (OS_ANSI_COLOR_RED "%s.%03d %s - ERROR: ", timestamp, milli_sec, tag);
-    //                 }
-    //                 break;
-    //             case LEVEL_FATAL:
-    //                 if(log_level & (LEVEL_DEBUG|LEVEL_INFO|LEVEL_WARNING|LEVEL_ERROR|LEVEL_FATAL))
-    //                 {
-    //                     enable_print = true;
-    //                     OS_LOG_PRINTF (OS_ANSI_COLOR_MAGENTA "%s.%03d %s - FATAL: ", timestamp, milli_sec, tag);
-    //                 }
-    //                 break;
-    //             default:
-    //                 enable_print = false;
-    //                 break;
-    //         }
-
-    //         va_start (list, fmt);
-    //         if(enable_print)
-    //             vprintf (fmt, list);
-    //         va_end (list);
-    //         if(enable_print)
-    //         {
-    //             OS_LOG_PRINTF("\n");
-    //             fflush (stdout);
-    //         }
+            va_start (list, fmt);
+            if(enable_print)
+                vprintf (fmt, list);
+            va_end (list);
+            if(enable_print)
+            {
+                OS_LOG_PRINTF(OS_ANSI_COLOR_RESET "\n");
+                fflush (stdout);
+            }
         }
 
     }
