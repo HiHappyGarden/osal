@@ -12,6 +12,8 @@
         "ratio": "cpp",
         "stdexcept": "cpp",
         "streambuf": "cpp",
-        "functional": "cpp"
-    }
+        "functional": "cpp",
+        "mmsystem.h": "c"
+    },
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
 }

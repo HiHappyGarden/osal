@@ -55,7 +55,7 @@ timer::~timer() OS_NOEXCEPT
     }
 }
 
-exit timer::create(void *arg, error** error)
+exit timer::create(void *arg, error** error) OS_NOEXCEPT
 {
     t.arg.arg = arg;
     t.handle = xTimerCreate (

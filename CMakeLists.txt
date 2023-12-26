@@ -11,8 +11,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS ON)
-add_compile_options("$<$<STREQUAL:$<TARGET_PROPERTY:LINKER_LANGUAGE>,CXX>:-fno-rtti>")
-add_compile_options("$<$<STREQUAL:$<TARGET_PROPERTY:LINKER_LANGUAGE>,CXX>:-fno-exceptions>")
+
 
 include(CheckIPOSupported)
 check_ipo_supported(RESULT supported OUTPUT error)
@@ -69,6 +68,9 @@ FetchContent_MakeAvailable(googletest)
 include_directories(inc)
 
 if(UNIX)
+    add_compile_options("$<$<STREQUAL:$<TARGET_PROPERTY:LINKER_LANGUAGE>,CXX>:-fno-rtti>")
+    add_compile_options("$<$<STREQUAL:$<TARGET_PROPERTY:LINKER_LANGUAGE>,CXX>:-fno-exceptions>")
+
     if (ENABLE_FREERTOS)
         message(STATUS "OSAL for FreeRTOS linux emulation")
 
@@ -113,6 +115,45 @@ if(UNIX)
         file(GLOB_RECURSE OSAL_INCLUDES CONFIGURE_DEPENDS "inc/*.hpp" "src/unix/osal_sys/*.hpp")
         file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/error.cpp" "memory.cpp" "src/log.cpp" "src/unix/*.cpp")
     endif()
+elseif (WIN32)
+        message(STATUS "OSAL for FreeRTOS win32 emulation")
+
+        message(STATUS "Start freertos download")
+        FetchContent_Declare( freertos_kernel
+                GIT_REPOSITORY https://github.com/FreeRTOS/FreeRTOS-Kernel.git
+                GIT_TAG        V11.0.1
+        )
+
+        add_library(freertos_config INTERFACE)
+
+        target_include_directories(freertos_config SYSTEM
+                INTERFACE
+                src/freertos/config
+        )
+
+        target_compile_definitions(freertos_config
+                INTERFACE
+                projCOVERAGE_TEST=0
+        )
+
+        set( FREERTOS_HEAP "4" CACHE STRING "" FORCE)
+        # Select the native compile PORT
+        set( FREERTOS_PORT "MSVC_MINGW" CACHE STRING "" FORCE)
+        # Select the cross-compile PORT
+#        if (CMAKE_CROSSCOMPILING)
+#            set(FREERTOS_PORT "GCC_ARM_CA9" CACHE STRING "" FORCE)
+#        endif()
+        include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/include)
+        include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/portable/ThirdParty/GCC/Posix)
+
+        set(LIB_FREERTOS freertos_kernel
+                             ws2_32
+                             winmm)
+        FetchContent_MakeAvailable(freertos_kernel)
+        set(PLATFORM_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/freertos ${CMAKE_CURRENT_SOURCE_DIR}/src/freertos/config)
+        include_directories(${PLATFORM_INCLUDE})
+        file(GLOB_RECURSE OSAL_INCLUDES CONFIGURE_DEPENDS "inc/*.hpp" "src/freertos/osal_sys/*.hpp" "src/freertos/config/*.h")
+        file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/error.cpp" "memory.cpp" "src/log.cpp" "src/freertos/*.cpp")
 endif()
 
 message(STATUS "PROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}")
@@ -121,9 +162,7 @@ message(STATUS "OSAL_INCLUDES=${OSAL_INCLUDES}")
 message(STATUS "OSAL_SOURCES=${OSAL_SOURCES}")
 
 
-#add_definitions(-DOS_USE_SCHED_FIFO)
-add_compile_options(-fno-rtti -fno-exceptions)
-#target_compile_options(${PROJECT_NAME} PUBLIC -fno-rtti -fno-exceptions)
+#add_compile_options(-fno-rtti -fno-exceptions)
 add_library(${PROJECT_NAME} STATIC ${OSAL_SOURCES} ${OSAL_INCLUDES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/inc ${PLATFORM_INCLUDES})
 

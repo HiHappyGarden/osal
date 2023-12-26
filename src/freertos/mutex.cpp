@@ -25,7 +25,7 @@ inline namespace v1
 {
 
 
-mutex::mutex(class error** error) OS_NOEXCEPT : m { .handle = xSemaphoreCreateRecursiveMutex() }
+mutex::mutex(class error** error) OS_NOEXCEPT : m { xSemaphoreCreateRecursiveMutex() }
 {
     if(m.handle == nullptr && error)
     {

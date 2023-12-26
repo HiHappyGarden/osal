@@ -41,7 +41,7 @@ public:
     /**
      * @brief Default constructor.
      */
-    explicit mutex(class error** error = nullptr);
+    explicit mutex(class error** error = nullptr) OS_NOEXCEPT;
 
     /**
      * @brief Deleted copy constructor.

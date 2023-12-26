@@ -81,7 +81,8 @@ struct array_deleter
 
 
 template <typename T, typename Deleter = default_delete<T>>
-class unique_ptr {
+class unique_ptr 
+{
     T* ptr = nullptr;
     Deleter deleter = Deleter();
 public:
@@ -138,7 +139,7 @@ public:
     }
 
     inline bool is_null() OS_NOEXCEPT { return ptr == nullptr; }
-    inline ssize_t size() OS_NOEXCEPT { return sizeof(T); }
+    //inline ssize_t size() OS_NOEXCEPT { return sizeof(T); }
     inline T& operator[](size_t idx) OS_NOEXCEPT { return ptr[idx]; }
     inline const T& operator[](size_t idx) const OS_NOEXCEPT { return ptr[idx]; }
     inline T& operator*() const OS_NOEXCEPT { return *ptr; }

@@ -24,7 +24,7 @@ namespace osal
 inline namespace v1
 {
 
-semaphore::semaphore(size_t count, error** error) OS_NOEXCEPT : sem {.handle = xSemaphoreCreateCounting (UINT32_MAX, count) }
+semaphore::semaphore(size_t count, error** error) OS_NOEXCEPT : sem { xSemaphoreCreateCounting (UINT32_MAX, count) }
 {
     if(sem.handle == nullptr && error)
     {
@@ -80,7 +80,7 @@ osal::exit semaphore::wait_from_isr(uint64_t time, error **error) OS_NOEXCEPT
     return exit::KO;
 }
 
-void semaphore::signal()
+void semaphore::signal() OS_NOEXCEPT
 {
     if(sem.handle)
     {

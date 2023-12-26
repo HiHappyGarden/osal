@@ -43,6 +43,8 @@ void* thread_function(void*)
     mutex.unlock();
 
     pthread_exit(nullptr);
+
+    return nullptr;
 }
 
 // Test case for concurrent increment

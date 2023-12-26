@@ -99,7 +99,7 @@ inline namespace v1
     }
 
 
-    void printf_stack_error(const char* app_tag, const error &e, const char* fmt, ...)
+    void printf_stack_error(const char* app_tag, const error &e, const char* fmt, ...) OS_NOEXCEPT
     {
         if(fmt && strlen(fmt))
         {

@@ -25,9 +25,9 @@ inline namespace v1
 
 queue::queue(size_t size, size_t message_size, error** error) OS_NOEXCEPT
     : q {
-       .size = size,
-       .count = 0,
-       .handle = xQueueCreate(size, message_size)
+       size,
+       0,
+       xQueueCreate(size, message_size)
     }
 {
     if(q.handle == nullptr && error)

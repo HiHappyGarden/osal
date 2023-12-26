@@ -24,7 +24,7 @@ inline namespace v1
 {
 
 stream_buffer::stream_buffer(size_t size, size_t trigger_size, error** error) OS_NOEXCEPT
-: sb { .handle = xStreamBufferCreate(size, trigger_size) }
+: sb { xStreamBufferCreate(size, trigger_size) }
 {
     if(sb.handle == nullptr && error)
     {

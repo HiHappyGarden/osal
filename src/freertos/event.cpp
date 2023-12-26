@@ -23,7 +23,7 @@ namespace osal
 inline namespace v1
 {
 
-event::event(error** error) OS_NOEXCEPT : e{ .handle = xEventGroupCreate() }
+event::event(error** error) OS_NOEXCEPT : e{ xEventGroupCreate() }
 {
     if(e.handle == nullptr && error)
     {
@@ -64,12 +64,12 @@ osal::exit event::wait(uint32_t mask, uint32_t& value, uint64_t time, error** er
     return (value == 0) ? exit::OK : exit::KO;
 }
 
-osal::exit event::wait_from_isr(uint32_t mask, uint32_t& value, uint64_t time, error **error)
+osal::exit event::wait_from_isr(uint32_t mask, uint32_t& value, uint64_t time, error **error) OS_NOEXCEPT
 {
     return wait(mask, value, time, error);
 }
 
-void event::set(uint32_t value)
+void event::set(uint32_t value) OS_NOEXCEPT
 {
     if(e.handle)
     {
@@ -77,7 +77,7 @@ void event::set(uint32_t value)
     }
 }
 
-void event::set_from_isr(uint32_t value)
+void event::set_from_isr(uint32_t value) OS_NOEXCEPT
 {
     if(e.handle)
     {
@@ -105,7 +105,7 @@ uint32_t event::get_from_isr() OS_NOEXCEPT
     return 0;
 }
 
-void event::clear(uint32_t value)
+void event::clear(uint32_t value) OS_NOEXCEPT
 {
     if(e.handle)
     {
@@ -113,7 +113,7 @@ void event::clear(uint32_t value)
     }
 }
 
-inline void event::clear_from_isr(uint32_t value)
+inline void event::clear_from_isr(uint32_t value) OS_NOEXCEPT
 {
     if(e.handle)
     {
