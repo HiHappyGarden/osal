@@ -26,9 +26,10 @@
 #define BIT2 0x02
 
 static void* thread_1 (void * arg);
+static void* thread_2 (void * arg);
 
 static os::thread thread1{"test_1", 4, OASL_TASK_HEAP, thread_1};
-static os::thread thread2{"test_2", 4, OASL_TASK_HEAP, thread_1};
+static os::thread thread2{"test_2", 4, OASL_TASK_HEAP, thread_2};
 os::event event;
 static bool run = true;
 
@@ -51,7 +52,7 @@ void* thread_1 (void * arg)
     return nullptr;
 }
 
-static void thread_2 (void * arg)
+void* thread_2 (void * arg)
 {
     while(run)
     {
@@ -70,6 +71,8 @@ static void thread_2 (void * arg)
     }
 
     EXPECT_EQ(run, false);
+
+    return nullptr;
 }
 
 TEST(event_test, two_thread_synch_event)
@@ -82,7 +85,7 @@ TEST(event_test, two_thread_synch_event)
 
     os::tick_sleep(os::sec_to_us(1));
 
-    thread1.create();
+    thread2.create();
 
     os::tick_sleep(os::ms_to_us(500));
 
