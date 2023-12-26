@@ -44,7 +44,7 @@ struct no_class final
 
 enum class trait_type : uint8_t
 {
-    VOID,
+    _VOID_,
     CHAR,
     BOOL,
     STR,
@@ -71,13 +71,13 @@ struct get_type
 template<>
 struct get_type<void>
 {
-    constexpr static const trait_type type = trait_type::VOID;
+    constexpr static const trait_type type = trait_type::_VOID_;
 };
 
 //template<>
 //struct get_type<no_class>
 //{
-//    constexpr static const trait_type type = trait_type::VOID;
+//    constexpr static const trait_type type = trait_type::_VOID_;
 //};
 
 template<>
@@ -254,16 +254,16 @@ struct function_base
     }
 
 protected:
-    inline explicit function_base(enum type type, const uint8_t args_count = 0, trait_type ret_type = trait_type::VOID, bool by_reference = false) OS_NOEXCEPT : type(type), args_count(args_count), ret_type(ret_type), by_reference(by_reference)
+    inline explicit function_base(enum type type, const uint8_t args_count = 0, trait_type ret_type = trait_type::_VOID_, bool by_reference = false) OS_NOEXCEPT : type(type), args_count(args_count), ret_type(ret_type), by_reference(by_reference)
     {
         memcpy(this->args_type, args_type, sizeof(this->args_type));
     }
 
     enum type type = NONE;
 
-    trait_type args_type[MAX_PARAM] {trait_type::VOID, trait_type::VOID, trait_type::VOID};
+    trait_type args_type[MAX_PARAM] {trait_type::_VOID_, trait_type::_VOID_, trait_type::_VOID_};
     const uint8_t args_count = 0;
-    trait_type ret_type = trait_type::VOID;
+    trait_type ret_type = trait_type::_VOID_;
     bool by_reference = false;
 };
 

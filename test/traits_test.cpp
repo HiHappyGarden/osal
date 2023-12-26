@@ -97,14 +97,14 @@ TEST(traits_test, dynamic_function)
     test1 t1;
     test2 t2;
 
-    method m1(&t1, &test1::test_1, trait_type::VOID);
+    method m1(&t1, &test1::test_1, trait_type::_VOID_);
     int32_t i =0;
     method m2(&t2, &test2::test_2, trait_type::BOOL, trait_type::INT32);
-    function f1 (func1, trait_type::VOID);
+    function f1 (func1, trait_type::_VOID_);
     function f2 (func2, trait_type::CHAR, trait_type::INT32, trait_type::INT32);
 
     void (*f)() = [] {};
-    function l2 (f, trait_type::VOID);
+    function l2 (f, trait_type::_VOID_);
 
     function_base* a1[4];
     a1[0] = &m1;

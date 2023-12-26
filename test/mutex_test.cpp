@@ -42,7 +42,7 @@ void* thread_function(void*)
     // Release the lock
     mutex.unlock();
 
-    pthread_exit(nullptr);
+    //pthread_exit(nullptr);
 
     return nullptr;
 }

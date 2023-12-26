@@ -102,7 +102,7 @@ if(UNIX)
         include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/include)
         include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/portable/ThirdParty/GCC/Posix)
 
-        set(LIB_FREERTOS "freertos_kernel")
+        set(PLATFORM_LIB "freertos_kernel")
         FetchContent_MakeAvailable(freertos_kernel)
         set(PLATFORM_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/freertos ${CMAKE_CURRENT_SOURCE_DIR}/src/freertos/config)
         include_directories(${PLATFORM_INCLUDE})
@@ -110,10 +110,12 @@ if(UNIX)
         file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/error.cpp" "memory.cpp" "src/log.cpp" "src/freertos/*.cpp")
     else()
         message(STATUS "OSAL for LINUX")
+        set(PLATFORM_LIB dl)
         set(PLATFORM_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/unix)
         include_directories(${PLATFORM_INCLUDE})
         file(GLOB_RECURSE OSAL_INCLUDES CONFIGURE_DEPENDS "inc/*.hpp" "src/unix/osal_sys/*.hpp")
         file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/error.cpp" "memory.cpp" "src/log.cpp" "src/unix/*.cpp")
+        
     endif()
 elseif (WIN32)
         message(STATUS "OSAL for FreeRTOS win32 emulation")
@@ -144,9 +146,9 @@ elseif (WIN32)
 #            set(FREERTOS_PORT "GCC_ARM_CA9" CACHE STRING "" FORCE)
 #        endif()
         include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/include)
-        include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/portable/ThirdParty/GCC/Posix)
+        include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/portable/MSVC-MingW)
 
-        set(LIB_FREERTOS freertos_kernel
+        set(PLATFORM_LIB freertos_kernel
                              ws2_32
                              winmm)
         FetchContent_MakeAvailable(freertos_kernel)
@@ -180,8 +182,7 @@ if (CMAKE_PROJECT_NAME STREQUAL osal AND BUILD_TESTING)
 
     target_link_libraries(osal_test
                             osal
-                            ${LIB_FREERTOS}
-                            dl
+                            ${PLATFORM_LIB}
                             GTest::gtest
                             GTest::gtest_main
                             )
