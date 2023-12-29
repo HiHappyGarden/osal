@@ -110,7 +110,7 @@ inline namespace v1
             va_end (list);
         }
 
-        char row[256];
+        char row[512];
         memset(row, '\0', sizeof(row));
 
         uint16_t count = 0;
@@ -118,7 +118,7 @@ inline namespace v1
         while(ptr)
         {
             count++;
-            snprintf(row, sizeof(row), "%u. msg:%s code:%d (%s::%s line:%u)", count, ptr->msg, ptr->code, ptr->file, ptr->func, ptr->line);
+            snprintf(row, sizeof(row), "%u. msg:%s code:%d (%s::%s line:%lu)", count, ptr->msg, ptr->code, ptr->file, ptr->func, ptr->line);
             OS_LOG_ERROR(app_tag, "%s", row);
             ptr = ptr->old_error;
         }

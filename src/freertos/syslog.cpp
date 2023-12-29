@@ -61,35 +61,35 @@ namespace osal
                     if(log_level & (LEVEL_DEBUG))
                     {
                         enable_print = true;
-                        OS_LOG_PRINTF (OS_ANSI_COLOR_CYAN "%u - DEBUG: ", milli_sec, tag);
+                        OS_LOG_PRINTF (OS_ANSI_COLOR_CYAN "%lu - DEBUG: %s", milli_sec, tag);
                     }
                     break;
                 case LEVEL_INFO:
                     if(log_level & (LEVEL_DEBUG|LEVEL_INFO))
                     {
                         enable_print = true;
-                        OS_LOG_PRINTF (OS_ANSI_COLOR_GREEN "%u - INFO : ", milli_sec, tag);
+                        OS_LOG_PRINTF (OS_ANSI_COLOR_GREEN "%lu - INFO : %s", milli_sec, tag);
                     }
                     break;
                 case LEVEL_WARNING:
                     if(log_level & (LEVEL_DEBUG|LEVEL_INFO|LEVEL_WARNING))
                     {
                         enable_print = true;
-                        OS_LOG_PRINTF (OS_ANSI_COLOR_YELLOW "%u - WARN : ", milli_sec, tag);
+                        OS_LOG_PRINTF (OS_ANSI_COLOR_YELLOW "%lu - WARN : %s", milli_sec, tag);
                     }
                     break;
                 case LEVEL_ERROR:
                     if(log_level & (LEVEL_DEBUG|LEVEL_INFO|LEVEL_WARNING|LEVEL_ERROR))
                     {
                         enable_print = true;
-                        OS_LOG_PRINTF (OS_ANSI_COLOR_RED "%u - ERROR: ", milli_sec, tag);
+                        OS_LOG_PRINTF (OS_ANSI_COLOR_RED "%lu - ERROR: %s", milli_sec, tag);
                     }
                     break;
                 case LEVEL_FATAL:
                     if(log_level & (LEVEL_DEBUG|LEVEL_INFO|LEVEL_WARNING|LEVEL_ERROR|LEVEL_FATAL))
                     {
                         enable_print = true;
-                        OS_LOG_PRINTF (OS_ANSI_COLOR_MAGENTA "%u - FATAL: ", milli_sec, tag);
+                        OS_LOG_PRINTF (OS_ANSI_COLOR_MAGENTA "%lu - FATAL: %s", milli_sec, tag);
                     }
                     break;
                 default:

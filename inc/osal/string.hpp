@@ -189,7 +189,11 @@ public:
      */
     constexpr string<Size>& operator+(const char* b) OS_NOEXCEPT
     {
-        size_t size_b = strnlen(b, Size);
+        size_t size_b = strlen(b);
+        if(size_b > Size)
+        {
+        	size_b = Size;
+        }
         if(data_length + size_b <= size())
         {
             strncpy(data + data_length, b, size_b);
