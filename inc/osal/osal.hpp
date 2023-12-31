@@ -1,7 +1,7 @@
 /***************************************************************************
  *
  * OSAL
- * Copyright (C) 2023  Antonio Salsi <passy.linux@zresa.it>
+ * Copyright (C) 2023/2024 Antonio Salsi <passy.linux@zresa.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,9 +23,12 @@
 #include "osal_sys/osal_sys.hpp"
 
 #include "osal/array.hpp"
+#include "osal/config.h"
 #include "osal/error.hpp"
 #include "osal/event.hpp"
+#include "osal/iterator.hpp"
 #include "osal/log.hpp"
+#include "osal/memory.hpp"
 #include "osal/mutex.hpp"
 #include "osal/queue.hpp"
 #include "osal/semaphore.hpp"
@@ -33,12 +36,8 @@
 #include "osal/string.hpp"
 #include "osal/thread.hpp"
 #include "osal/timer.hpp"
-#include "osal/types.hpp"
-#include "osal/memory.hpp"
 #include "osal/traits.hpp"
-
-#include "osal/config.h"
-
+#include "osal/types.hpp"
 
 
 namespace osal

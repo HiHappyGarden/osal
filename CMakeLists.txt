@@ -12,6 +12,8 @@ set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS ON)
 
+set(OS_HAVE_CONFIG ON)
+
 
 include(CheckIPOSupported)
 check_ipo_supported(RESULT supported OUTPUT error)

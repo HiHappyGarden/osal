@@ -29,10 +29,12 @@ static inline uint64_t system_current_time_millis() OS_NOEXCEPT
     struct _timeb timebuffer;
     _ftime(&timebuffer);
     return (uint64_t)(((timebuffer.time * 1000) + timebuffer.millitm));
-#else
+#elif defined(__UNIX__)
     struct timeb timebuffer;
     ftime(&timebuffer);
     return (uint64_t)(((timebuffer.time * 1000) + timebuffer.millitm));
+#else
+    return 0;
 #endif
 }
 
