@@ -18,6 +18,7 @@
  ***************************************************************************/
 #pragma once
 #include "osal/types.hpp"
+#include "osal/iterator.hpp"
 
 #include <stdlib.h>
 #include <stdint.h>
