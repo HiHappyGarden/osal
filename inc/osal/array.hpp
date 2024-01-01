@@ -142,6 +142,11 @@ public:
         return data[idx];
     }
 
+    constexpr inline auto begin() OS_NOEXCEPT { return data; }
+    constexpr inline auto end() OS_NOEXCEPT { return data + data_length; }
+
+    constexpr inline auto begin() const OS_NOEXCEPT { return data; }
+    constexpr inline auto end() const OS_NOEXCEPT { return data + data_length; }
 };
 
 /**
@@ -305,6 +310,12 @@ public:
         }
         return data[idx];
     }
+
+    constexpr inline auto begin() OS_NOEXCEPT { return data; }
+    constexpr inline auto end() OS_NOEXCEPT { return data + data_length; }
+
+    constexpr inline auto begin() const OS_NOEXCEPT { return data; }
+    constexpr inline auto end() const OS_NOEXCEPT { return data + data_length; }
 };
 
 

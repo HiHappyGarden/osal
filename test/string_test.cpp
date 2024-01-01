@@ -29,6 +29,11 @@ TEST(string_test, size)
     ASSERT_EQ(str.length(), 4);
     ASSERT_EQ(str.size(), 4);
 
+    for(auto&& it : str)
+    {
+        printf("it:%d", it);
+    }
+
 
 }
 

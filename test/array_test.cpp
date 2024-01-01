@@ -31,6 +31,11 @@ TEST(array_test, size)
     os::array_init data1(1,2,3,4,5,6);
     ASSERT_EQ(data1.size(), 6);
     ASSERT_EQ(data1.length(), 6);
+
+    for(auto&& it : data2)
+    {
+        printf("it:%d", it);
+    }
 }
 
 TEST(array_test, char_array)

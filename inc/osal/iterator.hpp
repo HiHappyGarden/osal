@@ -25,88 +25,34 @@ namespace osal
 {
 inline namespace v1
 {
+    template<typename T>
+    struct iterator final
+    {
+        // You need these tags to provide introspection and conform
+        // to standard implementations of iterators. If you were
+        // using Boost to define your iterator, you'd define those in
+        // the base class.
+        using value_type        = T;
+        using pointer           = value_type*;
+        using reference         = value_type&;
 
-template<typename T>
-class iterator final
-{
-public:
-    using value_type = T;
-    using difference_type = ptrdiff_t;
-    using pointer = T*;
-    using reference = T&;
+        constexpr inline explicit iterator(pointer ptr) OS_NOEXCEPT : ptr(ptr) {}
 
-    iterator() : m_ptr(nullptr) {}
-    iterator(pointer ptr) : m_ptr(ptr) {}
+        constexpr inline reference operator*() const OS_NOEXCEPT { return *ptr; }
+        constexpr inline pointer operator->() OS_NOEXCEPT { return ptr; }
 
-    reference operator*() const { return *m_ptr; }
-    pointer operator->() const { return m_ptr; }
-    reference operator[](difference_type n) const { return *(m_ptr + n); }
+        // Prefix increment
+        constexpr inline iterator& operator++() OS_NOEXCEPT { ptr++; return *this; }
 
-    iterator& operator++() {
-        ++m_ptr;
-        return *this;
-    }
-    iterator operator++(int) {
-        iterator temp = *this;
-        ++m_ptr;
-        return temp;
-    }
-    iterator& operator--() {
-        --m_ptr;
-        return *this;
-    }
-    iterator operator--(int) {
-        iterator temp = *this;
-        --m_ptr;
-        return temp;
-    }
-    iterator& operator+=(difference_type n) {
-        m_ptr += n;
-        return *this;
-    }
-    iterator& operator-=(difference_type n) {
-        m_ptr -= n;
-        return *this;
-    }
+        // Postfix increment
+        constexpr inline iterator operator++(int) OS_NOEXCEPT { iterator tmp = *this; ++(*this); return tmp; }
 
-    friend bool operator==(const iterator& lhs, const iterator& rhs) {
-        return lhs.m_ptr == rhs.m_ptr;
-    }
-    friend bool operator!=(const iterator& lhs, const iterator& rhs) {
-        return !(lhs == rhs);
-    }
-    friend bool operator<(const iterator& lhs, const iterator& rhs) {
-        return lhs.m_ptr < rhs.m_ptr;
-    }
-    friend bool operator>(const iterator& lhs, const iterator& rhs) {
-        return rhs < lhs;
-    }
-    friend bool operator<=(const iterator& lhs, const iterator& rhs) {
-        return !(rhs < lhs);
-    }
-    friend bool operator>=(const iterator& lhs, const iterator& rhs) {
-        return !(lhs < rhs);
-    }
-    friend iterator operator+(const iterator& it, difference_type n) {
-        iterator temp = it;
-        temp += n;
-        return temp;
-    }
-    friend iterator operator+(difference_type n, const iterator& it) {
-        return it + n;
-    }
-    friend iterator operator-(const iterator& it, difference_type n) {
-        iterator temp = it;
-        temp -= n;
-        return temp;
-    }
-    friend difference_type operator-(const iterator& lhs, const iterator& rhs) {
-        return lhs.m_ptr - rhs.m_ptr;
-    }
+        constexpr inline friend bool operator== (const iterator& a, const iterator& b) OS_NOEXCEPT  { return a.ptr == b.ptr; };
+        constexpr inline friend bool operator!= (const iterator& a, const iterator& b) OS_NOEXCEPT  { return a.ptr != b.ptr; };
 
-private:
-    pointer m_ptr;
-};
+    private:
+        pointer ptr;
+    };
 
 
 

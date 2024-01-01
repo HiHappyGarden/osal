@@ -17,8 +17,10 @@
  *
  ***************************************************************************/
 #pragma once
+#include "osal/iterator.hpp"
 #include <stdint.h>
 #include <string.h>
+
 namespace osal
 {
 inline namespace v1
@@ -38,6 +40,10 @@ class string
     size_t data_length{0};      ///< The current length of the string.
     static inline char str_terminator = '\0';
 public:
+
+    using iterator =  osal::iterator<char>;
+    using const_iterator = osal::iterator<char>;
+
     /**
      * @brief Default constructor.
      */
@@ -48,7 +54,7 @@ public:
      *
      * @param str The input string.
      */
-    constexpr string(const char(&str)[Size]) OS_NOEXCEPT
+    constexpr string(const char(&str)[Size]) OS_NOEXCEPT //keep not explicit
         : string(str, Size - 1)
     {}
 
@@ -118,6 +124,12 @@ public:
         memset(&data, '\0', sizeof(data));
         data_length = 0;
     }
+
+    constexpr inline auto begin() OS_NOEXCEPT { return data; }
+    constexpr inline auto end() OS_NOEXCEPT { return data + data_length; }
+
+    constexpr inline auto begin() const OS_NOEXCEPT { return data; }
+    constexpr inline auto end() const OS_NOEXCEPT { return data + data_length; }
 
     /**
      * @brief Concatenates the current string with a char.
