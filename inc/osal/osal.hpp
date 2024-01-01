@@ -130,3 +130,9 @@ constexpr inline uint64_t operator""_s( unsigned long long secs ) {  return sec_
 }
 
 namespace os = osal;
+
+extern "C"
+{
+[[maybe_unused]] void osal_us_sleep(uint64_t us);
+}
+

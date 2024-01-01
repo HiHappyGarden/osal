@@ -72,6 +72,14 @@ void stop_main_loop() OS_NOEXCEPT
     vTaskEndScheduler();
 }
 
+}
+}
+
+void osal_us_sleep(uint64_t us)
+{
+	osal::us_sleep(us);
+}
+
 #ifndef EXCLUE_CHECK_FOR_STACK_OVERFLOW
 extern "C" [[noreturn]] void vApplicationStackOverflowHook( TaskHandle_t xTask, char * pcTaskName )
 {
@@ -88,5 +96,3 @@ extern "C" [[noreturn]] void vApplicationMallocFailedHook( void )
 }
 #endif
 
-}
-}
