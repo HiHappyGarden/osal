@@ -134,5 +134,7 @@ namespace os = osal;
 extern "C"
 {
 [[maybe_unused]] void osal_us_sleep(uint64_t us);
+[[maybe_unused]] uint64_t osal_ms_to_us(uint32_t millis);
+[[maybe_unused]] uint64_t osal_sec_to_us(uint32_t sec);
 }
 

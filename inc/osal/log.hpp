@@ -232,4 +232,4 @@ inline void reset_color_log() OS_NOEXCEPT
 }
 }
 
-
+extern "C" uint64_t osal_system_current_time_millis() __attribute__((weak));
