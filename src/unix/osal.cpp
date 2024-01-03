@@ -155,7 +155,22 @@ void stop_main_loop() OS_NOEXCEPT
     done = true;
 }
 
-
-
 }
 }
+
+void osal_us_sleep(uint64_t us)
+{
+	osal::us_sleep(us);
+}
+
+uint64_t osal_ms_to_us(uint32_t millis)
+{
+	return osal::ms_to_us(millis);
+}
+
+uint64_t osal_sec_to_us(uint32_t sec)
+{
+	return osal::sec_to_us(sec);
+}
+
+
