@@ -420,6 +420,54 @@ public:
         (*this) += other;
         return *this;
     }
+
+    constexpr inline const char* find(const char to_find[], size_t offset = 0) const OS_NOEXCEPT
+    {
+        return strstr(&data[offset], to_find);
+    }
+
+    constexpr inline bool start_with(const char to_start[], size_t offset = 0) const OS_NOEXCEPT
+    {
+        return strncmp(&data[offset], to_start, strlen(to_start)) == 0;
+    }
+
+    string<Size>& ltrim() OS_NOEXCEPT
+    {
+        size_t count = 0;
+        for(auto ch : data)
+        {
+            if(!isspace(ch))
+            {
+                break;
+            }
+            count++;
+        }
+
+        memmove(data, data + count, data_length - count);
+        data_length -= count;
+        memset(data + data_length, '\0', sizeof(data) - data_length);
+
+        return *this;
+    }
+
+    string<Size>& rtrim() OS_NOEXCEPT
+    {
+        size_t count = 0;
+        for(size_t i = data_length - 1; i != 0; i--)
+        {
+            if(!isspace(data[i]))
+            {
+                break;
+            }
+            count++;
+        }
+
+        data[data_length - count] = '\0';
+        data_length -= count;
+        memset(data + data_length, '\0', sizeof(data) - data_length);
+        return *this;
+    }
+
 };
 
 

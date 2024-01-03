@@ -116,3 +116,27 @@ TEST(string_test, assignment)
     ASSERT_TRUE(s == "ciao");
 
 }
+
+
+TEST(string_test, find)
+{
+    os::string s = "test sono antonio";
+
+    ASSERT_TRUE(strcmp(s.find("sono"), "sono antonio") == 0);
+
+}
+
+TEST(string_test, start)
+{
+    os::string s = "test sono antonio";
+
+    ASSERT_TRUE(s.start_with("test"));
+
+}
+
+TEST(string_test, rtrim)
+{
+    os::string s = "sono antonio \r\n";
+
+    ASSERT_TRUE(strcmp(s.rtrim().c_str(), "sono antonio") == 0);
+}
