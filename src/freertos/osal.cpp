@@ -72,7 +72,7 @@ void stop_main_loop() OS_NOEXCEPT
     vTaskEndScheduler();
 }
 
-#ifndef EXCLUE_CHECK_FOR_STACK_OVERFLOW
+#ifndef EXCLUDE_CHECK_FOR_STACK_OVERFLOW
 extern "C" [[noreturn]] void vApplicationStackOverflowHook( TaskHandle_t xTask, char * pcTaskName )
 {
     (void)xTask;
@@ -81,7 +81,7 @@ extern "C" [[noreturn]] void vApplicationStackOverflowHook( TaskHandle_t xTask, 
 }
 #endif
 
-#ifndef EXCLUE_USE_MALLOC_FAILED_HOOK
+#ifndef EXCLUDE_USE_MALLOC_FAILED_HOOK
 extern "C" [[noreturn]] void vApplicationMallocFailedHook( void )
 {
     for(;;);
