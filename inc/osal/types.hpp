@@ -39,16 +39,7 @@
     #endif
 #endif
 
-
-#define OS_NO_COPY_NO_MOVE(clazz) \
-clazz(const clazz&) = delete; \
-clazz& operator=(const clazz&) = delete; \
-clazz(clazz&&) = delete; \
-clazz& operator=(clazz&&) = delete;
-
 #define OS_TO_STR(str) #str
-
-
 
 namespace osal
 {
@@ -221,6 +212,8 @@ enum class error_type : uint8_t
     OS_ERFKILL = 132, /* Operation not possible due to RF-kill */
 
     OS_EHWPOISON = 133, /* Memory page has hardware error */
+
+    OS_OUTRNG = 135, /* Out of range*/
 };
 
 
