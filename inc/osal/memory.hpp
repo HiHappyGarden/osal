@@ -38,9 +38,6 @@ template <class T>
 struct remove_reference<T&&> { typedef T type; };
 
 template <typename T>
-inline constexpr bool is_lvalue_reference_v = is_lvalue_reference<T>::value;
-
-template <typename T>
 typename remove_reference<T>::type&& move(T&& arg) OS_NOEXCEPT
 {
     return static_cast<typename remove_reference<T>::type&&>(arg);
@@ -120,8 +117,8 @@ public:
 
     void reset(T* ptr) OS_NOEXCEPT
     {
-        deleter(ptr);
-        ptr = ptr;
+        deleter(this->ptr);
+        this->ptr = ptr;
     }
 
     T* release() OS_NOEXCEPT

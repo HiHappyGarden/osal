@@ -26,6 +26,7 @@
 #include "osal/config.h"
 #include "osal/error.hpp"
 #include "osal/event.hpp"
+#include "osal/generics.hpp"
 #include "osal/iterator.hpp"
 #include "osal/log.hpp"
 #include "osal/memory.hpp"
