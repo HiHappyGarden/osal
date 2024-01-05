@@ -25,7 +25,7 @@
 
 #ifndef RTTI_ENABLED
     #ifndef dynamic_cast
-        #define dynamic_cast static_cast
+        #define dynamic_cast reinterpret_cast
     #endif
 #endif
 
@@ -214,6 +214,7 @@ enum class error_type : uint8_t
     OS_EHWPOISON = 133, /* Memory page has hardware error */
 
     OS_OUTRNG = 135, /* Out of range*/
+    OS_CASTERR = 136, /* Cast error*/
 };
 
 

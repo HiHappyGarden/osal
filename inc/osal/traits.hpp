@@ -190,7 +190,8 @@ struct get_type<double>
 };
 
 template<typename T, typename R, typename ... Ts>
-struct smart_call {
+struct smart_call
+{
     // call for non-const class methods
     static R invoke(T* context, R (T::*method)(Ts...), Ts... args)
     {
@@ -206,7 +207,8 @@ struct smart_call {
 
 // SmartCall specialization for 'void' return type
 template<typename T, typename ... Ts>
-struct smart_call<T, void, Ts...> {
+struct smart_call<T, void, Ts...>
+{
     static void invoke(T* context, void (T::*method)(Ts...), Ts... args)
     {
         (context->*(method))(args ...);
@@ -273,7 +275,7 @@ class method final : public function_base
 {
     
     T* target = nullptr;
-    union
+    union method_prt
     {
         R (V::*method_no_arg)();
         R (V::*method_a0)(A0);
@@ -303,6 +305,10 @@ public:
         return target;
     }
 
+    [[nodiscard]] inline const union method_prt& get_method() const OS_NOEXCEPT
+    {
+        return method_prt;
+    }
 };
 
 template<typename T, typename V, typename R, typename A0, typename A1, typename A2>
@@ -377,7 +383,7 @@ template <typename R,
         typename A0 = no_class, typename A1 = no_class, typename A2 = no_class>
 class function final : public function_base
 {
-    union
+    union function_prt
     {
         R (*function_no_arg)();
         R (*function_a0)(A0);
@@ -399,7 +405,12 @@ public:
     function& operator=(const function&) = delete;
     function(function&&) = delete;
     function& operator=(function&&) = delete;
-    
+
+    [[nodiscard]] inline const union function_prt& get_function() const OS_NOEXCEPT
+    {
+        return function_prt;
+    }
+
 };
 
 template<typename R, typename A0, typename A1, typename A2>
