@@ -75,12 +75,6 @@ struct get_type<void>
     constexpr static const trait_type type = trait_type::_VOID_;
 };
 
-//template<>
-//struct get_type<no_class>
-//{
-//    constexpr static const trait_type type = trait_type::_VOID_;
-//};
-
 template<>
 struct get_type<char>
 {

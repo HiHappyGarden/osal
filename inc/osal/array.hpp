@@ -48,7 +48,7 @@ public:
      */
     constexpr array() = default;
 
-    constexpr explicit inline array(const T default_value)
+    constexpr inline array(const T default_value) //no explicit
     : default_value(default_value)
     { }
 

@@ -22,12 +22,63 @@
 #include "osal/traits.hpp"
 #include "osal/types.hpp"
 #include "osal/memory.hpp"
+#include "osal/array.hpp"
 
 
 namespace osal
 {
 inline namespace v1
 {
+
+class value final
+{
+    union
+    {
+        char value_char;
+        bool value_bool;
+        char* value_str; //reference!!!!!!!
+        int8_t value_int8;
+        uint8_t value_uint8;
+        int16_t value_int16;
+        uint16_t value_uint16;
+        int32_t value_int32;
+        uint32_t value_uint32;
+        int64_t value_int64;
+        uint64_t value_uint64;
+        float value_float;
+        double value_double;
+    };
+    trait_type type;
+
+public:
+    inline value() OS_NOEXCEPT : type(trait_type::_VOID_) {}
+    inline value(char value_char) OS_NOEXCEPT : value_char(value_char), type(trait_type::CHAR) {} //keep not explicit
+    inline value(bool value_bool) OS_NOEXCEPT : value_bool(value_bool), type(trait_type::BOOL) {} //keep not explicit
+    inline value(char* value_str) OS_NOEXCEPT : value_str(value_str), type(trait_type::STR) {} //keep not explicit
+    inline value(int8_t value_int8) OS_NOEXCEPT : value_int8(value_int8), type(trait_type::INT8) {} //keep not explicit
+    inline value(uint8_t value_uint8) OS_NOEXCEPT : value_uint8(value_uint8), type(trait_type::UINT8) {} //keep not explicit
+    inline value(int16_t value_int16) OS_NOEXCEPT : value_int16(value_int16), type(trait_type::INT16) {} //keep not explicit
+    inline value(uint16_t value_uint16) OS_NOEXCEPT : value_uint16(value_uint16), type(trait_type::UINT16) {} //keep not explicit
+    inline value(int32_t value_int32) OS_NOEXCEPT : value_int32(value_int32), type(trait_type::INT32) {}  //keep not explicit
+    inline value(uint32_t value_uint32) OS_NOEXCEPT : value_uint32(value_uint32), type(trait_type::UINT32) {} //keep not explicit
+    inline value(int64_t value_int64) OS_NOEXCEPT : value_int64(value_int64), type(trait_type::INT64) {} //keep not explicit
+    inline value(uint64_t value_uint64) OS_NOEXCEPT : value_uint64(value_uint64), type(trait_type::UINT64) {} //keep not explicit
+    inline value(float value_float) OS_NOEXCEPT : value_double(value_float), type(trait_type::FLOAT) {} //keep not explicit
+    inline value(double value_double) OS_NOEXCEPT : value_double(value_double), type(trait_type::DOUBLE) {} //keep not explicit
+
+    [[nodiscard]] inline const trait_type& get_type() const OS_NOEXCEPT { return type; }
+
+    [[nodiscard]] inline char get_char() const OS_NOEXCEPT { return value_char; }
+    [[nodiscard]] inline const char* get_str() const OS_NOEXCEPT { return value_str; }
+    [[nodiscard]] inline int8_t get_int8() const OS_NOEXCEPT { return value_int8; }
+    [[nodiscard]] inline uint8_t get_uint8() const OS_NOEXCEPT { return value_uint8; }
+    [[nodiscard]] inline int16_t get_int16() const OS_NOEXCEPT { return value_int16; }
+    [[nodiscard]] inline uint16_t get_uint16() const OS_NOEXCEPT { return value_uint16; }
+    [[nodiscard]] inline int32_t get_int32() const OS_NOEXCEPT { return value_int32; }
+    [[nodiscard]] inline uint32_t get_uint32() const OS_NOEXCEPT { return value_uint32; }
+    [[nodiscard]] inline int64_t get_int64() const OS_NOEXCEPT { return value_int64; }
+    [[nodiscard]] inline uint64_t get_uint64() const OS_NOEXCEPT { return value_uint64; }
+};
 
 struct function_base
 {
@@ -68,18 +119,22 @@ struct function_base
     }
 
 protected:
-    inline explicit function_base(enum type type, const uint8_t args_count = 0, trait_type ret_type = trait_type::_VOID_, bool by_reference = false) OS_NOEXCEPT
-            : type(type), args_count(args_count), ret_type(ret_type), by_reference(by_reference)
-    {
-        memcpy(this->args_type, args_type, sizeof(this->args_type));
-    }
-
     enum type type = NONE;
 
     trait_type    args_type[MAX_PARAM]{trait_type::_VOID_, trait_type::_VOID_, trait_type::_VOID_};
     const uint8_t args_count   = 0;
     trait_type    ret_type     = trait_type::_VOID_;
     bool          by_reference = false;
+
+    inline explicit function_base(enum type type, const uint8_t args_count = 0, trait_type ret_type = trait_type::_VOID_, bool by_reference = false) OS_NOEXCEPT
+    : type(type), args_count(args_count), ret_type(ret_type), by_reference(by_reference)
+    {
+        memcpy(this->args_type, args_type, sizeof(this->args_type));
+    }
+
+public:
+    virtual osal::exit execute(array<value, MAX_PARAM>&& params, char* ret_buffer, size_t ret_buffer_len) OS_NOEXCEPT = 0;
+
 };
 
 template<typename T, typename R, typename A0 = no_class, typename A1 = no_class, typename A2 = no_class>
@@ -139,6 +194,7 @@ public:
         return method_prt;
     }
 
+    osal::exit execute(array<value, MAX_PARAM>&& params, char* ret_buffer, size_t ret_buffer_len) OS_NOEXCEPT override;
 
 };
 
@@ -203,6 +259,13 @@ method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(const A0&, const A1&,
     method_prt.method_ref_a0_a1_a2 = method;
 }
 
+template<typename T, typename R, typename A0, typename A1, typename A2>
+osal::exit method<T, R, A0, A1, A2>::execute(array<value, MAX_PARAM>&& params, char* ret_buffer, size_t ret_buffer_len) OS_NOEXCEPT
+{
+    
+    return exit::KO;
+}
+
 template<typename R, typename A0 = no_class, typename A1 = no_class, typename A2 = no_class>
 class function final : public function_base
 {
@@ -251,7 +314,9 @@ public:
         return function_prt;
     }
 
+    osal::exit execute(array<value, MAX_PARAM>&& params, char* ret_buffer, size_t ret_buffer_len) OS_NOEXCEPT override;
 };
+
 
 template<typename R, typename A0, typename A1, typename A2>
 function<R, A0, A1, A2>::function(R (* function)(), trait_type ret_type) OS_NOEXCEPT
@@ -313,6 +378,13 @@ function<R, A0, A1, A2>::function(R (* function)(const A0&, const A1&, const A2&
     args_type[2] = type2;
     function_prt.function_ref_a0_a1_a2 = function;
 }
+
+template<typename R, typename A0, typename A1, typename A2>
+osal::exit function<R, A0, A1, A2>::execute(array<value, MAX_PARAM>&& params, char* ret_buffer, size_t ret_buffer_len) OS_NOEXCEPT
+{
+    return exit::KO;
+}
+
 
 }
 }
