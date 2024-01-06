@@ -41,7 +41,7 @@ class array final
 private:
     T data[Size];
     size_t data_length{0};
-    const T default_value{};
+    T default_value;
 public:
     /**
      * @brief Default constructor for the array class.
@@ -165,7 +165,7 @@ class array_init final
 {
     size_t data_length{0};
     T data[sizeof... (Args) + 1];
-    const T default_value{};
+    T default_value;
 
     /**
      * @brief Helper function to fill the array with elements.

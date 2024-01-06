@@ -41,18 +41,21 @@ TEST(array_test, size)
 TEST(array_test, char_array)
 {
 
-    os::array<int, 6> data2;
+    os::array<int, 6> data2{99};
     data2 << 10;
     ASSERT_EQ(data2.get_size(), 6);
     ASSERT_EQ(data2.get_length(), 1);
     ASSERT_EQ(data2[0], 10);
+    ASSERT_TRUE(data2[10] == 99);
 
     os::array_init data1(1,2,3,4,5,6);
+    data1.set_default_value(99);
     data1 << 10;
     ASSERT_EQ(data1.size(), 6);
     ASSERT_EQ(data1.length(), 6);
     ASSERT_EQ(data1[0], 1);
-    //ASSERT_TRUE(data1[6] == nullptr);
+
+    ASSERT_TRUE(data1[10] == 99);
 
 
 }
