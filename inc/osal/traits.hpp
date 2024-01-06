@@ -29,8 +29,6 @@ namespace osal
 inline namespace v1
 {
 
-constexpr const uint8_t MAX_PARAM = 3;
-
 template<typename>
 struct is_lvalue_reference : public false_type { };
 

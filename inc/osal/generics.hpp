@@ -29,10 +29,11 @@ namespace osal
 inline namespace v1
 {
 
-
 struct function_base
 {
     using ptr = unique_ptr<function_base>;
+
+    static constexpr const uint8_t MAX_PARAM = 3;
 
     enum type
     {
@@ -81,7 +82,7 @@ protected:
     bool          by_reference = false;
 };
 
-template<typename T, typename V, typename R, typename A0 = no_class, typename A1 = no_class, typename A2 = no_class>
+template<typename T, typename R, typename A0 = no_class, typename A1 = no_class, typename A2 = no_class>
 class method final : public function_base
 {
 
@@ -89,36 +90,36 @@ class method final : public function_base
 
     union method_prt
     {
-        R (V::*method_no_arg)();
+        R (T::*method_no_arg)();
 
-        R (V::*method_a0)(A0);
+        R (T::*method_a0)(A0);
 
-        R (V::*method_ref_a0)(const A0&);
+        R (T::*method_ref_a0)(const A0&);
 
-        R (V::*method_a0_a1)(A0, A1);
+        R (T::*method_a0_a1)(A0, A1);
 
-        R (V::*method_ref_a0_a1)(const A0&, const A1&);
+        R (T::*method_ref_a0_a1)(const A0&, const A1&);
 
-        R (V::*method_a0_a1_a2)(A0, A1, A2);
+        R (T::*method_a0_a1_a2)(A0, A1, A2);
 
-        R (V::*method_ref_a0_a1_a2)(const A0&, const A1&, const A2&);
+        R (T::*method_ref_a0_a1_a2)(const A0&, const A1&, const A2&);
     } method_prt{nullptr};
 
 
 public:
-    method(T* target, R (V::*method)(), trait_type ret_type) OS_NOEXCEPT;
+    method(T* target, R (T::*method)(), trait_type ret_type) OS_NOEXCEPT;
 
-    method(T* target, R (V::*method)(A0), trait_type ret_type, trait_type type0) OS_NOEXCEPT;
+    method(T* target, R (T::*method)(A0), trait_type ret_type, trait_type type0) OS_NOEXCEPT;
 
-    method(T* target, R (V::*method)(const A0&), trait_type ret_type, trait_type type0) OS_NOEXCEPT;
+    method(T* target, R (T::*method)(const A0&), trait_type ret_type, trait_type type0) OS_NOEXCEPT;
 
-    method(T* target, R (V::*method)(A0, A1), trait_type ret_type, trait_type type0, trait_type type1) OS_NOEXCEPT;
+    method(T* target, R (T::*method)(A0, A1), trait_type ret_type, trait_type type0, trait_type type1) OS_NOEXCEPT;
 
-    method(T* target, R (V::*method)(const A0&, const A1&), trait_type ret_type, trait_type type0, trait_type type1) OS_NOEXCEPT;
+    method(T* target, R (T::*method)(const A0&, const A1&), trait_type ret_type, trait_type type0, trait_type type1) OS_NOEXCEPT;
 
-    method(T* target, R (V::*method)(A0, A1, A2), trait_type ret_type, trait_type type0, trait_type type1, trait_type type2) OS_NOEXCEPT;
+    method(T* target, R (T::*method)(A0, A1, A2), trait_type ret_type, trait_type type0, trait_type type1, trait_type type2) OS_NOEXCEPT;
 
-    method(T* target, R (V::*method)(const A0&, const A1&, const A2&), trait_type ret_type, trait_type type0, trait_type type1, trait_type type2) OS_NOEXCEPT;
+    method(T* target, R (T::*method)(const A0&, const A1&, const A2&), trait_type ret_type, trait_type type0, trait_type type1, trait_type type2) OS_NOEXCEPT;
 
     method(const method&) = delete;
 
@@ -137,33 +138,35 @@ public:
     {
         return method_prt;
     }
+
+
 };
 
-template<typename T, typename V, typename R, typename A0, typename A1, typename A2>
-method<T, V, R, A0, A1, A2>::method(T* target, R (V::*method)(), trait_type ret_type) OS_NOEXCEPT
+template<typename T, typename R, typename A0, typename A1, typename A2>
+method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(), trait_type ret_type) OS_NOEXCEPT
 : function_base(METHOD, 0, ret_type), target(target)
 {
     method_prt.method_no_arg = method;
 }
 
-template<typename T, typename V, typename R, typename A0, typename A1, typename A2>
-method<T, V, R, A0, A1, A2>::method(T* target, R (V::*method)(A0), trait_type ret_type, trait_type type0) OS_NOEXCEPT
+template<typename T, typename R, typename A0, typename A1, typename A2>
+method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0), trait_type ret_type, trait_type type0) OS_NOEXCEPT
 : function_base(METHOD, 1, ret_type), target(target)
 {
     args_type[0] = type0;
     method_prt.method_a0 = method;
 }
 
-template<typename T, typename V, typename R, typename A0, typename A1, typename A2>
-method<T, V, R, A0, A1, A2>::method(T* target, R (V::*method)(const A0&), trait_type ret_type, trait_type type0) OS_NOEXCEPT
+template<typename T, typename R, typename A0, typename A1, typename A2>
+method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(const A0&), trait_type ret_type, trait_type type0) OS_NOEXCEPT
 : function_base(METHOD, 1, ret_type, true), target(target)
 {
     args_type[0] = type0;
     method_prt.method_ref_a0 = method;
 }
 
-template<typename T, typename V, typename R, typename A0, typename A1, typename A2>
-method<T, V, R, A0, A1, A2>::method(T* target, R (V::*method)(A0, A1), trait_type ret_type, trait_type type0, trait_type type1) OS_NOEXCEPT
+template<typename T, typename R, typename A0, typename A1, typename A2>
+method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0, A1), trait_type ret_type, trait_type type0, trait_type type1) OS_NOEXCEPT
         : function_base(METHOD, 2, ret_type), target(target)
 {
     args_type[0] = type0;
@@ -171,8 +174,8 @@ method<T, V, R, A0, A1, A2>::method(T* target, R (V::*method)(A0, A1), trait_typ
     method_prt.method_a0_a1 = method;
 }
 
-template<typename T, typename V, typename R, typename A0, typename A1, typename A2>
-method<T, V, R, A0, A1, A2>::method(T* target, R (V::*method)(const A0&, const A1&), trait_type ret_type, trait_type type0, trait_type type1) OS_NOEXCEPT
+template<typename T, typename R, typename A0, typename A1, typename A2>
+method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(const A0&, const A1&), trait_type ret_type, trait_type type0, trait_type type1) OS_NOEXCEPT
 : function_base(METHOD, 2, ret_type, true), target(target)
 {
     args_type[0] = type0;
@@ -180,8 +183,8 @@ method<T, V, R, A0, A1, A2>::method(T* target, R (V::*method)(const A0&, const A
     method_prt.method_ref_a0_a1 = method;
 }
 
-template<typename T, typename V, typename R, typename A0, typename A1, typename A2>
-method<T, V, R, A0, A1, A2>::method(T* target, R (V::*method)(A0, A1, A2), trait_type ret_type, trait_type type0, trait_type type1, trait_type type2) OS_NOEXCEPT
+template<typename T, typename R, typename A0, typename A1, typename A2>
+method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0, A1, A2), trait_type ret_type, trait_type type0, trait_type type1, trait_type type2) OS_NOEXCEPT
 : function_base(METHOD, 3, ret_type), target(target)
 {
     args_type[0] = type0;
@@ -190,8 +193,8 @@ method<T, V, R, A0, A1, A2>::method(T* target, R (V::*method)(A0, A1, A2), trait
     method_prt.method_a0_a1_a2 = method;
 }
 
-template<typename T, typename V, typename R, typename A0, typename A1, typename A2>
-method<T, V, R, A0, A1, A2>::method(T* target, R (V::*method)(const A0&, const A1&, const A2&), trait_type ret_type, trait_type type0, trait_type type1, trait_type type2) OS_NOEXCEPT
+template<typename T, typename R, typename A0, typename A1, typename A2>
+method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(const A0&, const A1&, const A2&), trait_type ret_type, trait_type type0, trait_type type1, trait_type type2) OS_NOEXCEPT
 : function_base(METHOD, 3, ret_type, true), target(target)
 {
     args_type[0] = type0;

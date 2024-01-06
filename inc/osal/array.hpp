@@ -39,14 +39,18 @@ template <typename T, size_t Size>
 class array final
 {
 private:
-    T data[Size]{0};
+    T data[Size];
     size_t data_length{0};
-
+    const T default_value{};
 public:
     /**
      * @brief Default constructor for the array class.
      */
     constexpr array() = default;
+
+    constexpr explicit inline array(const T default_value)
+    : default_value(default_value)
+    { }
 
     /**
       * @brief Destructor for the array class.
@@ -124,7 +128,7 @@ public:
     {
         if(idx >= data_length)
         {
-            //exit(0);
+            return default_value;
         }
         return data[idx];
     }
@@ -138,7 +142,7 @@ public:
     {
         if(idx >= data_length)
         {
-            //exit(0);
+            return default_value;
         }
         return data[idx];
     }
@@ -160,14 +164,14 @@ template <typename T, typename... Args>
 class array_init final
 {
     size_t data_length{0};
-    T data[sizeof... (Args) + 1]{0};
+    T data[sizeof... (Args) + 1];
+    const T default_value{};
 
     /**
-
-            @brief Helper function to fill the array with elements.
-            @tparam TP The type of the last element.
-            @param last The last element to add to the array.
-         */
+     * @brief Helper function to fill the array with elements.
+     * @tparam TP The type of the last element.
+     * @param last The last element to add to the array.
+     */
     template <typename TP>
     constexpr void fill(const TP& last) OS_NOEXCEPT
     {
@@ -217,6 +221,11 @@ public:
     constexpr explicit array_init(const T& first, Args... args) OS_NOEXCEPT
     {
         fill(first, args...);
+    }
+
+    inline void set_default_value(const T& default_value) OS_NOEXCEPT
+    {
+        this->default_value = default_value;
     }
 
     /**
@@ -293,7 +302,7 @@ public:
     {
         if(idx >= data_length)
         {
-            //exit(0);
+            return default_value;
         }
         return data[idx];
     }
@@ -307,7 +316,7 @@ public:
     {
         if(idx >= data_length)
         {
-            //exit(0);
+            return default_value;
         }
         return data[idx];
     }
