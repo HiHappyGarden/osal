@@ -214,48 +214,17 @@ struct smart_call<T, void, Ts...>
     }
 };
 
-//template<typename ... Args>
-//class parameter_helper final
-//{
-//    trait_type parameters[sizeof...(Args)];
-//    uint8_t parameters_size = 0;
-//
-//public:
-//    inline constexpr parameter_helper() OS_NOEXCEPT
-//    {
-//        //getter(Args...);
-//    }
-//
-//    inline constexpr explicit parameter_helper(Args ... args) OS_NOEXCEPT
-//    {
-//        getter(args...);
-//    }
-//
-//    template<typename T>
-//    inline constexpr void getter(T t, Args ... args) OS_NOEXCEPT
-//    {
-//        parameters[parameters_size] = get_type(t);
-//        parameters_size++;
-//        getter(args...);
-//    }
-//
-//    template<typename T>
-//    inline constexpr void getter(T t) OS_NOEXCEPT
-//    {
-//        parameters[parameters_size] = get_type(t);
-//        parameters_size++;
-//    }
-//
-//    inline constexpr uint8_t size() OS_NOEXCEPT
-//    {
-//        return parameters_size;
-//    }
-//
-//    inline constexpr const trait_type* get_parameters() OS_NOEXCEPT
-//    {
-//        return parameters;
-//    }
-//};
+template<typename T, typename U>
+struct is_same
+{
+    static const bool value = false;
+};
+
+template<typename T>
+struct is_same<T,T>  //specialization
+{
+    static const bool value = true;
+};
 
 
 }

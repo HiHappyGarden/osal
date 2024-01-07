@@ -38,7 +38,7 @@ struct test2
     bool test_2(int i)
     {
         std::cout << "test2:" << i << std::endl;
-        return true;
+        return i > 0;
     }
 };
 
@@ -50,7 +50,7 @@ void func1()
 char func2(int a1, int a2)
 {
     std::cout << "func2:" << (a1 + a2) << std::endl;
-    return 30;
+    return (a1 + a2);
 }
 
 class obj
@@ -63,7 +63,7 @@ class obj
 
 
 
-TEST(commons_test, dynamic_function)
+TEST(generics_test, dynamic_function)
 {
     test1 t1;
     test2 t2;
@@ -86,27 +86,46 @@ TEST(commons_test, dynamic_function)
     const function_base& fb1 = m1;
     function_base&& fb2 = method(&t2, &test2::test_2, trait_type::BOOL, trait_type::INT32);;
 
+
     (m1.get_target()->*m1.get_method().method_no_arg)();
     bool r = (m2.get_target()->*m2.get_method().method_a0)(30);
+
+    ASSERT_TRUE(r);
 
     std::cout << "ret:" << std::to_string(r) << std::endl;
 }
 
 
-TEST(commons_test, function_base_call)
+TEST(generics_test, function_base_call)
 {
     test1 t1;
     test2 t2;
 
-    function_base::ptr m1 =  new method(&t1, &test1::test_1, trait_type::_VOID_);
+    function_base::ptr m1 = new method(&t1, &test1::test_1, trait_type::_VOID_);
     function_base::ptr m2 = new method(&t2, &test2::test_2, trait_type::BOOL, trait_type::INT32);
 
-    trait_type t = trait_type::INT32;
-    value p = 32;
+    function_base::ptr f1 = new function (func1, trait_type::_VOID_);
+    function_base::ptr f2 = new function (func2, trait_type::CHAR, trait_type::INT32, trait_type::INT32);
+
+    {
+        m1->execute(nullptr, nullptr, nullptr, nullptr);
+
+        value ret;
+        int32_t p0;
+        m2->execute(&ret, &p0, nullptr, nullptr);
+
+        ASSERT_TRUE(ret.get_bool());
+    }
+
+    {
+        value ret;
+        int32_t p0 = 10;
+        int32_t p1 = 20;
+        f2->execute(&ret, &p0, &p1, nullptr);
+
+        ASSERT_TRUE(ret.get_int8());
 
 
-    value v1 = 10;
-    m2->execute({v1}, nullptr, 0);
-
+    }
 
 }

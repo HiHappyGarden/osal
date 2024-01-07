@@ -47,28 +47,98 @@ class value final
         uint64_t value_uint64;
         float value_float;
         double value_double;
+        void* ptr;
     };
+    size_t ptr_size;
     trait_type type;
 
 public:
     inline value() OS_NOEXCEPT : type(trait_type::_VOID_) {}
-    inline value(char value_char) OS_NOEXCEPT : value_char(value_char), type(trait_type::CHAR) {} //keep not explicit
-    inline value(bool value_bool) OS_NOEXCEPT : value_bool(value_bool), type(trait_type::BOOL) {} //keep not explicit
-    inline value(char* value_str) OS_NOEXCEPT : value_str(value_str), type(trait_type::STR) {} //keep not explicit
-    inline value(int8_t value_int8) OS_NOEXCEPT : value_int8(value_int8), type(trait_type::INT8) {} //keep not explicit
-    inline value(uint8_t value_uint8) OS_NOEXCEPT : value_uint8(value_uint8), type(trait_type::UINT8) {} //keep not explicit
-    inline value(int16_t value_int16) OS_NOEXCEPT : value_int16(value_int16), type(trait_type::INT16) {} //keep not explicit
-    inline value(uint16_t value_uint16) OS_NOEXCEPT : value_uint16(value_uint16), type(trait_type::UINT16) {} //keep not explicit
-    inline value(int32_t value_int32) OS_NOEXCEPT : value_int32(value_int32), type(trait_type::INT32) {}  //keep not explicit
-    inline value(uint32_t value_uint32) OS_NOEXCEPT : value_uint32(value_uint32), type(trait_type::UINT32) {} //keep not explicit
-    inline value(int64_t value_int64) OS_NOEXCEPT : value_int64(value_int64), type(trait_type::INT64) {} //keep not explicit
-    inline value(uint64_t value_uint64) OS_NOEXCEPT : value_uint64(value_uint64), type(trait_type::UINT64) {} //keep not explicit
-    inline value(float value_float) OS_NOEXCEPT : value_double(value_float), type(trait_type::FLOAT) {} //keep not explicit
-    inline value(double value_double) OS_NOEXCEPT : value_double(value_double), type(trait_type::DOUBLE) {} //keep not explicit
+    inline value(void* ptr, size_t ptr_size) OS_NOEXCEPT : ptr(ptr), ptr_size(ptr_size), type(trait_type::DOUBLE) {} //keep not explicit
+
+    template<typename T>
+    constexpr value(T t) //keep not explicit
+    {
+        if constexpr (is_same<void, T>::value)
+        {
+            type = trait_type::_VOID_;
+        }
+        else if constexpr (is_same<char, T>::value)
+        {
+            type = trait_type::CHAR;
+            value_char = t;
+        }
+        else if constexpr (is_same<bool, T>::value)
+        {
+            type = trait_type::BOOL;
+            value_bool = t;
+        }
+        else if constexpr (is_same<char*, T>::value)
+        {
+            type = trait_type::STR;
+            value_bool = t;
+        }
+        else if constexpr (is_same<int8_t, T>::value)
+        {
+            type = trait_type::INT8;
+            value_int8 = t;
+        }
+        else if constexpr (is_same<uint8_t, T>::value)
+        {
+            type = trait_type::UINT8;
+            value_uint8 = t;
+        }
+        else if constexpr (is_same<int16_t, T>::value)
+        {
+            type = trait_type::INT16;
+            value_int16 = t;
+        }
+        else if constexpr (is_same<uint16_t, T>::value)
+        {
+            type = trait_type::UINT16;
+            value_uint16 = t;
+        }
+        else if constexpr (is_same<int32_t, T>::value)
+        {
+            type = trait_type::INT32;
+            value_int32 = t;
+        }
+        else if constexpr (is_same<uint32_t, T>::value)
+        {
+            type = trait_type::UINT32;
+            value_uint32 = t;
+        }
+        else if constexpr (is_same<int64_t, T>::value)
+        {
+            type = trait_type::INT64;
+            value_int64 = t;
+        }
+        else if constexpr (is_same<uint64_t, T>::value)
+        {
+            type = trait_type::UINT64;
+            value_uint64 = t;
+        }
+        else if constexpr (is_same<float, T>::value)
+        {
+            type = trait_type::FLOAT;
+            value_float = t;
+        }
+        else if constexpr (is_same<double, T>::value)
+        {
+            type = trait_type::DOUBLE;
+            value_double = t;
+        }
+        else
+        {
+            type = trait_type::CUSTOM;
+            ptr = &t;
+        }
+    }
 
     [[nodiscard]] inline const trait_type& get_type() const OS_NOEXCEPT { return type; }
 
     [[nodiscard]] inline char get_char() const OS_NOEXCEPT { return value_char; }
+    [[nodiscard]] inline bool get_bool() const OS_NOEXCEPT { return value_bool != 0; }
     [[nodiscard]] inline const char* get_str() const OS_NOEXCEPT { return value_str; }
     [[nodiscard]] inline int8_t get_int8() const OS_NOEXCEPT { return value_int8; }
     [[nodiscard]] inline uint8_t get_uint8() const OS_NOEXCEPT { return value_uint8; }
@@ -78,6 +148,10 @@ public:
     [[nodiscard]] inline uint32_t get_uint32() const OS_NOEXCEPT { return value_uint32; }
     [[nodiscard]] inline int64_t get_int64() const OS_NOEXCEPT { return value_int64; }
     [[nodiscard]] inline uint64_t get_uint64() const OS_NOEXCEPT { return value_uint64; }
+    [[nodiscard]] inline float get_float() const OS_NOEXCEPT { return value_float; }
+    [[nodiscard]] inline double get_double() const OS_NOEXCEPT { return value_double; }
+    [[nodiscard]] inline const void*  get_ptr(size_t* size) const OS_NOEXCEPT { *size = ptr_size; return ptr; }
+
 };
 
 struct function_base
@@ -108,32 +182,28 @@ struct function_base
         return ret_type;
     }
 
-    [[nodiscard]] inline bool get_by_reference() const OS_NOEXCEPT
-    {
-        return by_reference;
-    }
-
     [[nodiscard]] inline type get_type() const OS_NOEXCEPT
     {
         return type;
     }
+
+    virtual osal::exit execute(value* ret, void* a0, void* a1, void* a2) const OS_NOEXCEPT = 0;
 
 protected:
     enum type type = NONE;
 
     trait_type    args_type[MAX_PARAM]{trait_type::_VOID_, trait_type::_VOID_, trait_type::_VOID_};
     const uint8_t args_count   = 0;
-    trait_type    ret_type     = trait_type::_VOID_;
-    bool          by_reference = false;
+    trait_type ret_type    = trait_type::_VOID_;
 
-    inline explicit function_base(enum type type, const uint8_t args_count = 0, trait_type ret_type = trait_type::_VOID_, bool by_reference = false) OS_NOEXCEPT
-    : type(type), args_count(args_count), ret_type(ret_type), by_reference(by_reference)
+    inline explicit function_base(enum type type, const uint8_t args_count = 0, trait_type ret_type = trait_type::_VOID_) OS_NOEXCEPT
+    : type(type), args_count(args_count), ret_type(ret_type)
     {
         memcpy(this->args_type, args_type, sizeof(this->args_type));
     }
 
 public:
-    virtual osal::exit execute(array<value, MAX_PARAM>&& params, char* ret_buffer, size_t ret_buffer_len) OS_NOEXCEPT = 0;
+
 
 };
 
@@ -149,34 +219,24 @@ class method final : public function_base
 
         R (T::*method_a0)(A0);
 
-        R (T::*method_ref_a0)(const A0&);
-
         R (T::*method_a0_a1)(A0, A1);
 
-        R (T::*method_ref_a0_a1)(const A0&, const A1&);
-
         R (T::*method_a0_a1_a2)(A0, A1, A2);
-
-        R (T::*method_ref_a0_a1_a2)(const A0&, const A1&, const A2&);
-    } method_prt{nullptr};
-
+    } method_prt;
 
 public:
+
+    using ptr = unique_ptr<method>;
+
     method(T* target, R (T::*method)(), trait_type ret_type) OS_NOEXCEPT;
 
     method(T* target, R (T::*method)(A0), trait_type ret_type, trait_type type0) OS_NOEXCEPT;
 
-    method(T* target, R (T::*method)(const A0&), trait_type ret_type, trait_type type0) OS_NOEXCEPT;
-
     method(T* target, R (T::*method)(A0, A1), trait_type ret_type, trait_type type0, trait_type type1) OS_NOEXCEPT;
-
-    method(T* target, R (T::*method)(const A0&, const A1&), trait_type ret_type, trait_type type0, trait_type type1) OS_NOEXCEPT;
 
     method(T* target, R (T::*method)(A0, A1, A2), trait_type ret_type, trait_type type0, trait_type type1, trait_type type2) OS_NOEXCEPT;
 
-    method(T* target, R (T::*method)(const A0&, const A1&, const A2&), trait_type ret_type, trait_type type0, trait_type type1, trait_type type2) OS_NOEXCEPT;
-
-    method(const method&) = delete;
+    method(const method&) = default;
 
     method& operator=(const method&) = delete;
 
@@ -194,8 +254,7 @@ public:
         return method_prt;
     }
 
-    osal::exit execute(array<value, MAX_PARAM>&& params, char* ret_buffer, size_t ret_buffer_len) OS_NOEXCEPT override;
-
+    osal::exit execute(value* ret, void* a0, void* a1, void* a2) const OS_NOEXCEPT override;
 };
 
 template<typename T, typename R, typename A0, typename A1, typename A2>
@@ -214,29 +273,12 @@ method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0), trait_type ret_t
 }
 
 template<typename T, typename R, typename A0, typename A1, typename A2>
-method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(const A0&), trait_type ret_type, trait_type type0) OS_NOEXCEPT
-: function_base(METHOD, 1, ret_type, true), target(target)
-{
-    args_type[0] = type0;
-    method_prt.method_ref_a0 = method;
-}
-
-template<typename T, typename R, typename A0, typename A1, typename A2>
 method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0, A1), trait_type ret_type, trait_type type0, trait_type type1) OS_NOEXCEPT
         : function_base(METHOD, 2, ret_type), target(target)
 {
     args_type[0] = type0;
     args_type[1] = type1;
-    method_prt.method_a0_a1 = method;
-}
-
-template<typename T, typename R, typename A0, typename A1, typename A2>
-method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(const A0&, const A1&), trait_type ret_type, trait_type type0, trait_type type1) OS_NOEXCEPT
-: function_base(METHOD, 2, ret_type, true), target(target)
-{
-    args_type[0] = type0;
-    args_type[1] = type1;
-    method_prt.method_ref_a0_a1 = method;
+    method_prt.method_void_a0_a1 = method;
 }
 
 template<typename T, typename R, typename A0, typename A1, typename A2>
@@ -246,23 +288,73 @@ method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0, A1, A2), trait_ty
     args_type[0] = type0;
     args_type[1] = type1;
     args_type[2] = type2;
-    method_prt.method_a0_a1_a2 = method;
+    method_prt.method_a0_01_a2 = method;
 }
 
 template<typename T, typename R, typename A0, typename A1, typename A2>
-method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(const A0&, const A1&, const A2&), trait_type ret_type, trait_type type0, trait_type type1, trait_type type2) OS_NOEXCEPT
-: function_base(METHOD, 3, ret_type, true), target(target)
+osal::exit method<T, R, A0, A1, A2>::execute(value* ret, void* a0, void* a1, void* a2) const OS_NOEXCEPT
 {
-    args_type[0] = type0;
-    args_type[1] = type1;
-    args_type[2] = type2;
-    method_prt.method_ref_a0_a1_a2 = method;
-}
+    if(a0 == nullptr && a1 == nullptr && a2 == nullptr)
+    {
+        if constexpr (is_same<void, R> ::value)
+        {
+            (target->*method_prt.method_no_arg)();
+        }
+        else
+        {
+            if(ret)
+                *ret = (target->*method_prt.method_no_arg)();
+            else
+                return exit::KO;
+        }
+        return exit::OK;
+    }
+    else if(a0 && a1 == nullptr && a2 == nullptr)
+    {
+        if constexpr (is_same<void, R> ::value)
+        {
+            (target->*method_prt.method_a0)(*reinterpret_cast<A0*>(a0));
+        }
+        else
+        {
+            if(ret)
+                *ret = (target->*method_prt.method_a0)(*reinterpret_cast<A0*>(a0));
+            else
+                return exit::KO;
+        }
+        return exit::OK;
+    }
+    else if(a0 && a1 && a2 == nullptr)
+    {
+        if constexpr (is_same<void, R> ::value)
+        {
+            (target->*method_prt.method_a0_a1)(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1));
+        }
+        else
+        {
+            if(ret)
+                *ret = (target->*method_prt.method_a0_a1)(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1));
+            else
+                return exit::KO;
+        }
+        return exit::OK;
+    }
+    else if(a0 && a1 && a2)
+    {
+        if constexpr (is_same<void, R> ::value)
+        {
+            (target->*method_prt.method_a0_a1_a2)(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1), *reinterpret_cast<A2*>(a2));
+        }
+        else
+        {
+            if(ret)
+                *ret = (target->*method_prt.method_a0_a1_a2)(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1), *reinterpret_cast<A2*>(a2));
+            else
+                return exit::KO;
+        }
+        return exit::OK;
+    }
 
-template<typename T, typename R, typename A0, typename A1, typename A2>
-osal::exit method<T, R, A0, A1, A2>::execute(array<value, MAX_PARAM>&& params, char* ret_buffer, size_t ret_buffer_len) OS_NOEXCEPT
-{
-    
     return exit::KO;
 }
 
@@ -275,31 +367,21 @@ class function final : public function_base
 
         R (* function_a0)(A0);
 
-        R (* function_ref_a0)(const A0&);
-
         R (* function_a0_a1)(A0, A1);
 
-        R (* function_ref_a0_a1)(const A0&, const A1&);
-
         R (* function_a0_a1_a2)(A0, A1, A2);
-
-        R (* function_ref_a0_a1_a2)(const A0&, const A1&, const A2&);
     } function_prt{nullptr};
 
 public:
+    using ptr = unique_ptr<function>;
+
     explicit function(R (* function)(), trait_type ret_type) OS_NOEXCEPT;
 
     explicit function(R (* function)(A0), trait_type ret_type, trait_type type0) OS_NOEXCEPT;
 
-    explicit function(R (* function)(const A0&), trait_type ret_type, trait_type type0) OS_NOEXCEPT;
-
     explicit function(R (* function)(A0, A1), trait_type ret_type, trait_type type0, trait_type type1) OS_NOEXCEPT;
 
-    explicit function(R (* function)(const A0&, const A1&), trait_type ret_type, trait_type type0, trait_type type1) OS_NOEXCEPT;
-
     explicit function(R (* function)(A0, A1, A2), trait_type ret_type, trait_type type0, trait_type type1, trait_type type2) OS_NOEXCEPT;
-
-    explicit function(R (* function)(const A0&, const A1&, const A2&), trait_type ret_type, trait_type type0, trait_type type1, trait_type type2) OS_NOEXCEPT;
 
     function(const function&) = delete;
 
@@ -314,9 +396,8 @@ public:
         return function_prt;
     }
 
-    osal::exit execute(array<value, MAX_PARAM>&& params, char* ret_buffer, size_t ret_buffer_len) OS_NOEXCEPT override;
+    osal::exit execute(value* ret, void* a0, void* a1, void* a2) const OS_NOEXCEPT override;
 };
-
 
 template<typename R, typename A0, typename A1, typename A2>
 function<R, A0, A1, A2>::function(R (* function)(), trait_type ret_type) OS_NOEXCEPT
@@ -333,13 +414,6 @@ function<R, A0, A1, A2>::function(R (* function)(A0), trait_type ret_type, trait
     function_prt.function_a0 = function;
 }
 
-template<typename R, typename A0, typename A1, typename A2>
-function<R, A0, A1, A2>::function(R (* function)(const A0&), trait_type ret_type, trait_type type0) OS_NOEXCEPT
-: function_base(FUNCTION, 1, ret_type, true)
-{
-    args_type[0] = type0;
-    function_prt.function_ref_a0 = function;
-}
 
 template<typename R, typename A0, typename A1, typename A2>
 function<R, A0, A1, A2>::function(R (* function)(A0, A1), trait_type ret_type, trait_type type0, trait_type type1) OS_NOEXCEPT
@@ -348,15 +422,6 @@ function<R, A0, A1, A2>::function(R (* function)(A0, A1), trait_type ret_type, t
     args_type[0] = type0;
     args_type[1] = type1;
     function_prt.function_a0_a1 = function;
-}
-
-template<typename R, typename A0, typename A1, typename A2>
-function<R, A0, A1, A2>::function(R (* function)(const A0&, const A1&), trait_type ret_type, trait_type type0, trait_type type1) OS_NOEXCEPT
-: function_base(FUNCTION, 2, ret_type, true)
-{
-    args_type[0] = type0;
-    args_type[1] = type1;
-    function_prt.function_ref_a0_a1 = function;
 }
 
 template<typename R, typename A0, typename A1, typename A2>
@@ -370,21 +435,73 @@ function<R, A0, A1, A2>::function(R (* function)(A0, A1, A2), trait_type ret_typ
 }
 
 template<typename R, typename A0, typename A1, typename A2>
-function<R, A0, A1, A2>::function(R (* function)(const A0&, const A1&, const A2&), trait_type ret_type, trait_type type0, trait_type type1, trait_type type2) OS_NOEXCEPT
-: function_base(FUNCTION, 3, ret_type, true)
+osal::exit function<R, A0, A1, A2>::execute(value* ret, void* a0, void* a1, void* a2) const OS_NOEXCEPT
 {
-    args_type[0] = type0;
-    args_type[1] = type1;
-    args_type[2] = type2;
-    function_prt.function_ref_a0_a1_a2 = function;
-}
+    if(a0 == nullptr && a1 == nullptr && a2 == nullptr)
+    {
+        if constexpr (is_same<void, R> ::value)
+        {
+            function_prt.function_no_arg();
+        }
+        else
+        {
+            if(ret)
+                *ret = function_prt.function_no_arg();
+            else
+                return exit::KO;
+        }
 
-template<typename R, typename A0, typename A1, typename A2>
-osal::exit function<R, A0, A1, A2>::execute(array<value, MAX_PARAM>&& params, char* ret_buffer, size_t ret_buffer_len) OS_NOEXCEPT
-{
+        return exit::OK;
+    }
+    else if(a0 && a1 == nullptr && a2 == nullptr)
+    {
+        if constexpr (is_same<void, R> ::value)
+        {
+            function_prt.function_a0(*reinterpret_cast<A0*>(a0));
+        }
+        else
+        {
+            if(ret)
+                *ret = function_prt.function_a0(*reinterpret_cast<A0*>(a0));
+            else
+                return exit::KO;
+        }
+        return exit::OK;
+    }
+    else if(a0 && a1 && a2 == nullptr)
+    {
+        if constexpr (is_same<void, R> ::value)
+        {
+            function_prt.function_a0_a1(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1));
+        }
+        else
+        {
+            if(ret)
+                *ret = function_prt.function_a0_a1(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1));
+            else
+                return exit::KO;
+        }
+        return exit::OK;
+    }
+    else if(a0 && a1 && a2)
+    {
+        if constexpr (is_same<void, R> ::value)
+        {
+            function_prt.function_a0_a1_a2(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1), *reinterpret_cast<A2*>(a2));
+        }
+        else
+        {
+            if(ret)
+                *ret = function_prt.function_a0_a1_a2(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1), *reinterpret_cast<A2*>(a2));
+            else
+                return exit::KO;
+        }
+
+        return exit::OK;
+    }
+
     return exit::KO;
 }
-
 
 }
 }

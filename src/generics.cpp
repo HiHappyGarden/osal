@@ -24,7 +24,5 @@ namespace osal
 inline namespace v1
 {
 
-
-
 }
 }
