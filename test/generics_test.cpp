@@ -68,14 +68,14 @@ TEST(generics_test, dynamic_function)
     test1 t1;
     test2 t2;
 
-    method m1(&t1, &test1::test_1, trait_type::_VOID_);
+    method m1(&t1, &test1::test_1);
     int32_t i =0;
-    method m2(&t2, &test2::test_2, trait_type::BOOL, trait_type::INT32);
-    function f1 (func1, trait_type::_VOID_);
-    function f2 (func2, trait_type::CHAR, trait_type::INT32, trait_type::INT32);
+    method m2(&t2, &test2::test_2);
+    function f1 (func1);
+    function f2 (func2);
 
     void (*f)() = [] {};
-    function l2 (f, trait_type::_VOID_);
+    function l2 (f);
 
     function_base* a1[4];
     a1[0] = &m1;
@@ -84,7 +84,7 @@ TEST(generics_test, dynamic_function)
     a1[3] = &f2;
 
     const function_base& fb1 = m1;
-    function_base&& fb2 = method(&t2, &test2::test_2, trait_type::BOOL, trait_type::INT32);;
+    function_base&& fb2 = method(&t2, &test2::test_2);;
 
 
     (m1.get_target()->*m1.get_method().method_no_arg)();
@@ -101,11 +101,11 @@ TEST(generics_test, function_base_call)
     test1 t1;
     test2 t2;
 
-    function_base::ptr m1 = new method(&t1, &test1::test_1, trait_type::_VOID_);
-    function_base::ptr m2 = new method(&t2, &test2::test_2, trait_type::BOOL, trait_type::INT32);
+    function_base::ptr m1 = new method(&t1, &test1::test_1);
+    function_base::ptr m2 = new method(&t2, &test2::test_2);
 
-    function_base::ptr f1 = new function (func1, trait_type::_VOID_);
-    function_base::ptr f2 = new function (func2, trait_type::CHAR, trait_type::INT32, trait_type::INT32);
+    function_base::ptr f1 = new function (func1);
+    function_base::ptr f2 = new function (func2);
 
     {
         m1->execute(nullptr, nullptr, nullptr, nullptr);

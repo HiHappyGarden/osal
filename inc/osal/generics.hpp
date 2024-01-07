@@ -228,13 +228,13 @@ public:
 
     using ptr = unique_ptr<method>;
 
-    method(T* target, R (T::*method)(), trait_type ret_type) OS_NOEXCEPT;
+    method(T* target, R (T::*method)()) OS_NOEXCEPT;
 
-    method(T* target, R (T::*method)(A0), trait_type ret_type, trait_type type0) OS_NOEXCEPT;
+    method(T* target, R (T::*method)(A0)) OS_NOEXCEPT;
 
-    method(T* target, R (T::*method)(A0, A1), trait_type ret_type, trait_type type0, trait_type type1) OS_NOEXCEPT;
+    method(T* target, R (T::*method)(A0, A1)) OS_NOEXCEPT;
 
-    method(T* target, R (T::*method)(A0, A1, A2), trait_type ret_type, trait_type type0, trait_type type1, trait_type type2) OS_NOEXCEPT;
+    method(T* target, R (T::*method)(A0, A1, A2)) OS_NOEXCEPT;
 
     method(const method&) = default;
 
@@ -258,36 +258,36 @@ public:
 };
 
 template<typename T, typename R, typename A0, typename A1, typename A2>
-method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(), trait_type ret_type) OS_NOEXCEPT
-: function_base(METHOD, 0, ret_type), target(target)
+method<T, R, A0, A1, A2>::method(T* target, R (T::*method)()) OS_NOEXCEPT
+: function_base(METHOD, 0, osal::get_type<R>::type), target(target)
 {
     method_prt.method_no_arg = method;
 }
 
 template<typename T, typename R, typename A0, typename A1, typename A2>
-method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0), trait_type ret_type, trait_type type0) OS_NOEXCEPT
-: function_base(METHOD, 1, ret_type), target(target)
+method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0)) OS_NOEXCEPT
+: function_base(METHOD, 1, osal::get_type<R>::type), target(target)
 {
-    args_type[0] = type0;
+    args_type[0] = osal::get_type<A0>::type;
     method_prt.method_a0 = method;
 }
 
 template<typename T, typename R, typename A0, typename A1, typename A2>
-method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0, A1), trait_type ret_type, trait_type type0, trait_type type1) OS_NOEXCEPT
-        : function_base(METHOD, 2, ret_type), target(target)
+method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0, A1)) OS_NOEXCEPT
+        : function_base(METHOD, 2, osal::get_type<R>::type), target(target)
 {
-    args_type[0] = type0;
-    args_type[1] = type1;
+    args_type[0] = osal::get_type<A0>::type;
+    args_type[1] = osal::get_type<A1>::type;
     method_prt.method_void_a0_a1 = method;
 }
 
 template<typename T, typename R, typename A0, typename A1, typename A2>
-method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0, A1, A2), trait_type ret_type, trait_type type0, trait_type type1, trait_type type2) OS_NOEXCEPT
-: function_base(METHOD, 3, ret_type), target(target)
+method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0, A1, A2)) OS_NOEXCEPT
+: function_base(METHOD, 3, osal::get_type<R>::type), target(target)
 {
-    args_type[0] = type0;
-    args_type[1] = type1;
-    args_type[2] = type2;
+    args_type[0] = osal::get_type<A0>::type;
+    args_type[1] = osal::get_type<A1>::type;
+    args_type[2] = osal::get_type<A2>::type;
     method_prt.method_a0_01_a2 = method;
 }
 
@@ -375,13 +375,13 @@ class function final : public function_base
 public:
     using ptr = unique_ptr<function>;
 
-    explicit function(R (* function)(), trait_type ret_type) OS_NOEXCEPT;
+    explicit function(R (* function)()) OS_NOEXCEPT;
 
-    explicit function(R (* function)(A0), trait_type ret_type, trait_type type0) OS_NOEXCEPT;
+    explicit function(R (* function)(A0)) OS_NOEXCEPT;
 
-    explicit function(R (* function)(A0, A1), trait_type ret_type, trait_type type0, trait_type type1) OS_NOEXCEPT;
+    explicit function(R (* function)(A0, A1)) OS_NOEXCEPT;
 
-    explicit function(R (* function)(A0, A1, A2), trait_type ret_type, trait_type type0, trait_type type1, trait_type type2) OS_NOEXCEPT;
+    explicit function(R (* function)(A0, A1, A2)) OS_NOEXCEPT;
 
     function(const function&) = delete;
 
@@ -400,37 +400,37 @@ public:
 };
 
 template<typename R, typename A0, typename A1, typename A2>
-function<R, A0, A1, A2>::function(R (* function)(), trait_type ret_type) OS_NOEXCEPT
-: function_base(FUNCTION, 0, ret_type)
+function<R, A0, A1, A2>::function(R (* function)()) OS_NOEXCEPT
+: function_base(FUNCTION, 0, osal::get_type<R>::type)
 {
     function_prt.function_no_arg = function;
 }
 
 template<typename R, typename A0, typename A1, typename A2>
-function<R, A0, A1, A2>::function(R (* function)(A0), trait_type ret_type, trait_type type0) OS_NOEXCEPT
-: function_base(FUNCTION, 1, ret_type)
+function<R, A0, A1, A2>::function(R (* function)(A0)) OS_NOEXCEPT
+: function_base(FUNCTION, 1, osal::get_type<R>::type)
 {
-    args_type[0] = type0;
+    args_type[0] = osal::get_type<A0>::type;
     function_prt.function_a0 = function;
 }
 
 
 template<typename R, typename A0, typename A1, typename A2>
-function<R, A0, A1, A2>::function(R (* function)(A0, A1), trait_type ret_type, trait_type type0, trait_type type1) OS_NOEXCEPT
-: function_base(FUNCTION, 2, ret_type)
+function<R, A0, A1, A2>::function(R (* function)(A0, A1)) OS_NOEXCEPT
+: function_base(FUNCTION, 2, osal::get_type<R>::type)
 {
-    args_type[0] = type0;
-    args_type[1] = type1;
+    args_type[0] = osal::get_type<A0>::type;
+    args_type[1] = osal::get_type<A1>::type;
     function_prt.function_a0_a1 = function;
 }
 
 template<typename R, typename A0, typename A1, typename A2>
-function<R, A0, A1, A2>::function(R (* function)(A0, A1, A2), trait_type ret_type, trait_type type0, trait_type type1, trait_type type2) OS_NOEXCEPT
-: function_base(FUNCTION, 3, ret_type)
+function<R, A0, A1, A2>::function(R (* function)(A0, A1, A2)) OS_NOEXCEPT
+: function_base(FUNCTION, 3, osal::get_type<R>::type)
 {
-    args_type[0] = type0;
-    args_type[1] = type1;
-    args_type[2] = type2;
+    args_type[0] = osal::get_type<A0>::type;
+    args_type[1] = osal::get_type<A1>::type;
+    args_type[2] = osal::get_type<A2>::type;
     function_prt.function_a0_a1_a2 = function;
 }
 

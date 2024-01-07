@@ -226,7 +226,6 @@ struct is_same<T,T>  //specialization
     static const bool value = true;
 };
 
-
 }
 }
 
