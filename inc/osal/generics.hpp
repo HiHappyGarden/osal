@@ -158,7 +158,7 @@ struct function_base
 {
     using ptr = unique_ptr<function_base>;
 
-    static constexpr const uint8_t MAX_PARAM = 3;
+    static constexpr const uint8_t MAX_ARGS = 3;
 
     enum type
     {
@@ -192,7 +192,7 @@ struct function_base
 protected:
     enum type type = NONE;
 
-    trait_type    args_type[MAX_PARAM]{trait_type::_VOID_, trait_type::_VOID_, trait_type::_VOID_};
+    trait_type    args_type[MAX_ARGS]{trait_type::_VOID_, trait_type::_VOID_, trait_type::_VOID_};
     const uint8_t args_count   = 0;
     trait_type ret_type    = trait_type::_VOID_;
 
