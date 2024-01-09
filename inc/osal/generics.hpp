@@ -187,6 +187,12 @@ struct function_base
         return type;
     }
 
+    virtual osal::exit execute(value* ret) const OS_NOEXCEPT = 0;
+
+    virtual osal::exit execute(value* ret, void* a0) const OS_NOEXCEPT = 0;
+
+    virtual osal::exit execute(value* ret, void* a0, void* a1) const OS_NOEXCEPT = 0;
+
     virtual osal::exit execute(value* ret, void* a0, void* a1, void* a2) const OS_NOEXCEPT = 0;
 
 protected:
@@ -254,6 +260,12 @@ public:
         return method_prt;
     }
 
+    osal::exit execute(value* ret) const OS_NOEXCEPT override;
+
+    osal::exit execute(value* ret, void* a0) const OS_NOEXCEPT override;
+
+    osal::exit execute(value* ret, void* a0, void* a1) const OS_NOEXCEPT override;
+
     osal::exit execute(value* ret, void* a0, void* a1, void* a2) const OS_NOEXCEPT override;
 };
 
@@ -291,10 +303,8 @@ method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0, A1, A2)) OS_NOEXC
     method_prt.method_a0_01_a2 = method;
 }
 
-template<typename T, typename R, typename A0, typename A1, typename A2>
-osal::exit method<T, R, A0, A1, A2>::execute(value* ret, void* a0, void* a1, void* a2) const OS_NOEXCEPT
-{
-    if(a0 == nullptr && a1 == nullptr && a2 == nullptr)
+    template<typename T, typename R, typename A0, typename A1, typename A2>
+    osal::exit method<T, R, A0, A1, A2>::execute(value* ret) const OS_NOEXCEPT
     {
         if constexpr (is_same<void, R> ::value)
         {
@@ -309,7 +319,9 @@ osal::exit method<T, R, A0, A1, A2>::execute(value* ret, void* a0, void* a1, voi
         }
         return exit::OK;
     }
-    else if(a0 && a1 == nullptr && a2 == nullptr)
+
+    template<typename T, typename R, typename A0, typename A1, typename A2>
+    osal::exit method<T, R, A0, A1, A2>::execute(value* ret, void* a0) const OS_NOEXCEPT
     {
         if constexpr (is_same<void, R> ::value)
         {
@@ -324,38 +336,40 @@ osal::exit method<T, R, A0, A1, A2>::execute(value* ret, void* a0, void* a1, voi
         }
         return exit::OK;
     }
-    else if(a0 && a1 && a2 == nullptr)
-    {
-        if constexpr (is_same<void, R> ::value)
-        {
-            (target->*method_prt.method_a0_a1)(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1));
-        }
-        else
-        {
-            if(ret)
-                *ret = (target->*method_prt.method_a0_a1)(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1));
-            else
-                return exit::KO;
-        }
-        return exit::OK;
-    }
-    else if(a0 && a1 && a2)
-    {
-        if constexpr (is_same<void, R> ::value)
-        {
-            (target->*method_prt.method_a0_a1_a2)(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1), *reinterpret_cast<A2*>(a2));
-        }
-        else
-        {
-            if(ret)
-                *ret = (target->*method_prt.method_a0_a1_a2)(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1), *reinterpret_cast<A2*>(a2));
-            else
-                return exit::KO;
-        }
-        return exit::OK;
-    }
 
-    return exit::KO;
+template<typename T, typename R, typename A0, typename A1, typename A2>
+osal::exit method<T, R, A0, A1, A2>::execute(value* ret, void* a0, void* a1) const OS_NOEXCEPT
+{
+    if constexpr (is_same<void, R> ::value)
+    {
+        (target->*method_prt.method_a0_a1)(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1));
+    }
+    else
+    {
+        if(ret)
+            *ret = (target->*method_prt.method_a0_a1)(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1));
+        else
+            return exit::KO;
+    }
+    return exit::OK;
+
+}
+
+template<typename T, typename R, typename A0, typename A1, typename A2>
+osal::exit method<T, R, A0, A1, A2>::execute(value* ret, void* a0, void* a1, void* a2) const OS_NOEXCEPT
+{
+    if constexpr (is_same<void, R> ::value)
+    {
+        (target->*method_prt.method_a0_a1_a2)(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1), *reinterpret_cast<A2*>(a2));
+    }
+    else
+    {
+        if(ret)
+            *ret = (target->*method_prt.method_a0_a1_a2)(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1), *reinterpret_cast<A2*>(a2));
+        else
+            return exit::KO;
+    }
+    return exit::OK;
 }
 
 template<typename R, typename A0 = no_class, typename A1 = no_class, typename A2 = no_class>
@@ -396,6 +410,12 @@ public:
         return function_prt;
     }
 
+    osal::exit execute(value* ret) const OS_NOEXCEPT override;
+
+    osal::exit execute(value* ret, void* a0) const OS_NOEXCEPT override;
+    
+    osal::exit execute(value* ret, void* a0, void* a1) const OS_NOEXCEPT override;
+
     osal::exit execute(value* ret, void* a0, void* a1, void* a2) const OS_NOEXCEPT override;
 };
 
@@ -435,72 +455,73 @@ function<R, A0, A1, A2>::function(R (* function)(A0, A1, A2)) OS_NOEXCEPT
 }
 
 template<typename R, typename A0, typename A1, typename A2>
+osal::exit function<R, A0, A1, A2>::execute(value* ret) const OS_NOEXCEPT
+{
+    if constexpr (is_same<void, R> ::value)
+    {
+        function_prt.function_no_arg();
+    }
+    else
+    {
+        if(ret)
+            *ret = function_prt.function_no_arg();
+        else
+            return exit::KO;
+    }
+
+    return exit::OK;
+}
+
+template<typename R, typename A0, typename A1, typename A2>
+osal::exit function<R, A0, A1, A2>::execute(value* ret, void* a0) const OS_NOEXCEPT
+{
+    if constexpr (is_same<void, R> ::value)
+    {
+        function_prt.function_a0(*reinterpret_cast<A0*>(a0));
+    }
+    else
+    {
+        if(ret)
+            *ret = function_prt.function_a0(*reinterpret_cast<A0*>(a0));
+        else
+            return exit::KO;
+    }
+    return exit::OK;
+}
+
+template<typename R, typename A0, typename A1, typename A2>
+osal::exit function<R, A0, A1, A2>::execute(value* ret, void* a0, void* a1) const OS_NOEXCEPT
+{
+
+    if constexpr (is_same<void, R> ::value)
+    {
+        function_prt.function_a0_a1(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1));
+    }
+    else
+    {
+        if(ret)
+            *ret = function_prt.function_a0_a1(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1));
+        else
+            return exit::KO;
+    }
+    return exit::OK;
+}
+
+template<typename R, typename A0, typename A1, typename A2>
 osal::exit function<R, A0, A1, A2>::execute(value* ret, void* a0, void* a1, void* a2) const OS_NOEXCEPT
 {
-    if(a0 == nullptr && a1 == nullptr && a2 == nullptr)
+    if constexpr (is_same<void, R> ::value)
     {
-        if constexpr (is_same<void, R> ::value)
-        {
-            function_prt.function_no_arg();
-        }
-        else
-        {
-            if(ret)
-                *ret = function_prt.function_no_arg();
-            else
-                return exit::KO;
-        }
-
-        return exit::OK;
+        function_prt.function_a0_a1_a2(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1), *reinterpret_cast<A2*>(a2));
     }
-    else if(a0 && a1 == nullptr && a2 == nullptr)
+    else
     {
-        if constexpr (is_same<void, R> ::value)
-        {
-            function_prt.function_a0(*reinterpret_cast<A0*>(a0));
-        }
+        if(ret)
+            *ret = function_prt.function_a0_a1_a2(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1), *reinterpret_cast<A2*>(a2));
         else
-        {
-            if(ret)
-                *ret = function_prt.function_a0(*reinterpret_cast<A0*>(a0));
-            else
-                return exit::KO;
-        }
-        return exit::OK;
+            return exit::KO;
     }
-    else if(a0 && a1 && a2 == nullptr)
-    {
-        if constexpr (is_same<void, R> ::value)
-        {
-            function_prt.function_a0_a1(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1));
-        }
-        else
-        {
-            if(ret)
-                *ret = function_prt.function_a0_a1(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1));
-            else
-                return exit::KO;
-        }
-        return exit::OK;
-    }
-    else if(a0 && a1 && a2)
-    {
-        if constexpr (is_same<void, R> ::value)
-        {
-            function_prt.function_a0_a1_a2(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1), *reinterpret_cast<A2*>(a2));
-        }
-        else
-        {
-            if(ret)
-                *ret = function_prt.function_a0_a1_a2(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1), *reinterpret_cast<A2*>(a2));
-            else
-                return exit::KO;
-        }
-
-        return exit::OK;
-    }
-
-    return exit::KO;
+    return exit::OK;
 }
 
 }
