@@ -76,7 +76,12 @@ public:
         else if constexpr (is_same<char*, T>::value)
         {
             type = trait_type::STR;
-            value_bool = t;
+            value_str = t;
+        }
+        else if constexpr (is_same<const char*, T>::value)
+        {
+            type = trait_type::STR;
+            value_str = const_cast<char*>(t);
         }
         else if constexpr (is_same<int8_t, T>::value)
         {

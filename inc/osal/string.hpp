@@ -18,6 +18,7 @@
  ***************************************************************************/
 #pragma once
 #include "osal/iterator.hpp"
+
 #include <stdint.h>
 #include <string.h>
 
@@ -466,6 +467,53 @@ public:
         data_length -= count;
         memset(data + data_length, '\0', sizeof(data) - data_length);
         return *this;
+    }
+
+    static char * replace(char const * const original,  char const * const pattern,  char const * const replacement)
+    {
+        size_t const rep_len = strlen(replacement);
+        size_t const pat_len = strlen(pattern);
+        size_t const ori_len = strlen(original);
+
+        size_t pat_cnt = 0;
+        const char * ori_ptr;
+        const char * pat_loc;
+
+        // find how many times the pattern occurs in the original string
+        pat_loc = strstr(ori_ptr, pattern);
+        for (ori_ptr = original; pat_loc; ori_ptr = pat_loc + pat_len)
+        {
+            pat_cnt++;
+            pat_loc = strstr(ori_ptr, pattern);
+        }
+
+        {
+            // allocate memory for the new string
+            size_t const ret_len = ori_len + pat_cnt * (rep_len - pat_len);
+            char * const returned = new char[ret_len + 1];
+
+            if (returned)
+            {
+                // copy the original string,
+                // replacing all the instances of the pattern
+                char * ret_ptr = returned;
+                pat_loc      = strstr(ori_ptr, pattern);
+                for (ori_ptr = original; pat_loc; ori_ptr = pat_loc + pat_len)
+                {
+                    size_t const skp_len = pat_loc - ori_ptr;
+                    // copy the section until the occurence of the pattern
+                    strncpy(ret_ptr, ori_ptr, skp_len);
+                    ret_ptr += skp_len;
+                    // copy the replacement
+                    strncpy(ret_ptr, replacement, rep_len);
+                    ret_ptr += rep_len;
+                    pat_loc             = strstr(ori_ptr, pattern);
+                }
+                // copy the rest of the string.
+                strcpy(ret_ptr, ori_ptr);
+            }
+            return returned;
+        }
     }
 
 };
