@@ -413,7 +413,7 @@ public:
     osal::exit execute(value* ret) const OS_NOEXCEPT override;
 
     osal::exit execute(value* ret, void* a0) const OS_NOEXCEPT override;
-    
+
     osal::exit execute(value* ret, void* a0, void* a1) const OS_NOEXCEPT override;
 
     osal::exit execute(value* ret, void* a0, void* a1, void* a2) const OS_NOEXCEPT override;
