@@ -82,6 +82,7 @@ class unique_ptr
 {
     T* ptr = nullptr;
     Deleter deleter = Deleter();
+
 public:
     unique_ptr() = default;
     unique_ptr(T* ptr) OS_NOEXCEPT : ptr(ptr) {}
