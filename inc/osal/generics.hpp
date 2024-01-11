@@ -171,6 +171,7 @@ struct function_base
     };
 
     function_base() = default;
+    virtual ~function_base() = default;
 
     [[nodiscard]] inline uint8_t get_args_count() const OS_NOEXCEPT
     {

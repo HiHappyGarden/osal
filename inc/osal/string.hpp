@@ -21,6 +21,7 @@
 
 #include <stdint.h>
 #include <string.h>
+#include <limits.h>
 
 namespace osal
 {
@@ -39,11 +40,14 @@ class string
 {
     char data[Size]{};          ///< The character data storage.
     size_t data_length{0};      ///< The current length of the string.
-    static inline char str_terminator = '\0';
+
+    static inline char terminator = '\0'; //keep non constexpr
 public:
 
     using iterator =  osal::iterator<char>;
     using const_iterator = osal::iterator<char>;
+
+
 
     /**
      * @brief Default constructor.
@@ -377,8 +381,8 @@ public:
 
         if(idx >= data_length)
         {
-            str_terminator = '\0';
-            return str_terminator;
+            terminator = '\0';
+            return terminator;
         }
         return data[idx];
     }
@@ -396,8 +400,8 @@ public:
 
         if(idx >= data_length)
         {
-            str_terminator = '\0';
-            return str_terminator;
+            terminator = '\0';
+            return terminator;
         }
         return data[idx];
     }
@@ -422,12 +426,12 @@ public:
         return *this;
     }
 
-    constexpr inline const char* find(const char to_find[], size_t offset = 0) const OS_NOEXCEPT
+    inline const char* find(const char to_find[], size_t offset = 0) const OS_NOEXCEPT
     {
-        return strstr(&data[offset], to_find);
+        return ::strstr(&data[offset], to_find);
     }
 
-    constexpr inline bool start_with(const char to_start[], size_t offset = 0) const OS_NOEXCEPT
+    inline bool start_with(const char to_start[], size_t offset = 0) const OS_NOEXCEPT
     {
         return strncmp(&data[offset], to_start, strlen(to_start)) == 0;
     }
@@ -467,6 +471,33 @@ public:
         data_length -= count;
         memset(data + data_length, '\0', sizeof(data) - data_length);
         return *this;
+    }
+
+    string<Size> strstr(size_t idx_start, size_t offset = SIZE_MAX) const
+    {
+    	if(idx_start >= data_length)
+    	{
+    		return {};
+    	}
+
+    	if(idx_start + offset >= data_length)
+    	{
+    		if(data_length) {
+    			offset = data_length - idx_start - 1;
+    		}
+    		else
+    		{
+    			offset = 0;
+    		}
+    	}
+
+    	string<Size> ret;
+    	for(size_t i = idx_start; i <= idx_start + offset; i++)
+    	{
+    		ret += data[i];
+    	}
+
+    	return ret;
     }
 
     static char * replace(char const * const original,  char const * const pattern,  char const * const replacement)

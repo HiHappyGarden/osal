@@ -101,7 +101,7 @@ namespace osal
             va_end (list);
             if(enable_print)
             {
-                OS_LOG_PRINTF("\n");
+            	OS_LOG_PRINTF(OS_ANSI_COLOR_RESET OS_LOG_NEW_LINE);
                 fflush (stdout);
             }
         }
