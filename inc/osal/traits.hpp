@@ -40,7 +40,12 @@ inline constexpr bool is_lvalue_reference_v = is_lvalue_reference<T>::value;
 
 struct no_class final
 {
-    constexpr no_class() = default;
+    constexpr explicit no_class() = default;
+};
+
+struct no_throw
+{
+    constexpr explicit no_throw() = default;
 };
 
 enum class trait_type : uint8_t
@@ -225,6 +230,8 @@ struct is_same<T,T>  //specialization
 {
     static const bool value = true;
 };
+
+constexpr const no_throw no_throw;
 
 }
 }

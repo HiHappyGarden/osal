@@ -114,7 +114,7 @@ void sys_log(const char* tag, uint8_t type, const char* fmt, ...) OS_NOEXCEPT
 	va_end (list);
 	if(enable_print)
 	{
-		OS_LOG_PRINTF(OS_ANSI_COLOR_RESET "\r\n");
+		OS_LOG_PRINTF(OS_ANSI_COLOR_RESET OS_LOG_NEW_LINE);
 		fflush (stdout);
 	}
 }

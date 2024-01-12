@@ -18,8 +18,10 @@
  ***************************************************************************/
 #pragma once
 #include "osal/iterator.hpp"
+
 #include <stdint.h>
 #include <string.h>
+#include <limits.h>
 
 namespace osal
 {
@@ -38,11 +40,14 @@ class string
 {
     char data[Size]{};          ///< The character data storage.
     size_t data_length{0};      ///< The current length of the string.
-    static inline char str_terminator = '\0';
+
+    static inline char terminator = '\0'; //keep non constexpr
 public:
 
     using iterator =  osal::iterator<char>;
     using const_iterator = osal::iterator<char>;
+
+
 
     /**
      * @brief Default constructor.
@@ -202,6 +207,7 @@ public:
     constexpr string<Size>& operator+(const char* b) OS_NOEXCEPT
     {
         size_t size_b = strlen(b);
+        data_length = strlen(data);
         if(size_b > Size)
         {
         	size_b = Size;
@@ -376,8 +382,8 @@ public:
 
         if(idx >= data_length)
         {
-            str_terminator = '\0';
-            return str_terminator;
+            terminator = '\0';
+            return terminator;
         }
         return data[idx];
     }
@@ -395,8 +401,8 @@ public:
 
         if(idx >= data_length)
         {
-            str_terminator = '\0';
-            return str_terminator;
+            terminator = '\0';
+            return terminator;
         }
         return data[idx];
     }
@@ -421,12 +427,12 @@ public:
         return *this;
     }
 
-    constexpr inline const char* find(const char to_find[], size_t offset = 0) const OS_NOEXCEPT
+    inline const char* find(const char to_find[], size_t offset = 0) const OS_NOEXCEPT
     {
-        return strstr(&data[offset], to_find);
+        return ::strstr(&data[offset], to_find);
     }
 
-    constexpr inline bool start_with(const char to_start[], size_t offset = 0) const OS_NOEXCEPT
+    inline bool start_with(const char to_start[], size_t offset = 0) const OS_NOEXCEPT
     {
         return strncmp(&data[offset], to_start, strlen(to_start)) == 0;
     }
@@ -466,6 +472,80 @@ public:
         data_length -= count;
         memset(data + data_length, '\0', sizeof(data) - data_length);
         return *this;
+    }
+
+    string<Size> strstr(size_t idx_start, size_t offset = SIZE_MAX) const
+    {
+    	if(idx_start >= data_length)
+    	{
+    		return {};
+    	}
+
+    	if(idx_start + offset >= data_length)
+    	{
+    		if(data_length) {
+    			offset = data_length - idx_start - 1;
+    		}
+    		else
+    		{
+    			offset = 0;
+    		}
+    	}
+
+    	string<Size> ret;
+    	for(size_t i = idx_start; i <= idx_start + offset; i++)
+    	{
+    		ret += data[i];
+    	}
+
+    	return ret;
+    }
+
+    static char * replace(char const * const original,  char const * const pattern,  char const * const replacement)
+    {
+        size_t const rep_len = strlen(replacement);
+        size_t const pat_len = strlen(pattern);
+        size_t const ori_len = strlen(original);
+
+        size_t pat_cnt = 0;
+        const char * ori_ptr;
+        const char * pat_loc;
+
+        // find how many times the pattern occurs in the original string
+        pat_loc = strstr(ori_ptr, pattern);
+        for (ori_ptr = original; pat_loc; ori_ptr = pat_loc + pat_len)
+        {
+            pat_cnt++;
+            pat_loc = strstr(ori_ptr, pattern);
+        }
+
+        {
+            // allocate memory for the new string
+            size_t const ret_len = ori_len + pat_cnt * (rep_len - pat_len);
+            char * const returned = new char[ret_len + 1];
+
+            if (returned)
+            {
+                // copy the original string,
+                // replacing all the instances of the pattern
+                char * ret_ptr = returned;
+                pat_loc      = strstr(ori_ptr, pattern);
+                for (ori_ptr = original; pat_loc; ori_ptr = pat_loc + pat_len)
+                {
+                    size_t const skp_len = pat_loc - ori_ptr;
+                    // copy the section until the occurence of the pattern
+                    strncpy(ret_ptr, ori_ptr, skp_len);
+                    ret_ptr += skp_len;
+                    // copy the replacement
+                    strncpy(ret_ptr, replacement, rep_len);
+                    ret_ptr += rep_len;
+                    pat_loc             = strstr(ori_ptr, pattern);
+                }
+                // copy the rest of the string.
+                strcpy(ret_ptr, ori_ptr);
+            }
+            return returned;
+        }
     }
 
 };

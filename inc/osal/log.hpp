@@ -18,6 +18,7 @@
  ***************************************************************************/
 #pragma once
 #include "osal/types.hpp"
+#include "osal-config.h"
 
 #include <stdint.h>
 #include <stdio.h>
@@ -55,6 +56,10 @@
 
 #ifndef OS_LOG_PRINTF
 #define OS_LOG_PRINTF(...) printf (__VA_ARGS__)
+#endif
+
+#ifndef OS_LOG_NEW_LINE
+#define OS_LOG_NEW_LINE "\r\n"
 #endif
 
 namespace osal

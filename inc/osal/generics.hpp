@@ -76,7 +76,12 @@ public:
         else if constexpr (is_same<char*, T>::value)
         {
             type = trait_type::STR;
-            value_bool = t;
+            value_str = t;
+        }
+        else if constexpr (is_same<const char*, T>::value)
+        {
+            type = trait_type::STR;
+            value_str = const_cast<char*>(t);
         }
         else if constexpr (is_same<int8_t, T>::value)
         {
@@ -166,6 +171,7 @@ struct function_base
     };
 
     function_base() = default;
+    virtual ~function_base() = default;
 
     [[nodiscard]] inline uint8_t get_args_count() const OS_NOEXCEPT
     {
@@ -413,7 +419,7 @@ public:
     osal::exit execute(value* ret) const OS_NOEXCEPT override;
 
     osal::exit execute(value* ret, void* a0) const OS_NOEXCEPT override;
-    
+
     osal::exit execute(value* ret, void* a0, void* a1) const OS_NOEXCEPT override;
 
     osal::exit execute(value* ret, void* a0, void* a1, void* a2) const OS_NOEXCEPT override;
