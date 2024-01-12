@@ -44,7 +44,8 @@ endif()
 set(CMAKE_C_OUTPUT_EXTENSION_REPLACE 1)
 set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE 1)
 
-configure_file(config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/inc/osal/config.h)
+
+
 
 #foreach(i ${CMAKE_CXX_COMPILE_FEATURES})
 #  #message("-- ${i}")
@@ -68,6 +69,7 @@ FetchContent_MakeAvailable(googletest)
 
 
 include_directories(inc)
+include_directories(config)
 
 if(UNIX)
     add_compile_options("$<$<STREQUAL:$<TARGET_PROPERTY:LINKER_LANGUAGE>,CXX>:-fno-rtti>")
@@ -119,6 +121,8 @@ if(UNIX)
         file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/error.cpp" "memory.cpp" "src/log.cpp" "src/unix/*.cpp")
         
     endif()
+
+    set(LOG_NEW_LINE \\n)
 elseif (WIN32)
         message(STATUS "OSAL for FreeRTOS win32 emulation")
 
@@ -158,6 +162,8 @@ elseif (WIN32)
         include_directories(${PLATFORM_INCLUDE})
         file(GLOB_RECURSE OSAL_INCLUDES CONFIGURE_DEPENDS "inc/*.hpp" "src/freertos/osal_sys/*.hpp" "src/freertos/config/*.h")
         file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/error.cpp" "memory.cpp" "src/log.cpp" "src/freertos/*.cpp")
+
+        set(LOG_NEW_LINE \\r\\n)
 endif()
 
 message(STATUS "PROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}")
@@ -165,6 +171,8 @@ message(STATUS "CMAKE_BINARY_DIR=${CMAKE_BINARY_DIR}")
 message(STATUS "OSAL_INCLUDES=${OSAL_INCLUDES}")
 message(STATUS "OSAL_SOURCES=${OSAL_SOURCES}")
 
+
+configure_file(osal-config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/config/osal-config.h)
 
 #add_compile_options(-fno-rtti -fno-exceptions)
 add_library(${PROJECT_NAME} STATIC ${OSAL_SOURCES} ${OSAL_INCLUDES})

@@ -20,10 +20,10 @@
 
 #include <stdint.h>
 
-#include "osal_sys/osal_sys.hpp"
+#include "osal-config.h"
 
+#include "osal_sys/osal_sys.hpp"
 #include "osal/array.hpp"
-#include "osal/config.h"
 #include "osal/error.hpp"
 #include "osal/event.hpp"
 #include "osal/generics.hpp"
