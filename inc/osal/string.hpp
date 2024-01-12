@@ -148,6 +148,7 @@ public:
     constexpr string<Size>&operator+(char c) OS_NOEXCEPT
     {
         string<Size> ret = *this;
+        data_length = strlen(data);
         if(ret.data_length + 1 <= ret.size())
         {
             ret.data[data_length] = c;
@@ -170,6 +171,7 @@ public:
     {
         string<Size> ret = *this;
         size_t size_b = strnlen(b, SizeB);
+        data_length = strlen(data);
         if(ret.data_length + size_b <= ret.size())
         {
             strncpy(ret.data + ret.data_length, b, Size - 1);
@@ -247,6 +249,7 @@ public:
      */
     constexpr inline string<Size>& operator+=(char c) OS_NOEXCEPT
     {
+    	data_length = strlen(data);
         if(data_length + 1 <= size())
         {
             data[data_length] = c;
