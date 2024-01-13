@@ -26,7 +26,7 @@ namespace osal
 inline namespace v1
 {
 
-    inline error::error(const char* msg, uint8_t code, const char* file, const char* func, uint32_t line) OS_NOEXCEPT
+    error::error(const char* msg, uint8_t code, const char* file, const char* func, uint32_t line) OS_NOEXCEPT
         : code(code)
         , line(line)
     {

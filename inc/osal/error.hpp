@@ -145,7 +145,7 @@ public:
      * @param func The function name where the error occurred.
      * @param line The line number where the error occurred.
      */
-    explicit inline error(const char* msg, error_type code = error_type::OS_ENO, const char* file = get_file_name(__FILE__), const char* func = "", uint32_t line = __LINE__) OS_NOEXCEPT
+    explicit error(const char* msg, error_type code = error_type::OS_ENO, const char* file = get_file_name(__FILE__), const char* func = "", uint32_t line = __LINE__) OS_NOEXCEPT
         : error(msg, static_cast<uint8_t>(code), file, func, line) {}
 
     /**
