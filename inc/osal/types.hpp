@@ -230,6 +230,13 @@ enum class exit : uint8_t
     KO = EXIT_FAILURE
 };
 
+template<typename T, typename V>
+struct pair final
+{
+	T t;
+	V v;
+};
+
 }
 }
 
