@@ -47,6 +47,7 @@ class value final
         uint64_t value_uint64;
         float value_float;
         double value_double;
+        exit value_exit;
         void* ptr;
     };
     size_t ptr_size;
@@ -133,6 +134,11 @@ public:
             type = trait_type::DOUBLE;
             value_double = t;
         }
+        else if constexpr (is_same<exit, T>::value)
+        {
+            type = trait_type::_EXIT_;
+            value_exit = t;
+        }
         else
         {
             type = trait_type::CUSTOM;
@@ -155,6 +161,7 @@ public:
     [[nodiscard]] inline uint64_t get_uint64() const OS_NOEXCEPT { return value_uint64; }
     [[nodiscard]] inline float get_float() const OS_NOEXCEPT { return value_float; }
     [[nodiscard]] inline double get_double() const OS_NOEXCEPT { return value_double; }
+    [[nodiscard]] inline osal::exit get_exit() const OS_NOEXCEPT { return value_exit; }
     [[nodiscard]] inline const void*  get_ptr(size_t* size) const OS_NOEXCEPT { *size = ptr_size; return ptr; }
 
 };

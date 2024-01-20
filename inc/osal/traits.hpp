@@ -65,7 +65,8 @@ enum class trait_type : uint8_t
     UINT64,
     FLOAT,
     DOUBLE,
-    CUSTOM
+    CUSTOM,
+	_EXIT_
 };
 
 template<typename T>
@@ -188,6 +189,13 @@ struct get_type<double>
 {
     constexpr static const trait_type type = trait_type::DOUBLE;
 };
+
+template<>
+struct get_type<osal::exit>
+{
+    constexpr static const trait_type type = trait_type::_EXIT_;
+};
+
 
 template<typename T, typename R, typename ... Ts>
 struct smart_call
