@@ -224,6 +224,7 @@ class method final : public function_base
 {
 
     T* target = nullptr;
+    bool is_const = true;
 
     union method_prt
     {
@@ -234,6 +235,14 @@ class method final : public function_base
         R (T::*method_a0_a1)(A0, A1);
 
         R (T::*method_a0_a1_a2)(A0, A1, A2);
+
+        R (T::*method_no_arg_const)() const;
+
+		R (T::*method_a0_const)(A0) const;
+
+		R (T::*method_a0_a1_const)(A0, A1) const;
+
+		R (T::*method_a0_a1_a2_const)(A0, A1, A2) const;
     } method_prt;
 
 public:
@@ -247,6 +256,14 @@ public:
     method(T* target, R (T::*method)(A0, A1)) OS_NOEXCEPT;
 
     method(T* target, R (T::*method)(A0, A1, A2)) OS_NOEXCEPT;
+
+    method(T* target, R (T::*method)() const) OS_NOEXCEPT;
+
+    method(T* target, R (T::*method)(A0) const) OS_NOEXCEPT;
+
+    method(T* target, R (T::*method)(A0, A1) const) OS_NOEXCEPT;
+
+    method(T* target, R (T::*method)(A0, A1, A2) const) OS_NOEXCEPT;
 
     method(const method&) = default;
 
@@ -309,51 +326,110 @@ method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0, A1, A2)) OS_NOEXC
     method_prt.method_a0_01_a2 = method;
 }
 
-    template<typename T, typename R, typename A0, typename A1, typename A2>
-    osal::exit method<T, R, A0, A1, A2>::execute(value* ret) const OS_NOEXCEPT
-    {
-        if constexpr (is_same<void, R> ::value)
-        {
-            (target->*method_prt.method_no_arg)();
-        }
-        else
-        {
-            if(ret)
-                *ret = (target->*method_prt.method_no_arg)();
-            else
-                return exit::KO;
-        }
-        return exit::OK;
-    }
+template<typename T, typename R, typename A0, typename A1, typename A2>
+method<T, R, A0, A1, A2>::method(T* target, R (T::*method)() const) OS_NOEXCEPT
+: function_base(METHOD, 0, osal::get_type<R>::type), target(target), is_const(true)
+{
+    method_prt.method_no_arg_const = method;
+}
 
-    template<typename T, typename R, typename A0, typename A1, typename A2>
-    osal::exit method<T, R, A0, A1, A2>::execute(value* ret, void* a0) const OS_NOEXCEPT
-    {
-        if constexpr (is_same<void, R> ::value)
-        {
-            (target->*method_prt.method_a0)(*reinterpret_cast<A0*>(a0));
-        }
-        else
-        {
-            if(ret)
-                *ret = (target->*method_prt.method_a0)(*reinterpret_cast<A0*>(a0));
-            else
-                return exit::KO;
-        }
-        return exit::OK;
-    }
+
+template<typename T, typename R, typename A0, typename A1, typename A2>
+method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0) const) OS_NOEXCEPT
+: function_base(METHOD, 1, osal::get_type<R>::type), target(target), is_const(true)
+{
+    args_type[0] = osal::get_type<A0>::type;
+    method_prt.method_a0_const = method;
+}
+
+template<typename T, typename R, typename A0, typename A1, typename A2>
+method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0, A1) const) OS_NOEXCEPT
+        : function_base(METHOD, 2, osal::get_type<R>::type), target(target), is_const(true)
+{
+    args_type[0] = osal::get_type<A0>::type;
+    args_type[1] = osal::get_type<A1>::type;
+    method_prt.method_void_a0_a1_const = method;
+}
+
+template<typename T, typename R, typename A0, typename A1, typename A2>
+method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0, A1, A2) const) OS_NOEXCEPT
+: function_base(METHOD, 3, osal::get_type<R>::type), target(target), is_const(true)
+{
+    args_type[0] = osal::get_type<A0>::type;
+    args_type[1] = osal::get_type<A1>::type;
+    args_type[2] = osal::get_type<A2>::type;
+    method_prt.method_a0_01_a2_const = method;
+}
+
+template<typename T, typename R, typename A0, typename A1, typename A2>
+osal::exit method<T, R, A0, A1, A2>::execute(value* ret) const OS_NOEXCEPT
+{
+	if constexpr (is_same<void, R> ::value)
+	{
+		if(!is_const)
+			(target->*method_prt.method_no_arg)();
+		else
+			(target->*method_prt.method_no_arg_const)();
+	}
+	else
+	{
+		if(ret)
+		{
+			if(!is_const)
+				*ret = (target->*method_prt.method_no_arg)();
+			else
+				*ret = (target->*method_prt.method_no_arg_const)();
+		}
+		else
+			return exit::KO;
+	}
+	return exit::OK;
+}
+
+template<typename T, typename R, typename A0, typename A1, typename A2>
+osal::exit method<T, R, A0, A1, A2>::execute(value* ret, void* a0) const OS_NOEXCEPT
+{
+	if constexpr (is_same<void, R> ::value)
+	{
+		if(!is_const)
+			(target->*method_prt.method_a0)(*reinterpret_cast<A0*>(a0));
+		else
+			(target->*method_prt.method_a0_const)(*reinterpret_cast<A0*>(a0));
+	}
+	else
+	{
+		if(ret)
+		{
+			if(!is_const)
+				*ret = (target->*method_prt.method_a0)(*reinterpret_cast<A0*>(a0));
+			else
+				*ret = (target->*method_prt.method_a0_const)(*reinterpret_cast<A0*>(a0));
+		}
+		else
+			return exit::KO;
+	}
+	return exit::OK;
+}
 
 template<typename T, typename R, typename A0, typename A1, typename A2>
 osal::exit method<T, R, A0, A1, A2>::execute(value* ret, void* a0, void* a1) const OS_NOEXCEPT
 {
     if constexpr (is_same<void, R> ::value)
     {
-        (target->*method_prt.method_a0_a1)(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1));
+    	if(!is_const)
+    		(target->*method_prt.method_a0_a1)(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1));
+    	else
+    		(target->*method_prt.method_a0_a1_const)(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1));
     }
     else
     {
         if(ret)
-            *ret = (target->*method_prt.method_a0_a1)(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1));
+        {
+        	if(!is_const)
+        		*ret = (target->*method_prt.method_a0_a1)(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1));
+        	else
+        		*ret = (target->*method_prt.method_a0_a1_const)(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1));
+        }
         else
             return exit::KO;
     }
@@ -366,12 +442,20 @@ osal::exit method<T, R, A0, A1, A2>::execute(value* ret, void* a0, void* a1, voi
 {
     if constexpr (is_same<void, R> ::value)
     {
-        (target->*method_prt.method_a0_a1_a2)(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1), *reinterpret_cast<A2*>(a2));
+    	if(!is_const)
+    		(target->*method_prt.method_a0_a1_a2)(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1), *reinterpret_cast<A2*>(a2));
+    	else
+    		(target->*method_prt.method_a0_a1_a2_const)(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1), *reinterpret_cast<A2*>(a2));
     }
     else
     {
         if(ret)
-            *ret = (target->*method_prt.method_a0_a1_a2)(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1), *reinterpret_cast<A2*>(a2));
+        {
+        	if(!is_const)
+        		*ret = (target->*method_prt.method_a0_a1_a2)(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1), *reinterpret_cast<A2*>(a2));
+        	else
+        		*ret = (target->*method_prt.method_a0_a1_a2_const)(*reinterpret_cast<A0*>(a0), *reinterpret_cast<A1*>(a1), *reinterpret_cast<A2*>(a2));
+        }
         else
             return exit::KO;
     }
