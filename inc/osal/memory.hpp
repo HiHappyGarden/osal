@@ -118,7 +118,8 @@ public:
 
     void reset(T* ptr) OS_NOEXCEPT
     {
-        deleter(this->ptr);
+    	if(this->ptr)
+    		deleter(this->ptr);
         this->ptr = ptr;
     }
 
