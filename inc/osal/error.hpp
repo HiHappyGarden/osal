@@ -26,6 +26,7 @@
 #include <string.h>
 
 #define OS_ERROR_BUILD(msg, ...) new osal::error(msg, __VA_ARGS__)
+#define OS_ERROR_APPEND(old_error, msg, ...) new osal::error(old_error, msg, __VA_ARGS__)
 #define OS_ERROR_SET_POSITION(obj) obj.set_position(osal::get_file_name(__FILE__), __func__, __LINE__)
 #define OS_ERROR_PTR_SET_POSITION(obj) (obj)->set_position(osal::get_file_name(__FILE__), __func__, __LINE__)
 

@@ -216,6 +216,7 @@ enum class error_type : uint8_t
     OS_OUTRNG = 135, /* Out of range*/
     OS_CASTERR = 136, /* Cast error*/
     OS_VALCONV = 137, /* Value conversion error */
+	OS_ERCRC = 138, /* Value conversion error */
 };
 
 
