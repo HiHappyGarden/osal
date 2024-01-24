@@ -63,7 +63,8 @@ struct default_delete
     default_delete() = default;
     inline void operator()(T* ptr) const OS_NOEXCEPT
     {
-        delete ptr;
+        if(ptr)
+            delete ptr;
     }
 };
 
@@ -72,7 +73,8 @@ struct array_deleter
 {
     void operator()(T* ptr) const OS_NOEXCEPT
     {
-        delete [] ptr;
+        if(this->ptr)
+            delete [] ptr;
     }
 };
 
@@ -90,7 +92,8 @@ public:
 
     inline ~unique_ptr()
     {
-        deleter(ptr);
+        if(this->ptr)
+            deleter(ptr);
         ptr = nullptr;
     }
 

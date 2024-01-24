@@ -69,7 +69,7 @@ FetchContent_MakeAvailable(googletest)
 
 
 include_directories(inc)
-include_directories(config)
+include_directories(${PROJECT_SOURCE_DIR}/config)
 
 if(UNIX)
     add_compile_options("$<$<STREQUAL:$<TARGET_PROPERTY:LINKER_LANGUAGE>,CXX>:-fno-rtti>")
@@ -172,7 +172,7 @@ message(STATUS "OSAL_INCLUDES=${OSAL_INCLUDES}")
 message(STATUS "OSAL_SOURCES=${OSAL_SOURCES}")
 
 
-configure_file(osal-config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/config/osal-config.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/osal-config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/config/osal-config.h)
 
 #add_compile_options(-fno-rtti -fno-exceptions)
 add_library(${PROJECT_NAME} STATIC ${OSAL_SOURCES} ${OSAL_INCLUDES})
