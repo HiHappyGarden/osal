@@ -17,8 +17,11 @@
  * 
  ***************************************************************************/
 #pragma once
-#include "osal/types.hpp"
+#ifdef INCLUDE_OS_CONFIG
 #include "osal-config.h"
+#endif
+
+#include "osal/types.hpp"
 
 #include <stdint.h>
 #include <stdio.h>

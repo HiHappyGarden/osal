@@ -18,9 +18,9 @@
 ***************************************************************************/
 #pragma once
 
-#include <stdint.h>
-
+#ifdef INCLUDE_OS_CONFIG
 #include "osal-config.h"
+#endif
 
 #include "osal_sys/osal_sys.hpp"
 #include "osal/array.hpp"
@@ -39,6 +39,8 @@
 #include "osal/timer.hpp"
 #include "osal/traits.hpp"
 #include "osal/types.hpp"
+
+#include <stdint.h>
 
 #define OS_NO_COPY_NO_MOVE(clazz) \
 clazz(const clazz&) = delete; \

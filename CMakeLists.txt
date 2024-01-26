@@ -14,6 +14,7 @@ set(CMAKE_C_EXTENSIONS ON)
 
 set(OS_HAVE_CONFIG ON)
 
+add_definitions(-DINCLUDE_OS_CONFIG) 
 
 include(CheckIPOSupported)
 check_ipo_supported(RESULT supported OUTPUT error)
