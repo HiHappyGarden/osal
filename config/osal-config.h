@@ -21,9 +21,9 @@
 #define OS_CONFIG_H
 
 #define OS_NAME "osal"
-#define OS_VER "0.8.0"
+#define OS_VER "0.9.0"
 #define OS_VER_MAJOR (0)
-#define OS_VER_MINOR (8)
+#define OS_VER_MINOR (9)
 #define OS_VER_PATCH (0)
 #define OS_LOG_NEW_LINE "\n"
 
