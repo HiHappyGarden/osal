@@ -42,26 +42,37 @@ array_deleter<uint32_t> array_deleter_int32;
 array_deleter<int64_t> array_deleter_uint64;
 array_deleter<uint64_t> array_deleter_int64;
 
+void* os_malloc(size_t size)
+{
+	return malloc(size);
+}
+
+void os_free(void* ptr)
+{
+	free(ptr);
+}
+
+
 }
 }
 
-#if defined(MEM_LAYER) && MEM_LAYER == 1
-void* operator new( size_t size )
+#ifdef OS_MEM_LAYER
+void* operator new(size_t size)
 {
     return malloc(size);
 }
 
-void* operator new[]( size_t size )
+void* operator new[](size_t size)
 {
     return malloc(size);
 }
 
-void operator delete( void * ptr )
+void operator delete(void* ptr)
 {
     free(ptr);
 }
 
-void operator delete[]( void * ptr )
+void operator delete[](void* ptr)
 {
     free(ptr);
 }

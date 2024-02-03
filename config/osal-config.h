@@ -26,6 +26,6 @@
 #define OS_VER_MINOR (9)
 #define OS_VER_PATCH (0)
 #define OS_LOG_NEW_LINE "\n"
-#define OS_MEM_LAYER ()
+#define OS_OS_MEM_LAYER ()
 
 #endif // OS_CONFIG_H

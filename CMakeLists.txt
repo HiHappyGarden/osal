@@ -107,7 +107,7 @@ if(UNIX)
         include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/include)
         include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/portable/ThirdParty/GCC/Posix)
 
-        set(MEM_LAYER 1)
+        set(OS_MEM_LAYER 1)
         set(PLATFORM_LIB "freertos_kernel")
         FetchContent_MakeAvailable(freertos_kernel)
         set(PLATFORM_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/freertos ${CMAKE_CURRENT_SOURCE_DIR}/src/freertos/config)
@@ -156,7 +156,7 @@ elseif (WIN32)
         include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/include)
         include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/portable/MSVC-MingW)
 
-        set(MEM_LAYER 1)
+        set(OS_MEM_LAYER 1)
         set(PLATFORM_LIB freertos_kernel
                              ws2_32
                              winmm)

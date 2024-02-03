@@ -171,12 +171,15 @@ extern array_deleter<uint32_t> array_deleter_int32;
 extern array_deleter<int64_t> array_deleter_uint64;
 extern array_deleter<uint64_t> array_deleter_int64;
 
+void* os_malloc(size_t size);
+
+void os_free( void * ptr );
 
 
 }
 }
 
-#if defined(MEM_LAYER) && MEM_LAYER == 1
+#ifdef OS_MEM_LAYER
 void* operator new( size_t size );
 void* operator new[]( size_t size );
 void operator delete( void * ptr );
