@@ -73,7 +73,7 @@ struct array_deleter
 {
     void operator()(T* ptr) const OS_NOEXCEPT
     {
-        if(this->ptr)
+        if(ptr)
             delete [] ptr;
     }
 };
@@ -168,6 +168,14 @@ extern array_deleter<uint32_t> array_deleter_int32;
 extern array_deleter<int64_t> array_deleter_uint64;
 extern array_deleter<uint64_t> array_deleter_int64;
 
+
+
 }
 }
 
+#if defined(MEM_LAYER) && MEM_LAYER == 1
+void* operator new( size_t size );
+void* operator new[]( size_t size );
+void operator delete( void * ptr );
+void operator delete[]( void * ptr );
+#endif

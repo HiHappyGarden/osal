@@ -19,6 +19,7 @@
 
 #include "osal/memory.hpp"
 
+#include <FreeRTOS.h>
 #include <stdint.h>
 
 namespace osal
@@ -42,6 +43,29 @@ array_deleter<uint32_t> array_deleter_int32;
 array_deleter<int64_t> array_deleter_uint64;
 array_deleter<uint64_t> array_deleter_int64;
 
+
+
 }
 }
 
+#if defined(MEM_LAYER) && MEM_LAYER == 1
+void* operator new( size_t size )
+{
+    return pvPortMalloc( size );
+}
+
+void* operator new[]( size_t size )
+{
+    return pvPortMalloc(size);
+}
+
+void operator delete( void * ptr )
+{
+    vPortFree ( ptr );
+}
+
+void operator delete[]( void * ptr )
+{
+    vPortFree ( ptr );
+}
+#endif
