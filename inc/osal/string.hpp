@@ -39,7 +39,7 @@ template <size_t Size = 33>
 class string
 {
     char data[Size]{};          ///< The character data storage.
-    size_t data_length{0};      ///< The current length of the string.
+    mutable size_t data_length{0};      ///< The current length of the string.
 
     static inline char terminator = '\0'; //keep non constexpr
 public:
@@ -101,6 +101,7 @@ public:
      */
     constexpr inline size_t length() const OS_NOEXCEPT
     {
+    	data_length = strlen(data);
         return data_length;
     }
 
@@ -382,7 +383,7 @@ public:
      */
     constexpr char& operator[](size_t idx) OS_NOEXCEPT
     {
-
+    	data_length = strlen(data);
         if(idx >= data_length)
         {
             terminator = '\0';
@@ -401,7 +402,7 @@ public:
      */
     constexpr const char& operator[](size_t idx) const OS_NOEXCEPT
     {
-
+    	data_length = strlen(data);
         if(idx >= data_length)
         {
             terminator = '\0';
@@ -442,6 +443,7 @@ public:
 
     string<Size>& ltrim() OS_NOEXCEPT
     {
+    	data_length = strlen(data);
         size_t count = 0;
         for(auto ch : data)
         {
@@ -461,6 +463,7 @@ public:
 
     string<Size>& rtrim() OS_NOEXCEPT
     {
+    	data_length = strlen(data);
         size_t count = 0;
         for(size_t i = data_length - 1; i != 0; i--)
         {
@@ -479,6 +482,7 @@ public:
 
     string<Size> strstr(size_t idx_start, size_t offset = SIZE_MAX) const
     {
+    	data_length = strlen(data);
     	if(idx_start >= data_length)
     	{
     		return {};
