@@ -22,33 +22,33 @@ namespace osal
 {
 inline namespace v1
 {
-    uint8_t log_level = LEVEL_DEBUG | LOG_STATE_ON;
+    uint8_t log_level = FLAG_STATE_ON | LEVEL_DEBUG;
 
     void set_level_log(uint8_t t) OS_NOEXCEPT
     {
-        log_level |= (t & LEVEL_MASK);
+        log_level = (log_level &  FLAG_STATE_ON) | (t & LEVEL_MASK);
     }
 
     void set_enable_log(bool t) OS_NOEXCEPT
     {
         if(t)
         {
-            log_level |= LOG_STATE_ON;
+            log_level |= FLAG_STATE_ON;
         }
         else
         {
-            log_level &= ~(LOG_STATE_ON);
+            log_level &= ~(FLAG_STATE_ON);
         }
     }
 
     bool get_enable_log() OS_NOEXCEPT
     {
-        return (log_level & LOG_STATE_ON) > 0;
+        return (log_level & FLAG_STATE_ON) > 0;
     }
 
     bool is_enabled_log(uint8_t type) OS_NOEXCEPT
     {
-        return (get_level_log(type) >= log_level) && (type & LOG_STATE_ON);
+        return (get_level_log(type) >= log_level) && (type & FLAG_STATE_ON);
     }
 
 }

@@ -40,7 +40,7 @@ namespace osal
             uint32_t milli_sec{0};
             bool     enable_print = false;
 
-            if( !(log_level & LOG_STATE_ON) )
+            if( !(log_level & FLAG_STATE_ON) )
             {
                 return;
             }
@@ -55,36 +55,36 @@ namespace osal
 
             switch (get_level_log(type))
             {
-                case LEVEL_DEBUG:
-                    if(log_level & (LEVEL_DEBUG))
+                case FLAG_DEBUG:
+                    if(log_level & FLAG_DEBUG)
                     {
                         enable_print = true;
                         OS_LOG_PRINTF (OS_ANSI_COLOR_CYAN "%s.%03d %s - DEBUG: ", timestamp, milli_sec, tag);
                     }
                     break;
-                case LEVEL_INFO:
-                    if(log_level & (LEVEL_DEBUG|LEVEL_INFO))
+                case FLAG_INFO:
+                    if(log_level & FLAG_INFO)
                     {
                         enable_print = true;
                         OS_LOG_PRINTF (OS_ANSI_COLOR_GREEN "%s.%03d %s - INFO : ", timestamp, milli_sec, tag);
                     }
                     break;
-                case LEVEL_WARNING:
-                    if(log_level & (LEVEL_DEBUG|LEVEL_INFO|LEVEL_WARNING))
+                case FLAG_WARNING:
+                    if(log_level & FLAG_WARNING)
                     {
                         enable_print = true;
                         OS_LOG_PRINTF (OS_ANSI_COLOR_YELLOW "%s.%03d %s - WARN : ", timestamp, milli_sec, tag);
                     }
                     break;
-                case LEVEL_ERROR:
-                    if(log_level & (LEVEL_DEBUG|LEVEL_INFO|LEVEL_WARNING|LEVEL_ERROR))
+                case FLAG_ERROR:
+                    if(log_level & FLAG_ERROR)
                     {
                         enable_print = true;
                         OS_LOG_PRINTF (OS_ANSI_COLOR_RED "%s.%03d %s - ERROR: ", timestamp, milli_sec, tag);
                     }
                     break;
-                case LEVEL_FATAL:
-                    if(log_level & (LEVEL_DEBUG|LEVEL_INFO|LEVEL_WARNING|LEVEL_ERROR|LEVEL_FATAL))
+                case FLAG_FATAL:
+                    if(log_level & FLAG_FATAL)
                     {
                         enable_print = true;
                         OS_LOG_PRINTF (OS_ANSI_COLOR_MAGENTA "%s.%03d %s - FATAL: ", timestamp, milli_sec, tag);

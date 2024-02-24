@@ -70,30 +70,19 @@ namespace osal
 inline namespace v1
 {
 
-/**
- * @brief Debug log level.
- */
-constexpr inline const uint8_t LEVEL_DEBUG   = 0x01;
-
-/**
- * @brief Info log level.
- */
-constexpr inline const uint8_t LEVEL_INFO    = 0x02;
-
-/**
- * @brief Warning log level.
- */
-constexpr inline const uint8_t LEVEL_WARNING = 0x04;
-
-/**
- * @brief Error log level.
- */
-constexpr inline const uint8_t LEVEL_ERROR   = 0x08;
-
-/**
- * @brief Fatal log level.
- */
-constexpr inline const uint8_t LEVEL_FATAL   = 0x10;
+enum log_level : uint8_t
+{
+    FLAG_DEBUG    = (1 << 0),       //!< @brief Debug log level.
+    FLAG_INFO     = (1 << 1),       //!< @brief Info log level.
+    FLAG_WARNING  = (1 << 2),       //!< @brief Warning log level.
+    FLAG_ERROR    = (1 << 3),       //!< @brief Warning log level.
+    FLAG_FATAL    = (1 << 4),       //!< @brief Warning log level.
+    LEVEL_DEBUG   = FLAG_DEBUG | FLAG_INFO| FLAG_WARNING | FLAG_ERROR | FLAG_FATAL,
+    LEVEL_INFO    = FLAG_INFO| FLAG_WARNING | FLAG_ERROR | FLAG_FATAL,
+    LEVEL_WARNING = FLAG_WARNING | FLAG_ERROR | FLAG_FATAL,
+    LEVEL_ERROR   = FLAG_ERROR | FLAG_FATAL,
+    LEVEL_FATAL   = FLAG_FATAL
+};
 
 /**
  * @brief Log level mask.
@@ -103,12 +92,7 @@ constexpr inline const uint8_t LEVEL_MASK    = 0x1F;
 /**
  * @brief Log state when enabled.
  */
-constexpr inline const uint8_t LOG_STATE_ON  = (1 << 7);
-
-/**
- * @brief Log state when disabled.
- */
-constexpr inline const uint8_t LOG_STATE_OFF = (0 << 7);
+constexpr inline const uint8_t FLAG_STATE_ON  = (1 << 7);
 
 /**
  * @brief Gets the log level from a given value.
@@ -168,7 +152,7 @@ void sys_log(const char* tag, uint8_t type, const char* fmt, ...) OS_NOEXCEPT;
 template<typename... Args>
 constexpr inline void log_debug(const char* tag, const char* fmt, Args... args) OS_NOEXCEPT
 {
-    sys_log(tag, LEVEL_DEBUG, fmt, args...);
+    sys_log(tag, FLAG_DEBUG, fmt, args...);
 }
 
 /**
@@ -182,7 +166,7 @@ constexpr inline void log_debug(const char* tag, const char* fmt, Args... args) 
 template<typename... Args>
 constexpr inline void log_info(const char* tag, const char* fmt, Args... args) OS_NOEXCEPT
 {
-    sys_log(tag, LEVEL_INFO, fmt, args...);
+    sys_log(tag, FLAG_INFO, fmt, args...);
 }
 
 /**
@@ -196,7 +180,7 @@ constexpr inline void log_info(const char* tag, const char* fmt, Args... args) O
 template<typename... Args>
 constexpr inline void log_warning(const char* tag, const char* fmt, Args... args) OS_NOEXCEPT
 {
-    sys_log(tag, LEVEL_WARNING, fmt, args...);
+    sys_log(tag, FLAG_WARNING, fmt, args...);
 }
 
 /**
@@ -210,7 +194,7 @@ constexpr inline void log_warning(const char* tag, const char* fmt, Args... args
 template<typename... Args>
 constexpr inline void log_error(const char* tag, const char* fmt, Args... args) OS_NOEXCEPT
 {
-    sys_log(tag, LEVEL_ERROR, fmt, args...);
+    sys_log(tag, FLAG_ERROR, fmt, args...);
 }
 
 /**
@@ -224,7 +208,7 @@ constexpr inline void log_error(const char* tag, const char* fmt, Args... args) 
 template<typename... Args>
 constexpr inline void log_fatal(const char* tag, const char* fmt, Args... args) OS_NOEXCEPT
 {
-    sys_log(tag, LEVEL_FATAL, fmt, args...);
+    sys_log(tag, FLAG_FATAL, fmt, args...);
 }
 
 /**

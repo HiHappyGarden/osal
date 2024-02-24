@@ -37,7 +37,7 @@ TEST(log_test, base)
 TEST(log_test, set_level)
 {
 
-    os::set_level_log(os::LEVEL_INFO);
+    os::set_level_log(os::LEVEL_WARNING|os::LEVEL_ERROR|os::LEVEL_FATAL);
 
     OS_LOG_DEBUG(APP_TAG, "debug");
     OS_LOG_INFO(APP_TAG, "info");
