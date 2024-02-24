@@ -33,7 +33,7 @@ inline namespace v1
     {
         if(t)
         {
-            log_level &= LOG_STATE_ON;
+            log_level |= LOG_STATE_ON;
         }
         else
         {
