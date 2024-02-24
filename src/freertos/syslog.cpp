@@ -51,6 +51,11 @@ void sys_log(const char* tag, uint8_t type, const char* fmt, ...) OS_NOEXCEPT
 	va_list list;
 	bool enable_print = false;
 
+	if( !(log_level & LOG_STATE_ON) )
+	{
+		return;
+	}
+
 	uint32_t milli_sec = 0;
 	if(::osal_system_current_time_millis)
 	{
@@ -61,10 +66,6 @@ void sys_log(const char* tag, uint8_t type, const char* fmt, ...) OS_NOEXCEPT
 		milli_sec = system_current_time_millis();
 	}
 
-	if( !(log_level & LOG_STATE_ON) )
-	{
-		return;
-	}
 
 	switch (get_level_log(type))
 	{
