@@ -69,13 +69,13 @@ struct thread_data
     struct args_wrapper final
     {
         void* arg = nullptr;
-        void* (*handler)(void* arg) = nullptr;
+        void* (*fn)(void* arg) = nullptr;
 
         static void wrap_func(void * arg);
     };
 
-    TaskHandle_t handle = nullptr;
-    args_wrapper arg{};
+    TaskHandle_t handler = nullptr;
+    args_wrapper args_wrp{};
 };
 
 
@@ -90,8 +90,8 @@ struct timer_data
 
         static void wrap_func( TimerHandle_t xTimer );
     };
-    TimerHandle_t handle = nullptr;
-    args_wrapper arg{};
+    TimerHandle_t handler = nullptr;
+    args_wrapper args_wrp{};
 };
 
 using tick = uint64_t;

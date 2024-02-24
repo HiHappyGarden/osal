@@ -42,29 +42,29 @@ timer::timer(uint64_t us, handler fn, bool one_shot) OS_NOEXCEPT
     , fn(fn)
     , one_shot(one_shot)
 {
-    t.arg.fn = fn;
-    t.arg.timer = this;
+    t.args_wrp.fn = fn;
+    t.args_wrp.timer = this;
 }
 
 timer::~timer() OS_NOEXCEPT
 {
-    if(t.handle)
+    if(t.handler)
     {
-        xTimerDelete (t.handle, portMAX_DELAY);
-        t.handle = nullptr;
+        xTimerDelete (t.handler, portMAX_DELAY);
+        t.handler = nullptr;
     }
 }
 
 exit timer::create(void *arg, error** error) OS_NOEXCEPT
 {
-    t.arg.arg = arg;
-    t.handle = xTimerCreate (
+    t.args_wrp.arg = arg;
+    t.handler = xTimerCreate (
             "os_timer",
             (us / portTICK_PERIOD_MS) / 1'000,
             one_shot ? pdFALSE : pdTRUE,
-            &t.arg,
+            &t.args_wrp,
             &timer_data::args_wrapper::wrap_func);
-    if(t.handle == nullptr)
+    if(t.handler == nullptr)
     {
         if(error)
         {
@@ -80,56 +80,56 @@ exit timer::create(void *arg, error** error) OS_NOEXCEPT
 void timer::set(uint64_t us) OS_NOEXCEPT
 {
     timer::us = us;
-    if(t.handle && xTimerIsTimerActive( t.handle ))
+    if(t.handler && xTimerIsTimerActive( t.handler ))
     {
-        xTimerChangePeriod(t.handle, (us / portTICK_PERIOD_MS) / 1'000, portMAX_DELAY);
+        xTimerChangePeriod(t.handler, (us / portTICK_PERIOD_MS) / 1'000, portMAX_DELAY);
     }
 }
 
 void timer::set_from_isr(uint64_t us) OS_NOEXCEPT
 {
     timer::us = us;
-    if(t.handle && xTimerIsTimerActive( t.handle ))
+    if(t.handler && xTimerIsTimerActive( t.handler ))
     {
-        xTimerChangePeriodFromISR(t.handle, (us / portTICK_PERIOD_MS) / 1'000, nullptr);
+        xTimerChangePeriodFromISR(t.handler, (us / portTICK_PERIOD_MS) / 1'000, nullptr);
     }
 }
 
 void timer::start() const OS_NOEXCEPT
 {
-    if(t.handle)
+    if(t.handler)
     {
-        xTimerStart(t.handle, (us / portTICK_PERIOD_MS) / 1'000);
+        xTimerStart(t.handler, (us / portTICK_PERIOD_MS) / 1'000);
     }
 }
 
 void timer::start_from_isr() const OS_NOEXCEPT
 {
-    if(t.handle)
+    if(t.handler)
     {
-        xTimerStartFromISR(t.handle, nullptr);
+        xTimerStartFromISR(t.handler, nullptr);
     }
 }
 
 void timer::stop() const OS_NOEXCEPT
 {
-    if(t.handle && xTimerIsTimerActive( t.handle ))
+    if(t.handler && xTimerIsTimerActive( t.handler ))
     {
-        xTimerStop(t.handle, portMAX_DELAY);
+        xTimerStop(t.handler, portMAX_DELAY);
     }
 }
 
 void timer::stop_from_isr() const OS_NOEXCEPT
 {
-    if(t.handle && xTimerIsTimerActive( t.handle ))
+    if(t.handler && xTimerIsTimerActive( t.handler ))
     {
-        xTimerStopFromISR(t.handle, nullptr);
+        xTimerStopFromISR(t.handler, nullptr);
     }
 }
 
 bool timer::is_active() const OS_NOEXCEPT
 {
-    return t.handle && xTimerIsTimerActive( t.handle );
+    return t.handler && xTimerIsTimerActive( t.handler );
 }
 
 

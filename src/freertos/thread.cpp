@@ -33,7 +33,7 @@ void thread_data::args_wrapper::wrap_func(void* arg)
     }
 
     auto wrapper = static_cast<thread_data::args_wrapper*>(arg);
-    wrapper->handler(wrapper->arg);
+    wrapper->fn(wrapper->arg);
 }
 
 
@@ -50,7 +50,7 @@ thread::thread(const char *name, uint32_t priority, size_t stack_size, thread::h
     {
         memset(this->name, '\0', sizeof(name));
     }
-    t.arg.handler = handler;
+    t.args_wrp.fn = handler;
 }
 
 
@@ -59,10 +59,10 @@ osal::exit thread::create(void* arg, class error** error) OS_NOEXCEPT
 {
 
 
-    t.arg.arg = arg;
+    t.args_wrp.arg = arg;
 
     configSTACK_DEPTH_TYPE stack_depth =  stack_size / sizeof (configSTACK_DEPTH_TYPE);
-    if (xTaskCreate (&thread_data::args_wrapper::wrap_func, name, stack_depth, &t.arg, priority, &t.handle) == pdPASS)
+    if (xTaskCreate (&thread_data::args_wrapper::wrap_func, name, stack_depth, &t.args_wrp, priority, &t.handler) == pdPASS)
     {
         return exit::OK;
     }
@@ -77,10 +77,10 @@ osal::exit thread::create(void* arg, class error** error) OS_NOEXCEPT
 
 osal::exit thread::exit() OS_NOEXCEPT
 {
-    if(t.handle)
+    if(t.handler)
     {
-        vTaskDelete(t.handle);
-        t.handle= NULL;
+        vTaskDelete(t.handler);
+        t.handler = NULL;
         return exit::OK;
     }
     return exit::KO;
