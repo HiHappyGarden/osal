@@ -320,7 +320,7 @@ method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0, A1)) OS_NOEXCEPT
 {
     args_type[0] = osal::get_type<A0>::type;
     args_type[1] = osal::get_type<A1>::type;
-    method_prt.method_void_a0_a1 = method;
+    method_prt.method_a0_a1 = method;
 }
 
 template<typename T, typename R, typename A0, typename A1, typename A2>
@@ -355,7 +355,7 @@ method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0, A1) const) OS_NOE
 {
     args_type[0] = osal::get_type<A0>::type;
     args_type[1] = osal::get_type<A1>::type;
-    method_prt.method_void_a0_a1_const = method;
+    method_prt.method_a0_a1_const = method;
 }
 
 template<typename T, typename R, typename A0, typename A1, typename A2>
