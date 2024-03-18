@@ -56,18 +56,19 @@ set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE 1)
 #  endif()
 #endforeach()
 
-file(GLOB_RECURSE OSAL_TEST CONFIGURE_DEPENDS "test/*.cpp")
+if (CMAKE_PROJECT_NAME STREQUAL osal AND ENABLE_TEST)
+    file(GLOB_RECURSE OSAL_TEST CONFIGURE_DEPENDS "test/*.cpp")
 
-include(FetchContent)
-message(STATUS "Start googletest download")
-FetchContent_Declare(
-  googletest
-  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
-)
-# For Windows: Prevent overriding the parent project's compiler/linker settings
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googletest)
-
+    include(FetchContent)
+    message(STATUS "Start googletest download")
+    FetchContent_Declare(
+      googletest
+      URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+    )
+    # For Windows: Prevent overriding the parent project's compiler/linker settings
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(googletest)
+endif()
 
 include_directories(inc)
 include_directories(${PROJECT_SOURCE_DIR}/config)
@@ -167,6 +168,8 @@ elseif (WIN32)
         file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/error.cpp" "src/log.cpp" "src/freertos/*.cpp")
 
         set(LOG_NEW_LINE \\r\\n)
+else ()
+    message(FATAL_ERROR "No one platform selected" )
 endif()
 
 message(STATUS "PROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}")
@@ -188,7 +191,7 @@ else()
     message(STATUS "IPO / LTO not supported for ${PROJECT_NAME}: <${error}>")
 endif()
 
-if (CMAKE_PROJECT_NAME STREQUAL osal AND BUILD_TESTING)
+if (CMAKE_PROJECT_NAME STREQUAL osal AND ENABLE_TEST)
     message(STATUS "build test")
 
     add_executable(osal_test ${OSAL_TEST})
