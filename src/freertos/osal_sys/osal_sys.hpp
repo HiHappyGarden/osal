@@ -18,7 +18,7 @@
  ***************************************************************************/
 #pragma once
 
-#include <osal/types.hpp>
+#include "osal/types.hpp"
 #include <FreeRTOS.h>
 #include <semphr.h>
 #include <event_groups.h>

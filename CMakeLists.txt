@@ -11,7 +11,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS ON)
-
+message("CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
 set(OS_HAVE_CONFIG ON)
 
 add_definitions(-DINCLUDE_OS_CONFIG) 
@@ -114,66 +114,90 @@ if(UNIX)
         set(PLATFORM_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/freertos ${CMAKE_CURRENT_SOURCE_DIR}/src/freertos/config)
         include_directories(${PLATFORM_INCLUDE})
         file(GLOB_RECURSE OSAL_INCLUDES CONFIGURE_DEPENDS "inc/*.hpp" "src/freertos/osal_sys/*.hpp" "src/freertos/config/*.h")
-        file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/error.cpp" "src/log.cpp" "src/freertos/*.cpp")
+        file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/error.cpp" "src/log.cpp" "src/generics.cpp" "src/freertos/*.cpp")
     else()
         message(STATUS "OSAL for LINUX")
         set(PLATFORM_LIB dl)
         set(PLATFORM_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/unix)
         include_directories(${PLATFORM_INCLUDE})
         file(GLOB_RECURSE OSAL_INCLUDES CONFIGURE_DEPENDS "inc/*.hpp" "src/unix/osal_sys/*.hpp")
-        file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/error.cpp" "src/log.cpp" "src/unix/*.cpp")
+        file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/error.cpp" "src/log.cpp" "src/generics.cpp" "src/unix/*.cpp")
         
     endif()
 
     set(LOG_NEW_LINE \\n)
 elseif (WIN32)
-        message(STATUS "OSAL for FreeRTOS win32 emulation")
+    message(STATUS "OSAL for FreeRTOS win32 emulation")
 
-        message(STATUS "Start freertos download")
-        FetchContent_Declare( freertos_kernel
-                GIT_REPOSITORY https://github.com/FreeRTOS/FreeRTOS-Kernel.git
-                GIT_TAG        V11.0.1
-        )
+    option(OS_MEM_LAYER "Enable FreeRTOS wrapping memory management in C++" 0)
 
-        add_library(freertos_config INTERFACE)
+    message(STATUS "Start freertos download")
+    FetchContent_Declare( freertos_kernel
+            GIT_REPOSITORY https://github.com/FreeRTOS/FreeRTOS-Kernel.git
+            GIT_TAG        V11.0.1
+    )
 
-        target_include_directories(freertos_config SYSTEM
-                INTERFACE
-                src/freertos/config
-        )
-
-        target_compile_definitions(freertos_config
-                INTERFACE
-                projCOVERAGE_TEST=0
-        )
-
-        set( FREERTOS_HEAP "4" CACHE STRING "" FORCE)
-        # Select the native compile PORT
-        set( FREERTOS_PORT "MSVC_MINGW" CACHE STRING "" FORCE)
-        # Select the cross-compile PORT
+    set( FREERTOS_HEAP "4" CACHE STRING "" FORCE)
+    # Select the native compile PORT
+    set( FREERTOS_PORT "MSVC_MINGW" CACHE STRING "" FORCE)
+    # Select the cross-compile PORT
 #        if (CMAKE_CROSSCOMPILING)
 #            set(FREERTOS_PORT "GCC_ARM_CA9" CACHE STRING "" FORCE)
 #        endif()
-        include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/include)
-        include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/portable/MSVC-MingW)
+    include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/include)
+    include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/portable/MSVC-MingW)
 
-        set(OS_MEM_LAYER 1)
-        set(PLATFORM_LIB freertos_kernel
-                             ws2_32
-                             winmm)
-        FetchContent_MakeAvailable(freertos_kernel)
-        set(PLATFORM_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/freertos ${CMAKE_CURRENT_SOURCE_DIR}/src/freertos/config)
-        include_directories(${PLATFORM_INCLUDE})
-        file(GLOB_RECURSE OSAL_INCLUDES CONFIGURE_DEPENDS "inc/*.hpp" "src/freertos/osal_sys/*.hpp" "src/freertos/config/*.h")
-        file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/error.cpp" "src/log.cpp" "src/freertos/*.cpp")
+    FetchContent_MakeAvailable(freertos_kernel)
 
-        set(LOG_NEW_LINE \\r\\n)
-elseif(FREERTOS)
-    message(STATUS "OSAL for FreeRTOS")
     set(PLATFORM_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/freertos ${CMAKE_CURRENT_SOURCE_DIR}/src/freertos/config)
     include_directories(${PLATFORM_INCLUDE})
+    set(PLATFORM_LIB freertos_kernel)
+
     file(GLOB_RECURSE OSAL_INCLUDES CONFIGURE_DEPENDS "inc/*.hpp" "src/freertos/osal_sys/*.hpp" "src/freertos/config/*.h")
-    file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/error.cpp" "src/log.cpp" "src/freertos/*.cpp")
+    file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/error.cpp" "src/log.cpp" "src/generics.cpp" "src/freertos/*.cpp")
+
+    set(LOG_NEW_LINE \\r\\n)
+elseif(ENABLE_FREERTOS)
+    message(STATUS "OSAL for FreeRTOS")
+
+#    include(FetchContent)
+#    message(STATUS "Start download FreeRTOS Kernel")
+#    FetchContent_Declare( freertos_kernel
+#            GIT_REPOSITORY https://github.com/FreeRTOS/FreeRTOS-Kernel.git
+#            GIT_TAG        V11.0.1
+#    )
+#
+#    add_library(freertos_config INTERFACE)
+#
+#    target_include_directories(freertos_config SYSTEM
+#            INTERFACE
+#            src/freertos/config
+#    )
+#
+#    target_compile_definitions(freertos_config
+#            INTERFACE
+#            projCOVERAGE_TEST=0
+#    )
+#
+#
+#    set( FREERTOS_HEAP "4" CACHE STRING "" FORCE)
+#    # Select the native compile PORT
+#    set( FREERTOS_PORT "GCC_RP2040" CACHE STRING "" FORCE)
+#    # Select the cross-compile PORT
+#    #        if (CMAKE_CROSSCOMPILING)
+#    #            set(FREERTOS_PORT "GCC_ARM_CA9" CACHE STRING "" FORCE)
+#    #        endif()
+#    include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/include)
+#    include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/portable/ThirdParty/GCC/RP2040/include)
+#
+#    set(OS_MEM_LAYER 1)
+#    set(PLATFORM_LIB "freertos_kernel")
+#    FetchContent_MakeAvailable(freertos_kernel)
+#
+#    set(PLATFORM_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/freertos ${CMAKE_CURRENT_SOURCE_DIR}/src/freertos/config)
+#    include_directories(${PLATFORM_INCLUDE})
+    file(GLOB_RECURSE OSAL_INCLUDES CONFIGURE_DEPENDS "inc/*.hpp" "src/freertos/osal_sys/*.hpp" "src/freertos/config/*.h")
+    file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/error.cpp" "src/log.cpp" "src/generics.cpp" "src/freertos/*.cpp")
 else ()
     message(FATAL_ERROR "No one platform selected" )
 endif()
@@ -188,7 +212,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/osal-config.h.in ${CMAKE_CURRENT_SOUR
 
 #add_compile_options(-fno-rtti -fno-exceptions)
 add_library(${PROJECT_NAME} STATIC ${OSAL_SOURCES} ${OSAL_INCLUDES})
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/inc ${PLATFORM_INCLUDES})
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${PLATFORM_INCLUDES})
 
 if( supported )
     message(STATUS "IPO / LTO enabled for ${PROJECT_NAME}")
