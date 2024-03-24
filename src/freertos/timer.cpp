@@ -19,7 +19,8 @@
 #include "osal/timer.hpp"
 #include "osal/thread.hpp"
 
-
+#include <FreeRTOS.h>
+#include <timers.h>
 
 namespace osal
 {

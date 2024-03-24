@@ -18,6 +18,9 @@
  ***************************************************************************/
 #include "osal/queue.hpp"
 
+#include <FreeRTOS.h>
+#include <queue.h>
+
 namespace osal
 {
 inline namespace v1

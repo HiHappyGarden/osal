@@ -18,6 +18,9 @@
  ***************************************************************************/
 #include "osal/event.hpp"
 
+#include <FreeRTOS.h>
+#include <event_groups.h>
+
 namespace osal
 {
 inline namespace v1

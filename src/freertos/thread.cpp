@@ -18,6 +18,8 @@
  ***************************************************************************/
 #include "osal/thread.hpp"
 
+#include <FreeRTOS.h>
+#include <task.h>
 
 namespace osal
 {

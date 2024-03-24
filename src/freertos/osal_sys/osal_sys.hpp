@@ -19,21 +19,34 @@
 #pragma once
 
 #include "osal/types.hpp"
-#include <FreeRTOS.h>
-#include <semphr.h>
-#include <event_groups.h>
-#include <queue.h>
-#include <stream_buffer.h>
+//#include <FreeRTOS.h>
+//#include <semphr.h>
+//#include <event_groups.h>
+//#include <queue.h>
+//#include <stream_buffer.h>
+
+struct QueueDefinition; /* Using old naming convention so as not to break kernel aware debuggers. */
+typedef struct QueueDefinition   * QueueHandle_t;
+typedef QueueHandle_t SemaphoreHandle_t;
+
+struct EventGroupDef_t;
+typedef struct EventGroupDef_t   * EventGroupHandle_t;
+
+struct StreamBufferDef_t;
+typedef struct StreamBufferDef_t * StreamBufferHandle_t;
+
+struct tskTaskControlBlock; /* The old naming convention is used to prevent breaking kernel aware debuggers. */
+typedef struct tskTaskControlBlock * TaskHandle_t;
+
+struct tmrTimerControl; /* The old naming convention is used to prevent breaking kernel aware debuggers. */
+typedef struct tmrTimerControl * TimerHandle_t;
 
 namespace osal
 {
 inline namespace v1
 {
 
-constexpr inline uint64_t tmo_to_ticks(uint64_t ms) OS_NOEXCEPT
-{
-    return ((ms == WAIT_FOREVER) ? portMAX_DELAY : (((ms) / portTICK_PERIOD_MS)) / 1000);
-}
+uint64_t tmo_to_ticks(uint64_t ms) OS_NOEXCEPT;
 
 class timer;
 

@@ -18,6 +18,9 @@
  ***************************************************************************/
 #include "osal/streambuffer.hpp"
 
+#include <FreeRTOS.h>
+#include <stream_buffer.h>
+
 namespace osal
 {
 inline namespace v1

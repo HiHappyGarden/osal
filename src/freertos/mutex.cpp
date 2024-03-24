@@ -18,6 +18,8 @@
  ***************************************************************************/
 #include "osal/mutex.hpp"
 
+#include <FreeRTOS.h>
+#include <semphr.h>
 
 namespace osal
 {

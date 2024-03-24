@@ -19,14 +19,17 @@
 #include "osal/osal.hpp"
 
 #include <FreeRTOS.h>
-#include <time.h>
-#include <signal.h>
+#include <task.h>
 
 namespace osal
 {
 inline namespace v1
 {
 
+uint64_t tmo_to_ticks(uint64_t ms) OS_NOEXCEPT
+{
+    return ((ms == WAIT_FOREVER) ? portMAX_DELAY : (((ms) / portTICK_PERIOD_MS)) / 1000);
+}
 
 void us_sleep (uint64_t us) OS_NOEXCEPT
 {

@@ -90,7 +90,7 @@ class unique_ptr
 
 public:
     unique_ptr() = default;
-    unique_ptr(T* ptr) OS_NOEXCEPT : ptr(ptr) {}
+    unique_ptr(T* ptr) OS_NOEXCEPT : ptr(ptr) {} //keep mot explicit
     unique_ptr(T* ptr, const Deleter& deleter) OS_NOEXCEPT : ptr(ptr), deleter(deleter) {}
 
     inline ~unique_ptr()
@@ -109,7 +109,7 @@ public:
 
     // generalized move ctor
     template <typename U, typename E>
-    unique_ptr(unique_ptr<U, E>&& other) OS_NOEXCEPT
+    unique_ptr(unique_ptr<U, E>&& other) OS_NOEXCEPT //keep mot explicit
         : ptr(other.release())
         , deleter(forward<E>(other.get_deleter()))
     {}
