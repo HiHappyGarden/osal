@@ -94,7 +94,7 @@ uint64_t osal_sec_to_us(uint32_t sec)
 }
 
 #ifndef EXCLUDE_CHECK_FOR_STACK_OVERFLOW
-extern "C" [[noreturn]] void vApplicationStackOverflowHook( TaskHandle_t xTask, char * pcTaskName )
+extern "C" void vApplicationStackOverflowHook( TaskHandle_t xTask, char * pcTaskName )
 {
     (void)xTask;
     (void)pcTaskName;
@@ -103,7 +103,7 @@ extern "C" [[noreturn]] void vApplicationStackOverflowHook( TaskHandle_t xTask, 
 #endif
 
 #ifndef EXCLUDE_USE_MALLOC_FAILED_HOOK
-extern "C" [[noreturn]] void vApplicationMallocFailedHook( void )
+extern "C" void vApplicationMallocFailedHook( void )
 {
     for(;;);
 }
