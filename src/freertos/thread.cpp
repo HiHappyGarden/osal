@@ -82,7 +82,7 @@ osal::exit thread::exit() OS_NOEXCEPT
     if(t.handler)
     {
         vTaskDelete(t.handler);
-        t.handler = NULL;
+        t.handler = nullptr;
         return exit::OK;
     }
     return exit::KO;
