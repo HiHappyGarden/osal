@@ -106,8 +106,8 @@ class error final
 {
     char msg[128]{0};               ///< The error message.
     uint8_t code = 0;               ///< The error code.
-    char file[64];                  ///< The file name where the error occurred.
-    char func[64];                  ///< The function name where the error occurred.
+    char file[64]{0};               ///< The file name where the error occurred.
+    char func[64]{0};               ///< The function name where the error occurred.
     uint32_t line = 0;              ///< The line number where the error occurred.
     osal::error* old_error = nullptr;  ///< Pointer to the previous error.
 
