@@ -43,12 +43,12 @@ array_deleter<uint32_t> array_deleter_int32;
 array_deleter<int64_t> array_deleter_uint64;
 array_deleter<uint64_t> array_deleter_int64;
 
-void* os_malloc(size_t size)
+void* malloc(size_t size)
 {
 	return pvPortMalloc(size);
 }
 
-void os_free(void* ptr)
+void free(void* ptr)
 {
 	vPortFree(ptr);
 }
@@ -59,17 +59,17 @@ void os_free(void* ptr)
 #ifdef OS_MEM_LAYER
 void* operator new(size_t size)
 {
-    return osal::os_malloc(size);
+    return osal::malloc(size);
 }
 
 void* operator new[](size_t size)
 {
-    return osal::os_malloc(size);
+    return osal::malloc(size);
 }
 
 void operator delete(void* ptr)
 {
-	osal::os_free(ptr);
+	osal::free(ptr);
 }
 
 void operator delete[](void* ptr)

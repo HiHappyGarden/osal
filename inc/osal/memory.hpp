@@ -171,9 +171,22 @@ extern array_deleter<uint32_t> array_deleter_int32;
 extern array_deleter<int64_t> array_deleter_uint64;
 extern array_deleter<uint64_t> array_deleter_int64;
 
-void* os_malloc(size_t size);
+void* malloc(size_t size);
 
-void os_free( void * ptr );
+void free( void * ptr );
+
+[[deprecated]] inline void* os_malloc(size_t size)
+{
+    return osal::malloc(size);
+}
+
+
+[[deprecated]] inline void os_free( void * ptr )
+{
+    osal::free(ptr);
+}
+
+
 
 
 }
