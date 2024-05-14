@@ -70,7 +70,7 @@ osal::exit queue::fetch(void* msg, uint64_t time, error** error) OS_NOEXCEPT
     return exit::KO;
 }
 
-inline exit queue::fetch_from_isr(void* msg, uint64_t, error** error) OS_NOEXCEPT
+exit queue::fetch_from_isr(void* msg, uint64_t, error** error) OS_NOEXCEPT
 {
     if(q.handle == nullptr)
     {
@@ -114,7 +114,7 @@ osal::exit queue::post(const uint8_t* msg, uint64_t time, error** error) OS_NOEX
     return exit::KO;
 }
 
-inline exit queue::post_from_isr(const uint8_t* msg, uint64_t, error** error) OS_NOEXCEPT
+exit queue::post_from_isr(const uint8_t* msg, uint64_t, error** error) OS_NOEXCEPT
 {
     if(q.handle == nullptr)
     {
