@@ -74,6 +74,6 @@ void operator delete(void* ptr)
 
 void operator delete[](void* ptr)
 {
-	osal::os_free(ptr);
+	osal::free(ptr);
 }
 #endif
