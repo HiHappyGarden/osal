@@ -84,7 +84,7 @@ void event::set_from_isr(uint32_t value) OS_NOEXCEPT
 {
     if(e.handle)
     {
-        xEventGroupSetBitsFromISR(e.handle, value, NULL);
+        xEventGroupSetBitsFromISR(e.handle, value, nullptr);
     }
 }
 
