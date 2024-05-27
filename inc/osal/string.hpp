@@ -480,7 +480,7 @@ public:
         return *this;
     }
 
-    string<Size> strstr(size_t idx_start, size_t offset = SIZE_MAX) const
+    string<Size> strstr(size_t idx_start, size_t offset = SIZE_MAX) const OS_NOEXCEPT
     {
     	data_length = strlen(data);
     	if(idx_start >= data_length)
@@ -508,7 +508,7 @@ public:
     	return ret;
     }
 
-    static char * replace(char const * const original,  char const * const pattern,  char const * const replacement)
+    static char * replace(char const * const original,  char const * const pattern,  char const * const replacement) OS_NOEXCEPT
     {
         size_t const rep_len = strlen(replacement);
         size_t const pat_len = strlen(pattern);
@@ -553,6 +553,19 @@ public:
             }
             return returned;
         }
+    }
+
+    string<Size> replace(char const * const pattern,  char const * const replacement) OS_NOEXCEPT
+    {
+        string<Size> ret;
+
+        char* rc = replace(c_str(), pattern, replacement);
+
+        ret = rc;
+
+        delete rc;
+
+        return ret;
     }
 
 };
