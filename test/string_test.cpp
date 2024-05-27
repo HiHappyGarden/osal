@@ -140,3 +140,36 @@ TEST(string_test, rtrim)
 
     ASSERT_TRUE(strcmp(s.rtrim().c_str(), "sono antonio") == 0);
 }
+
+TEST(string_test, strstr)
+{
+    os::string buffer = " $ciao sono antonio \r\n";
+
+    auto start = buffer.find("$");
+    auto end = buffer.find("\r\n");
+
+    size_t idx = start - buffer.c_str();
+    size_t offset = end - start;
+
+    auto&& rc = buffer.strstr(start - buffer.c_str(), end - start);
+
+    ASSERT_TRUE(strcmp(rc.c_str(), "$ciao sono antonio ") == 0);
+
+
+    rc = buffer.strstr(2, 4);
+
+    ASSERT_TRUE(strcmp(rc.c_str(), "ciao") == 0);
+
+}
+
+TEST(string_test, replace)
+{
+os::string s = "sono antonio \r\n";
+
+auto rc = s.replace("sono", "ciao");
+
+ASSERT_TRUE(strcmp(rc, "ciao antonio") == 0);
+
+delete rc;
+
+}

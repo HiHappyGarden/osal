@@ -500,7 +500,7 @@ public:
     	}
 
     	string<Size> ret;
-    	for(size_t i = idx_start; i <= idx_start + offset; i++)
+    	for(size_t i = idx_start; i < idx_start + offset; i++)
     	{
     		ret += data[i];
     	}
@@ -508,64 +508,11 @@ public:
     	return ret;
     }
 
-    static char * replace(char const * const original,  char const * const pattern,  char const * const replacement) OS_NOEXCEPT
+    char * replace(char const * const pattern,  char const * const replacement) const OS_NOEXCEPT
     {
-        size_t const rep_len = strlen(replacement);
-        size_t const pat_len = strlen(pattern);
-        size_t const ori_len = strlen(original);
 
-        size_t pat_cnt = 0;
-        const char * ori_ptr;
-        const char * pat_loc;
 
-        // find how many times the pattern occurs in the original string
-        pat_loc = strstr(ori_ptr, pattern);
-        for (ori_ptr = original; pat_loc; ori_ptr = pat_loc + pat_len)
-        {
-            pat_cnt++;
-            pat_loc = strstr(ori_ptr, pattern);
-        }
-
-        {
-            // allocate memory for the new string
-            size_t const ret_len = ori_len + pat_cnt * (rep_len - pat_len);
-            char * const returned = new char[ret_len + 1];
-
-            if (returned)
-            {
-                // copy the original string,
-                // replacing all the instances of the pattern
-                char * ret_ptr = returned;
-                pat_loc      = strstr(ori_ptr, pattern);
-                for (ori_ptr = original; pat_loc; ori_ptr = pat_loc + pat_len)
-                {
-                    size_t const skp_len = pat_loc - ori_ptr;
-                    // copy the section until the occurence of the pattern
-                    strncpy(ret_ptr, ori_ptr, skp_len);
-                    ret_ptr += skp_len;
-                    // copy the replacement
-                    strncpy(ret_ptr, replacement, rep_len);
-                    ret_ptr += rep_len;
-                    pat_loc             = strstr(ori_ptr, pattern);
-                }
-                // copy the rest of the string.
-                strcpy(ret_ptr, ori_ptr);
-            }
-            return returned;
-        }
-    }
-
-    string<Size> replace(char const * const pattern,  char const * const replacement) OS_NOEXCEPT
-    {
-        string<Size> ret;
-
-        char* rc = replace(c_str(), pattern, replacement);
-
-        ret = rc;
-
-        delete rc;
-
-        return ret;
+        return nullptr;
     }
 
 };

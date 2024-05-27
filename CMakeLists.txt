@@ -122,7 +122,7 @@ if(UNIX)
         include_directories(${PLATFORM_INCLUDE})
         file(GLOB_RECURSE OSAL_INCLUDES CONFIGURE_DEPENDS "inc/*.hpp" "src/unix/osal_sys/*.hpp")
         file(GLOB_RECURSE OSAL_SOURCES CONFIGURE_DEPENDS "src/error.cpp" "src/log.cpp" "src/generics.cpp" "src/unix/*.cpp")
-        
+
     endif()
 
     set(LOG_NEW_LINE \\n)
@@ -221,7 +221,7 @@ else()
     message(STATUS "IPO / LTO not supported for ${PROJECT_NAME}: <${error}>")
 endif()
 
-if (CMAKE_PROJECT_NAME STREQUAL osal AND ENABLE_TEST)
+if (ENABLE_TEST)
     message(STATUS "build test")
 
     add_executable(osal_test ${OSAL_TEST})

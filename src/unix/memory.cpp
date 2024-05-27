@@ -44,12 +44,12 @@ array_deleter<uint64_t> array_deleter_int64;
 
 void* malloc(size_t size)
 {
-	return malloc(size);
+	return ::malloc(size);
 }
 
 void free(void* ptr)
 {
-	free(ptr);
+	::free(ptr);
 }
 
 
