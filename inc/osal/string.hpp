@@ -36,7 +36,7 @@ inline namespace v1
  * @tparam Size The maximum size of the string, including the null-terminator.
  */
 template <size_t Size = 33>
-class string
+class string final
 {
     char data[Size]{};          ///< The character data storage.
     mutable size_t data_length{0};      ///< The current length of the string.
