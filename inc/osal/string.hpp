@@ -433,11 +433,19 @@ public:
 
     inline const char* find(const char to_find[], size_t offset = 0) const OS_NOEXCEPT
     {
+        if(to_find == nullptr)
+        {
+            return nullptr;
+        }
         return ::strstr(&data[offset], to_find);
     }
 
     inline bool start_with(const char to_start[], size_t offset = 0) const OS_NOEXCEPT
     {
+        if(to_start == nullptr)
+        {
+            return false;
+        }
         return strncmp(&data[offset], to_start, strlen(to_start)) == 0;
     }
 
@@ -480,7 +488,7 @@ public:
         return *this;
     }
 
-    string<Size> strstr(size_t idx_start, size_t offset = SIZE_MAX) const OS_NOEXCEPT
+    string<Size> substr(size_t idx_start, size_t offset = SIZE_MAX) const OS_NOEXCEPT
     {
     	data_length = strlen(data);
     	if(idx_start >= data_length)
@@ -510,9 +518,39 @@ public:
 
     char * replace(char const * const pattern,  char const * const replacement) const OS_NOEXCEPT
     {
+        if(pattern == nullptr || replacement == nullptr)
+        {
+            return nullptr;
+        }
 
+        size_t pattern_len = strlen(pattern);
+        size_t replacement_len = strlen(replacement);
+        size_t ret_len = length() - pattern_len + replacement_len;
 
-        return nullptr;
+        char* ret = new char[ret_len + 1];
+        if(ret == nullptr)
+        {
+            return nullptr;
+        }
+        memset(ret, '\0', ret_len + 1);
+
+        const char* ptr = ::strstr(data, pattern);
+        if(ptr)
+        {
+            size_t ret_count = ptr - data;
+            strncpy(ret, data, ret_count);
+            strncpy(ret + ret_count, replacement, ret_len - ret_count);
+            ptr += pattern_len;
+            ret_count += replacement_len;
+            strncpy(ret + ret_count, ptr, strnlen(ptr, ret_len - ret_count));
+        }
+        else
+        {
+            delete[] ret;
+            return nullptr;
+        }
+
+        return ret;
     }
 
 };

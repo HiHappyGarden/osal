@@ -151,12 +151,12 @@ TEST(string_test, strstr)
     size_t idx = start - buffer.c_str();
     size_t offset = end - start;
 
-    auto&& rc = buffer.strstr(start - buffer.c_str(), end - start);
+    auto&& rc = buffer.substr(start - buffer.c_str(), end - start);
 
     ASSERT_TRUE(strcmp(rc.c_str(), "$ciao sono antonio ") == 0);
 
 
-    rc = buffer.strstr(2, 4);
+    rc = buffer.substr(2, 4);
 
     ASSERT_TRUE(strcmp(rc.c_str(), "ciao") == 0);
 
@@ -164,12 +164,18 @@ TEST(string_test, strstr)
 
 TEST(string_test, replace)
 {
-os::string s = "sono antonio \r\n";
+    os::string s = "ciao sono antonio \r\n";
 
-auto rc = s.replace("sono", "ciao");
+    auto rc = s.replace("sono", ":)");
 
-ASSERT_TRUE(strcmp(rc, "ciao antonio") == 0);
+    ASSERT_TRUE(strcmp(rc, "ciao :) antonio \r\n") == 0);
 
-delete rc;
+    delete rc;
+
+    rc = s.replace("\r\n", "---->");
+
+    ASSERT_TRUE(strcmp(rc, "ciao sono antonio ---->") == 0);
+
+    delete rc;
 
 }
