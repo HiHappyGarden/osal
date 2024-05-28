@@ -542,7 +542,7 @@ public:
             strncpy(ret + ret_count, replacement, ret_len - ret_count);
             ptr += pattern_len;
             ret_count += replacement_len;
-            strncpy(ret + ret_count, ptr, strnlen(ptr, ret_len - ret_count));
+            strncpy(ret + ret_count, ptr, strlen(ptr));
         }
         else
         {
