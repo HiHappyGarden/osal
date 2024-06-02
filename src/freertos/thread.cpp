@@ -46,11 +46,11 @@ thread::thread(const char *name, uint32_t priority, size_t stack_size, thread::h
 {
     if(name)
     {
-        strncpy(this->name, name, sizeof(name) - 1);
+        strncpy(this->name, name, sizeof(this->name) - 1);
     }
     else
     {
-        memset(this->name, '\0', sizeof(name));
+        memset(this->name, '\0', sizeof(this->name));
     }
     t.args_wrp.fn = handler;
 }
