@@ -59,7 +59,10 @@ thread::thread(const char *name, uint32_t priority, size_t stack_size, thread::h
 
 osal::exit thread::create(void* arg, class error** error) OS_NOEXCEPT
 {
-
+    if(t.args_wrp.fn == nullptr)
+    {
+        return exit::KO;
+    }
 
     t.args_wrp.arg = arg;
 
