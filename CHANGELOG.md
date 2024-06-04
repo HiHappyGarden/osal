@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.1.1] - 2024-06-04
+
+Here we would have the update steps for 1.0.0 for people to follow.
+
+### Fixed
+
+- fix: remove one inline in event::clear_from_isr
+- fix: concurrence on log print
+
+## [1.0.0] - 2024-02-28
+
 ## [1.1.0] - 2024-06-02
 
 Here we would have the update steps for 1.0.0 for people to follow.
