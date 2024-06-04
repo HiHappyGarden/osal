@@ -42,17 +42,31 @@ uint64_t system_current_time_millis() OS_NOEXCEPT
     return 0;
 #endif
 }
-
+extern void us_sleep(uint64_t us) OS_NOEXCEPT;
 
 extern uint8_t log_level;
 
+namespace
+{
+    bool busy = false;
+}
+
 void sys_log(const char* tag, uint8_t type, const char* fmt, ...) OS_NOEXCEPT
 {
+    if(busy)
+    {
+        while (busy)
+        {
+            us_sleep(1'000); // 1ms
+        }
+    }
+    busy = true;
 	va_list list;
 	bool enable_print = false;
 
 	if( !(log_level & FLAG_STATE_ON) )
 	{
+        busy = false;
 		return;
 	}
 
@@ -118,6 +132,7 @@ void sys_log(const char* tag, uint8_t type, const char* fmt, ...) OS_NOEXCEPT
 		OS_LOG_PRINTF(OS_ANSI_COLOR_RESET OS_LOG_NEW_LINE);
 		fflush (stdout);
 	}
+    busy = false;
 }
 
 }
