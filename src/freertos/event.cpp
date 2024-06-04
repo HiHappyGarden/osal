@@ -116,7 +116,7 @@ void event::clear(uint32_t value) OS_NOEXCEPT
     }
 }
 
-inline void event::clear_from_isr(uint32_t value) OS_NOEXCEPT
+void event::clear_from_isr(uint32_t value) OS_NOEXCEPT
 {
     if(e.handle)
     {
