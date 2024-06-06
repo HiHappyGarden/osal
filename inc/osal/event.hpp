@@ -29,7 +29,7 @@ inline namespace v1
 class event final
 {
 public:
-    event(error** error = nullptr) OS_NOEXCEPT;
+    explicit event(error** error = nullptr) OS_NOEXCEPT;
 
     /**
      * @brief Deleted copy constructor.
