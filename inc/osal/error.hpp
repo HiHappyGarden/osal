@@ -19,6 +19,7 @@
 #pragma once
 
 #include "osal/types.hpp"
+#include "osal/memory.hpp"
 
 #include <stdarg.h>
 #include <stdlib.h>
@@ -104,16 +105,21 @@ class string;
  */
 class error final
 {
+public:
+    using ptr = unique_ptr<error>;
+
+private:
     char msg[128]{0};               ///< The error message.
     uint8_t code = 0;               ///< The error code.
     char file[64]{0};               ///< The file name where the error occurred.
     char func[64]{0};               ///< The function name where the error occurred.
     uint32_t line = 0;              ///< The line number where the error occurred.
-    osal::error* old_error = nullptr;  ///< Pointer to the previous error.
+    error::ptr old_error{};          ///< Pointer to the previous error.
 
     friend void printf_stack_error(const char* app_tag, const error &e, const char* fmt, ...) OS_NOEXCEPT;
 
 public:
+
     /**
      * @brief Default constructor.
      */
@@ -159,45 +165,9 @@ public:
      * @param func The function name where the error occurred.
      * @param line The line number where the error occurred.
      */
-    error(const error& old_error, const char* msg, uint8_t code = 0, const char* file = get_file_name(__FILE__), const char* func = "", uint32_t line = __LINE__) OS_NOEXCEPT;
+    error(error::ptr& old_error, const char* msg, uint8_t code = 0, const char* file = get_file_name(__FILE__), const char* func = "", uint32_t line = __LINE__) OS_NOEXCEPT;
 
-    /**
-     * @brief Constructs an error object with the given previous error, message, error type, file, function, and line number.
-     *
-     * @param old_error The previous error.
-     * @param msg The error message.
-     * @param code The error type.
-     * @param file The file name where the error occurred.
-     * @param func The function name where the error occurred.
-     * @param line The line number where the error occurred.
-     */
-    error(const error& old_error, const char* msg, error_type code = error_type::OS_ENO, const char* file = get_file_name(__FILE__), const char* func = "", uint32_t line = __LINE__) OS_NOEXCEPT
-        : error(msg, static_cast<uint8_t>(code), file, func, line) {}
 
-    /**
-     * @brief Constructs an error object with the given previous error, message, code, file, function, and line number.
-     *
-     * @param old_error The previous error.
-     * @param msg The error message.
-     * @param code The error code.
-     * @param file The file name where the error occurred.
-     * @param func The function name where the error occurred.
-     * @param line The line number where the error occurred.
-     */
-    error(error* old_error, const char* msg, uint8_t code = 0, const char* file = get_file_name(__FILE__), const char* func = "", uint32_t line = __LINE__) OS_NOEXCEPT;
-
-    /**
-     * @brief Constructs an error object with the given previous error, message, error type, file, function, and line number.
-     *
-     * @param old_error The previous error.
-     * @param msg The error message.
-     * @param code The error type.
-     * @param file The file name where the error occurred.
-     * @param func The function name where the error occurred.
-     * @param line The line number where the error occurred.
-     */
-    error(error* old_error, const char* msg, error_type code = error_type::OS_ENO, const char* file = get_file_name(__FILE__), const char* func = "", uint32_t line = __LINE__) OS_NOEXCEPT
-        : error(old_error, msg, static_cast<uint8_t>(code), file, func, line) {}
 
     /**
      * @brief Copy constructor.
@@ -239,7 +209,7 @@ public:
      *
      * @param old_error The previous error object to be added.
      */
-    void add_error(const error& old_error) OS_NOEXCEPT;
+    void add_error(error::ptr old_error) OS_NOEXCEPT;
 
     /**
      * @brief Returns the error message.

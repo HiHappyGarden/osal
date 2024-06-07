@@ -44,45 +44,17 @@ inline namespace v1
         }
     }
 
-    error::error(const error& old_error, const char* msg, uint8_t code, const char* file, const char* func, uint32_t line) OS_NOEXCEPT
+    error::error(error::ptr& old_error, const char* msg, uint8_t code, const char* file, const char* func, uint32_t line) OS_NOEXCEPT
         : error(msg, code, file, func, line)
     {
-        if(this->old_error)
-        {
-            delete this->old_error;
-            this->old_error = nullptr;
-        }
-        this->old_error = new error(old_error);
+        this->old_error.swap(old_error);
     }
+    
+    error::~error() OS_NOEXCEPT = default;
 
-    error::error(error* old_error, const char* msg, uint8_t code, const char* file, const char* func, uint32_t line) OS_NOEXCEPT
-        : error(msg, code, file, func, line)
+    void error::add_error(error::ptr old_error) OS_NOEXCEPT
     {
-        if(this->old_error)
-        {
-            delete this->old_error;
-            this->old_error = nullptr;
-        }
-        this->old_error = old_error;
-    }
-
-    error::~error() OS_NOEXCEPT
-    {
-        if(old_error)
-        {
-            delete old_error;
-            old_error = nullptr;
-        }
-    }
-
-    void error::add_error(const error &old_error) OS_NOEXCEPT
-    {
-        if(this->old_error)
-        {
-            delete this->old_error;
-            this->old_error = nullptr;
-        }
-        this->old_error = new error(old_error);
+        this->old_error.swap(old_error);
     }
 
     void error::set_position(const char* file, const char* func, uint32_t line) OS_NOEXCEPT
@@ -118,9 +90,9 @@ inline namespace v1
         while(ptr)
         {
             count++;
-            snprintf(row, sizeof(row), "%u. msg:%s code:%d (%s::%s line:%lu)", count, ptr->msg, ptr->code, ptr->file, ptr->func, ptr->line);
+            snprintf(row, sizeof(row), "%u. msg:%s code:%d (%s::%s line:%u)", count, ptr->msg, ptr->code, ptr->file, ptr->func, ptr->line);
             OS_LOG_ERROR(app_tag, "%s", row);
-            ptr = ptr->old_error;
+            ptr = ptr->old_error.get();
         }
         fflush(stdout);
 

@@ -40,14 +40,12 @@ TEST(error_test, base)
 TEST(error_test, old_error)
 {
 
-    os::error* old = OS_ERROR_BUILD("old", 20);
+    os::error::ptr old = OS_ERROR_BUILD("old", 20);
 
 
-    os::error err(*old, "test",30, osal::get_file_name(__FILE__), __FUNCTION__, __LINE__);
+    os::error err(old, "test",30, osal::get_file_name(__FILE__), __FUNCTION__, __LINE__);
 
     os::printf_stack_error(APP_TAG, err);
 
-
-    delete old;
 }
 
