@@ -114,7 +114,7 @@ private:
     char file[64]{0};               ///< The file name where the error occurred.
     char func[64]{0};               ///< The function name where the error occurred.
     uint32_t line = 0;              ///< The line number where the error occurred.
-    error::ptr old_error{};          ///< Pointer to the previous error.
+    error::ptr old_error;           ///< Pointer to the previous error.
 
     friend void printf_stack_error(const char* app_tag, const error &e, const char* fmt, ...) OS_NOEXCEPT;
 
@@ -165,9 +165,7 @@ public:
      * @param func The function name where the error occurred.
      * @param line The line number where the error occurred.
      */
-    error(error::ptr& old_error, const char* msg, uint8_t code = 0, const char* file = get_file_name(__FILE__), const char* func = "", uint32_t line = __LINE__) OS_NOEXCEPT;
-
-
+    error(error* old_error, const char* msg, uint8_t code = 0, const char* file = get_file_name(__FILE__), const char* func = "", uint32_t line = __LINE__) OS_NOEXCEPT;
 
     /**
      * @brief Copy constructor.
@@ -209,7 +207,7 @@ public:
      *
      * @param old_error The previous error object to be added.
      */
-    void add_error(error::ptr old_error) OS_NOEXCEPT;
+    void add_error(error* old_error) OS_NOEXCEPT;
 
     /**
      * @brief Returns the error message.
@@ -270,45 +268,6 @@ public:
      */
     void set_position(const char* file = get_file_name(__FILE__), const char* func = "", uint32_t line = __LINE__) OS_NOEXCEPT;
 };
-
-
-/**
- * @brief Prints an error message with stack information.
- *
- * This function prints an error message along with stack information to the standard output.
- * It takes an error object as the first argument and variadic arguments for formatting the error message.
- * The error message can be formatted using a format string (fmt) and additional arguments (args).
- * The stack information is obtained from the error object.
- *
- * @tparam Args The variadic argument types.
- * @param e The error object.
- * @param args The additional arguments for formatting the error message.
- */
-template<typename... Args>
-constexpr inline void printf_stack_error(const char* app_tag, const error &e, Args... args) OS_NOEXCEPT
-{
-    printf_stack_error(app_tag, e, "", args...);
-}
-
-/**
- * @brief Prints an error message with stack information.
- *
- * This function prints an error message along with stack information to the standard output.
- * It takes an rvalue reference to an error object as the first argument, a format string (fmt) as the second argument (optional),
- * and variadic arguments for formatting the error message.
- * The error message can be formatted using the format string and additional arguments.
- * The stack information is obtained from the error object.
- *
- * @tparam Args The variadic argument types.
- * @param e The rvalue reference to the error object.
- * @param fmt The format string for formatting the error message (optional).
- * @param args The additional arguments for formatting the error message.
- */
-template<typename... Args>
-constexpr inline void printf_stack_error(const char* app_tag, error &&e, const char* fmt = nullptr, Args... args) OS_NOEXCEPT
-{
-    printf_stack_error(app_tag, e, fmt, args...);
-}
 
 /**
  * @brief Prints an error message with stack information.

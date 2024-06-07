@@ -44,17 +44,27 @@ inline namespace v1
         }
     }
 
-    error::error(error::ptr& old_error, const char* msg, uint8_t code, const char* file, const char* func, uint32_t line) OS_NOEXCEPT
+    error::error(error* old_error, const char* msg, uint8_t code, const char* file, const char* func, uint32_t line) OS_NOEXCEPT
         : error(msg, code, file, func, line)
     {
-        this->old_error.swap(old_error);
+        if(this->old_error)
+        {
+            this->old_error = nullptr;
+        }
+        this->old_error = old_error;
     }
-    
-    error::~error() OS_NOEXCEPT = default;
 
-    void error::add_error(error::ptr old_error) OS_NOEXCEPT
+    error::~error() OS_NOEXCEPT
     {
-        this->old_error.swap(old_error);
+        if(old_error)
+        {
+            old_error = nullptr;
+        }
+    }
+
+    void error::add_error(error* old_error) OS_NOEXCEPT
+    {
+        this->old_error = old_error;
     }
 
     void error::set_position(const char* file, const char* func, uint32_t line) OS_NOEXCEPT
