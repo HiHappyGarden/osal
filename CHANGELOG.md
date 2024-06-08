@@ -5,20 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [1.1.1] - 2024-06-04
+## [1.1.2] - 2024-06-04
 
-Here we would have the update steps for 1.0.0 for people to follow.
+### Fixed
+
+- fix: a ctor who handle error_type enum
+- fix: restore before commit and set unique_ptr only old_error
+- fix: switch old error raw ptr to unique_ptr
+- fix: add explicit to event ctor
+
+## [1.1.1] - 2024-06-04
 
 ### Fixed
 
 - fix: remove one inline in event::clear_from_isr
 - fix: concurrence on log print
 
-## [1.0.0] - 2024-02-28
-
 ## [1.1.0] - 2024-06-02
-
-Here we would have the update steps for 1.0.0 for people to follow.
 
 ### Added
  - add: instance replace in string

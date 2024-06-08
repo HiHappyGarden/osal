@@ -21,10 +21,10 @@
 #define OS_CONFIG_H
 
 #define OS_NAME "osal"
-#define OS_VER "1.1.1"
+#define OS_VER "1.1.2"
 #define OS_VER_MAJOR (1)
 #define OS_VER_MINOR (1)
-#define OS_VER_PATCH (1)
+#define OS_VER_PATCH (2)
 #define OS_LOG_NEW_LINE "\n"
 #define OS_MEM_LAYER ()
 
