@@ -489,7 +489,7 @@ public:
         return *this;
     }
 
-    inline const char* find(const char to_find[], size_t offset = 0) const OS_NOEXCEPT
+    inline char* find(const char to_find[], size_t offset = 0) const OS_NOEXCEPT
     {
         if(to_find == nullptr)
         {
