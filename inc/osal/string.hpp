@@ -299,6 +299,36 @@ public:
      * @return A reference to the modified string.
      */
     template <size_t SizeB>
+    constexpr inline bool operator==(const string<SizeB>& b) OS_NOEXCEPT
+    {
+        return strncmp(data, b.c_str(), size()) == 0;
+    }
+
+    /**
+     * @brief Appends a character array to the current string.
+     *
+     * This function appends the provided character array to the current string.
+     *
+     * @tparam SizeB The size of the character array to be appended.
+     * @param b The character array to append.
+     * @return A reference to the modified string.
+     */
+    template <size_t SizeB>
+    constexpr inline bool operator==(string<SizeB>&& b) OS_NOEXCEPT
+    {
+        return strncmp(data, b.c_str(), size()) == 0;
+    }
+
+    /**
+     * @brief Appends a character array to the current string.
+     *
+     * This function appends the provided character array to the current string.
+     *
+     * @tparam SizeB The size of the character array to be appended.
+     * @param b The character array to append.
+     * @return A reference to the modified string.
+     */
+    template <size_t SizeB>
     constexpr inline bool operator==(char(&&b)[SizeB]) OS_NOEXCEPT
     {
         return strncmp(data, b, size()) == 0;
@@ -329,6 +359,34 @@ public:
     constexpr inline bool operator==(const char* b) OS_NOEXCEPT
     {
         return strncmp(data, b, size()) == 0;
+    }
+
+    /**
+     * @brief Inequality operator with a C-style string.
+     *
+     * This operator checks if the current string is not equal to a C-style string.
+     *
+     * @param b The C-style string to compare with.
+     * @return true if the strings are not equal, false otherwise.
+     */
+    template <size_t SizeB>
+    constexpr inline bool operator!=(const string<SizeB>& b) OS_NOEXCEPT
+    {
+        return strncmp(data, b.c_str(), size()) != 0;
+    }
+
+    /**
+     * @brief Inequality operator with a C-style string.
+     *
+     * This operator checks if the current string is not equal to a C-style string.
+     *
+     * @param b The C-style string to compare with.
+     * @return true if the strings are not equal, false otherwise.
+     */
+    template <size_t SizeB>
+    constexpr inline bool operator!=(string<SizeB>&& b) OS_NOEXCEPT
+    {
+        return strncmp(data, b.c_str(), size()) != 0;
     }
 
     /**
