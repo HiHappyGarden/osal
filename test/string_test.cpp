@@ -179,3 +179,15 @@ TEST(string_test, replace)
     delete rc;
 
 }
+
+
+TEST(string_test, small_string)
+{
+    os::string<256> s = "ciao sono antonio";
+
+    ASSERT_TRUE(strcmp(s.c_str(), "ciao sono antonio") == 0);
+
+    os::string<128> s1 = s;
+
+    ASSERT_TRUE(strcmp(s1.c_str(), "ciao sono antonio") == 0);
+}

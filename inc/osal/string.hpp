@@ -60,7 +60,56 @@ public:
      * @param str The input string.
      */
     constexpr string(const char(&str)[Size]) OS_NOEXCEPT //keep not explicit
-        : string(str, Size - 1)
+            : string(str, Size - 1)
+    {}
+
+    /**
+     * @brief Constructor from a C-style string literal.
+     *
+     * @param str The input string.
+     */
+    template <size_t SizeB>
+    constexpr string(const char(&str)[SizeB]) OS_NOEXCEPT //keep not explicit
+            : string(str, SizeB - 1)
+    {}
+
+    /**
+ * @brief Constructor from a C-style string literal.
+ *
+ * @param str The input string.
+ */
+    template <size_t SizeB>
+    constexpr string(char(&str)[SizeB]) OS_NOEXCEPT //keep not explicit
+            : string(str, SizeB - 1)
+    {}
+
+    /**
+ * @brief Constructor from a C-style string literal.
+ *
+ * @param str The input string.
+ */
+    constexpr string(const string<Size>& str) OS_NOEXCEPT //keep not explicit
+            : string(str.c_str(), str.length())
+    {}
+
+    /**
+     * @brief Constructor from a C-style string literal.
+     *
+     * @param str The input string.
+     */
+    template <size_t SizeB>
+    constexpr string(string<SizeB>& str) OS_NOEXCEPT //keep not explicit
+            : string(str.c_str(), str.length())
+    {}
+
+    /**
+ * @brief Constructor from a C-style string literal.
+ *
+ * @param str The input string.
+ */
+    template <size_t SizeB>
+    constexpr string(const string<SizeB>& str) OS_NOEXCEPT //keep not explicit
+            : string(str.c_str(), str.length())
     {}
 
     /**
@@ -489,13 +538,18 @@ public:
         return *this;
     }
 
+    inline char* find(char to_find[], size_t offset = 0) const OS_NOEXCEPT
+    {
+        return find(to_find, offset);
+    }
+
     inline char* find(const char to_find[], size_t offset = 0) const OS_NOEXCEPT
     {
         if(to_find == nullptr)
         {
             return nullptr;
         }
-        return ::strstr(&data[offset], to_find);
+        return ::strstr(const_cast<char *>(&data[offset]), to_find);
     }
 
     inline bool start_with(const char to_start[], size_t offset = 0) const OS_NOEXCEPT
