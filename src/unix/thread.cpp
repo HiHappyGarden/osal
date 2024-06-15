@@ -61,20 +61,20 @@ osal::exit thread::create(void* arg, class error** error) OSAL_NOEXCEPT
         switch (error_type(result))
         {
         case error_type::OS_EAGAIN:
-            *error = OS_ERROR_BUILD("Insufficient resources to create another thread.", error_type::OS_EAGAIN);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("Insufficient resources to create another thread.", error_type::OS_EAGAIN);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
             break;
         case error_type::OS_EINVAL:
-            *error = OS_ERROR_BUILD("Invalid settings in attr.", error_type::OS_EINVAL);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("Invalid settings in attr.", error_type::OS_EINVAL);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
             break;
         case error_type::OS_EPERM:
-            *error = OS_ERROR_BUILD("No permission to set the scheduling policy and parameters specified in attr.", error_type::OS_EINVAL);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("No permission to set the scheduling policy and parameters specified in attr.", error_type::OS_EINVAL);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
             break;
         default:
-            *error = OS_ERROR_BUILD("Unmanaged error", result);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("Unmanaged error", result);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
             break;
         }
     }
@@ -101,20 +101,20 @@ osal::exit thread::join(error** error) const OSAL_NOEXCEPT
         switch (error_type(result))
         {
         case error_type::OS_EDEADLK:
-            *error = OS_ERROR_BUILD("A deadlock was detected or thread specifies the calling thread.", error_type::OS_EDEADLK);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("A deadlock was detected or thread specifies the calling thread.", error_type::OS_EDEADLK);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
             break;
         case error_type::OS_EINVAL:
-            *error = OS_ERROR_BUILD("Another thread is already waiting to join with this thread.", error_type::OS_EINVAL);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("Another thread is already waiting to join with this thread.", error_type::OS_EINVAL);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
             break;
         case error_type::OS_ESRCH:
-            *error = OS_ERROR_BUILD("No thread with the ID thread could be found.", error_type::OS_ESRCH);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("No thread with the ID thread could be found.", error_type::OS_ESRCH);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
             break;
         default:
-            *error = OS_ERROR_BUILD("Unmanaged error", result);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("Unmanaged error", result);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
             break;
         }
     }

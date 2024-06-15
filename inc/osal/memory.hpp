@@ -20,7 +20,7 @@
 #pragma once
 
 #include "osal/traits.hpp"
-#ifdef INCLUDE_OS_CONFIG
+#ifdef INCLUDE_OSAL_CONFIG
 #include "osal-config.h"
 #endif
 

@@ -109,8 +109,8 @@ exit timer::create(void *arg, error** error)
     {
         if(error)
         {
-            *error = OS_ERROR_BUILD("Out off memory.", error_type::OS_ENOMEM);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("Out off memory.", error_type::OS_ENOMEM);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
         }
         return exit::KO;
     }
@@ -118,8 +118,8 @@ exit timer::create(void *arg, error** error)
     {
         if(error)
         {
-            *error = OS_ERROR_BUILD("Impossible create timer.", error_type::OS_ENODATA);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("Impossible create timer.", error_type::OS_ENODATA);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
         }
         return exit::KO;
     }

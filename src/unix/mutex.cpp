@@ -39,28 +39,28 @@ mutex::mutex(class error** error) OSAL_NOEXCEPT
     {
         switch (error_type(result)) {
         case error_type::OS_EAGAIN:
-            *error = OS_ERROR_BUILD("The system lacked the necessary resources (other than memory) to initialise another mutex.", error_type::OS_EAGAIN);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("The system lacked the necessary resources (other than memory) to initialise another mutex.", error_type::OS_EAGAIN);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
             break;
         case error_type::OS_ENOMEM:
-            *error = OS_ERROR_BUILD("Insufficient memory exists to initialise the mutex.", error_type::OS_ENOMEM);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("Insufficient memory exists to initialise the mutex.", error_type::OS_ENOMEM);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
             break;
         case error_type::OS_EPERM:
-            *error = OS_ERROR_BUILD("The caller does not have the privilege to perform the operation.", error_type::OS_EPERM);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("The caller does not have the privilege to perform the operation.", error_type::OS_EPERM);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
             break;
         case error_type::OS_EBUSY:
-            *error = OS_ERROR_BUILD("The caller does not have the privilege to perform the operation.", error_type::OS_EBUSY);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("The caller does not have the privilege to perform the operation.", error_type::OS_EBUSY);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
             break;
         case error_type::OS_EINVAL:
-            *error = OS_ERROR_BUILD("The caller does not have the privilege to perform the operation.", error_type::OS_EINVAL);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("The caller does not have the privilege to perform the operation.", error_type::OS_EINVAL);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
             break;
         default:
-            *error = OS_ERROR_BUILD("Unmanaged error", result);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("Unmanaged error", result);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
             break;
         }
     }

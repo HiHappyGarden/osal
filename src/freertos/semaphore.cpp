@@ -30,8 +30,8 @@ semaphore::semaphore(size_t count, error** error) OSAL_NOEXCEPT : sem { xSemapho
 {
     if(sem.handle == nullptr && error)
     {
-        *error = OS_ERROR_BUILD("xSemaphoreCreateCounting() fail.", error_type::OS_EFAULT);
-        OS_ERROR_PTR_SET_POSITION(*error);
+        *error = OSAL_ERROR_BUILD("xSemaphoreCreateCounting() fail.", error_type::OS_EFAULT);
+        OSAL_ERROR_PTR_SET_POSITION(*error);
     }
 }
 
@@ -50,8 +50,8 @@ osal::exit semaphore::wait(uint64_t time, error** error) OSAL_NOEXCEPT
     {
         if(error)
         {
-            *error = OS_ERROR_BUILD("xSemaphoreCreateCounting() fail.", error_type::OS_EFAULT);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("xSemaphoreCreateCounting() fail.", error_type::OS_EFAULT);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
         }
         return exit::KO;
     }
@@ -69,8 +69,8 @@ osal::exit semaphore::wait_from_isr(uint64_t time, error **error) OSAL_NOEXCEPT
     {
         if(error)
         {
-            *error = OS_ERROR_BUILD("xSemaphoreCreateCounting() fail.", error_type::OS_EFAULT);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("xSemaphoreCreateCounting() fail.", error_type::OS_EFAULT);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
         }
         return exit::KO;
     }

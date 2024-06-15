@@ -36,8 +36,8 @@ stream_buffer::stream_buffer(size_t size, size_t trigger_size, error** error) OS
     {
         if(error)
         {
-            *error = OS_ERROR_BUILD("Out off memory.", error_type::OS_ENOMEM);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("Out off memory.", error_type::OS_ENOMEM);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
         }
         return;
     }
@@ -86,8 +86,8 @@ size_t stream_buffer::send(const uint8_t *data, size_t size, uint64_t time, erro
     {
         if(_error)
         {
-            *_error = OS_ERROR_BUILD("Data nullptr", error_type::OS_EINVAL);
-            OS_ERROR_PTR_SET_POSITION(*_error);
+            *_error = OSAL_ERROR_BUILD("Data nullptr", error_type::OS_EINVAL);
+            OSAL_ERROR_PTR_SET_POSITION(*_error);
         }
         return false;
     }
@@ -96,8 +96,8 @@ size_t stream_buffer::send(const uint8_t *data, size_t size, uint64_t time, erro
     {
         if(_error)
         {
-            *_error = OS_ERROR_BUILD("sb.count == sb.size", error_type::OS_EINVAL);
-            OS_ERROR_PTR_SET_POSITION(*_error);
+            *_error = OSAL_ERROR_BUILD("sb.count == sb.size", error_type::OS_EINVAL);
+            OSAL_ERROR_PTR_SET_POSITION(*_error);
         }
         return false;
     }
@@ -130,20 +130,20 @@ size_t stream_buffer::send(const uint8_t *data, size_t size, uint64_t time, erro
                     switch (error_type(error))
                     {
                     case error_type::OS_ETIMEDOUT:
-                        *_error = OS_ERROR_BUILD("The time specified by abstime to pthread_cond_timedwait() has passed.", error_type::OS_ETIMEDOUT);
-                        OS_ERROR_PTR_SET_POSITION(*_error);
+                        *_error = OSAL_ERROR_BUILD("The time specified by abstime to pthread_cond_timedwait() has passed.", error_type::OS_ETIMEDOUT);
+                        OSAL_ERROR_PTR_SET_POSITION(*_error);
                         break;
                     case error_type::OS_EINVAL:
-                        *_error = OS_ERROR_BUILD("The value specified by abstime is invalid.", error_type::OS_EINVAL);
-                        OS_ERROR_PTR_SET_POSITION(*_error);
+                        *_error = OSAL_ERROR_BUILD("The value specified by abstime is invalid.", error_type::OS_EINVAL);
+                        OSAL_ERROR_PTR_SET_POSITION(*_error);
                         break;
                     case error_type::OS_EPERM:
-                        *_error = OS_ERROR_BUILD("The mutex was not owned by the current thread at the time of the call.", error_type::OS_EPERM);
-                        OS_ERROR_PTR_SET_POSITION(*_error);
+                        *_error = OSAL_ERROR_BUILD("The mutex was not owned by the current thread at the time of the call.", error_type::OS_EPERM);
+                        OSAL_ERROR_PTR_SET_POSITION(*_error);
                         break;
                     default:
-                        *_error = OS_ERROR_BUILD("Unmanaged error", error);
-                        OS_ERROR_PTR_SET_POSITION(*_error);
+                        *_error = OSAL_ERROR_BUILD("Unmanaged error", error);
+                        OSAL_ERROR_PTR_SET_POSITION(*_error);
                         break;
                     }
                 }
@@ -160,16 +160,16 @@ size_t stream_buffer::send(const uint8_t *data, size_t size, uint64_t time, erro
                     switch (error_type(error))
                     {
                     case error_type::OS_ETIMEDOUT:
-                        *_error = OS_ERROR_BUILD("The time specified by abstime to pthread_cond_timedwait() has passed.", error_type::OS_ETIMEDOUT);
-                        OS_ERROR_PTR_SET_POSITION(*_error);
+                        *_error = OSAL_ERROR_BUILD("The time specified by abstime to pthread_cond_timedwait() has passed.", error_type::OS_ETIMEDOUT);
+                        OSAL_ERROR_PTR_SET_POSITION(*_error);
                         break;
                     case error_type::OS_EINVAL:
-                        *_error = OS_ERROR_BUILD("The value specified by abstime is invalid.", error_type::OS_EINVAL);
-                        OS_ERROR_PTR_SET_POSITION(*_error);
+                        *_error = OSAL_ERROR_BUILD("The value specified by abstime is invalid.", error_type::OS_EINVAL);
+                        OSAL_ERROR_PTR_SET_POSITION(*_error);
                         break;
                     default:
-                        *_error = OS_ERROR_BUILD("Unmanaged error", error);
-                        OS_ERROR_PTR_SET_POSITION(*_error);
+                        *_error = OSAL_ERROR_BUILD("Unmanaged error", error);
+                        OSAL_ERROR_PTR_SET_POSITION(*_error);
                         break;
                     }
                 }
@@ -280,8 +280,8 @@ size_t stream_buffer::receive(uint8_t *data, size_t size, uint64_t time, error *
     {
         if(_error)
         {
-            *_error = OS_ERROR_BUILD("Data nullptr", error_type::OS_EINVAL);
-            OS_ERROR_PTR_SET_POSITION(*_error);
+            *_error = OSAL_ERROR_BUILD("Data nullptr", error_type::OS_EINVAL);
+            OSAL_ERROR_PTR_SET_POSITION(*_error);
         }
         return false;
     }
@@ -313,20 +313,20 @@ size_t stream_buffer::receive(uint8_t *data, size_t size, uint64_t time, error *
                     switch (error_type(error))
                     {
                     case error_type::OS_ETIMEDOUT:
-                        *_error = OS_ERROR_BUILD("The time specified by abstime to pthread_cond_timedwait() has passed.", error_type::OS_ETIMEDOUT);
-                        OS_ERROR_PTR_SET_POSITION(*_error);
+                        *_error = OSAL_ERROR_BUILD("The time specified by abstime to pthread_cond_timedwait() has passed.", error_type::OS_ETIMEDOUT);
+                        OSAL_ERROR_PTR_SET_POSITION(*_error);
                         break;
                     case error_type::OS_EINVAL:
-                        *_error = OS_ERROR_BUILD("The value specified by abstime is invalid.", error_type::OS_EINVAL);
-                        OS_ERROR_PTR_SET_POSITION(*_error);
+                        *_error = OSAL_ERROR_BUILD("The value specified by abstime is invalid.", error_type::OS_EINVAL);
+                        OSAL_ERROR_PTR_SET_POSITION(*_error);
                         break;
                     case error_type::OS_EPERM:
-                        *_error = OS_ERROR_BUILD("The mutex was not owned by the current thread at the time of the call.", error_type::OS_EPERM);
-                        OS_ERROR_PTR_SET_POSITION(*_error);
+                        *_error = OSAL_ERROR_BUILD("The mutex was not owned by the current thread at the time of the call.", error_type::OS_EPERM);
+                        OSAL_ERROR_PTR_SET_POSITION(*_error);
                         break;
                     default:
-                        *_error = OS_ERROR_BUILD("Unmanaged error", error);
-                        OS_ERROR_PTR_SET_POSITION(*_error);
+                        *_error = OSAL_ERROR_BUILD("Unmanaged error", error);
+                        OSAL_ERROR_PTR_SET_POSITION(*_error);
                         break;
                     }
                 }
@@ -343,16 +343,16 @@ size_t stream_buffer::receive(uint8_t *data, size_t size, uint64_t time, error *
                     switch (error_type(error))
                     {
                     case error_type::OS_ETIMEDOUT:
-                        *_error = OS_ERROR_BUILD("The time specified by abstime to pthread_cond_timedwait() has passed.", error_type::OS_ETIMEDOUT);
-                        OS_ERROR_PTR_SET_POSITION(*_error);
+                        *_error = OSAL_ERROR_BUILD("The time specified by abstime to pthread_cond_timedwait() has passed.", error_type::OS_ETIMEDOUT);
+                        OSAL_ERROR_PTR_SET_POSITION(*_error);
                         break;
                     case error_type::OS_EINVAL:
-                        *_error = OS_ERROR_BUILD("The value specified by abstime is invalid.", error_type::OS_EINVAL);
-                        OS_ERROR_PTR_SET_POSITION(*_error);
+                        *_error = OSAL_ERROR_BUILD("The value specified by abstime is invalid.", error_type::OS_EINVAL);
+                        OSAL_ERROR_PTR_SET_POSITION(*_error);
                         break;
                     default:
-                        *_error = OS_ERROR_BUILD("Unmanaged error", error);
-                        OS_ERROR_PTR_SET_POSITION(*_error);
+                        *_error = OSAL_ERROR_BUILD("Unmanaged error", error);
+                        OSAL_ERROR_PTR_SET_POSITION(*_error);
                         break;
                     }
                 }

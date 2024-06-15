@@ -31,8 +31,8 @@ mutex::mutex(class error** error) OSAL_NOEXCEPT : m { xSemaphoreCreateRecursiveM
 {
     if(m.handle == nullptr && error)
     {
-        *error = OS_ERROR_BUILD("xSemaphoreCreateRecursiveMutex() fail.", error_type::OS_EFAULT);
-        OS_ERROR_PTR_SET_POSITION(*error);
+        *error = OSAL_ERROR_BUILD("xSemaphoreCreateRecursiveMutex() fail.", error_type::OS_EFAULT);
+        OSAL_ERROR_PTR_SET_POSITION(*error);
     }
 }
 

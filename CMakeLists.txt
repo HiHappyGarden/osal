@@ -14,7 +14,7 @@ set(CMAKE_C_EXTENSIONS ON)
 message("CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
 set(OS_HAVE_CONFIG ON)
 
-add_definitions(-DINCLUDE_OS_CONFIG) 
+add_definitions(-DINCLUDE_OSAL_CONFIG)
 
 include(CheckIPOSupported)
 check_ipo_supported(RESULT supported OUTPUT error)

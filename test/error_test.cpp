@@ -25,8 +25,8 @@ constexpr const char APP_TAG[]  = "ERROR TEST";
 TEST(error_test, base)
 {
 
-    auto err = OS_ERROR_BUILD("test", 20);
-    OS_ERROR_PTR_SET_POSITION(err);
+    auto err = OSAL_ERROR_BUILD("test", 20);
+    OSAL_ERROR_PTR_SET_POSITION(err);
 
     ASSERT_TRUE(strcmp(err->get_msg(), "test") == 0);
     ASSERT_TRUE(strcmp(err->get_file(), "error_test.cpp") == 0);
@@ -40,7 +40,7 @@ TEST(error_test, base)
 TEST(error_test, old_error)
 {
 
-    auto old = OS_ERROR_BUILD("old", 20);
+    auto old = OSAL_ERROR_BUILD("old", 20);
     
     auto err = new osal::error{old, "test",30, osal::get_file_name(__FILE__), __FUNCTION__, __LINE__};
 

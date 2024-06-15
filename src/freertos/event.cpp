@@ -30,8 +30,8 @@ event::event(error** error) OSAL_NOEXCEPT : e{ xEventGroupCreate() }
 {
     if(e.handle == nullptr && error)
     {
-        *error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
-        OS_ERROR_PTR_SET_POSITION(*error);
+        *error = OSAL_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
+        OSAL_ERROR_PTR_SET_POSITION(*error);
     }
 }
 
@@ -51,8 +51,8 @@ osal::exit event::wait(uint32_t mask, uint32_t& value, uint64_t time, error** er
     {
         if(error)
         {
-            *error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
         }
         return exit::KO;
     }

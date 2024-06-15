@@ -31,8 +31,8 @@ stream_buffer::stream_buffer(size_t size, size_t trigger_size, error** error) OS
 {
     if(sb.handle == nullptr && error)
     {
-        *error = OS_ERROR_BUILD("xStreamBufferCreate() fail.", error_type::OS_EFAULT);
-        OS_ERROR_PTR_SET_POSITION(*error);
+        *error = OSAL_ERROR_BUILD("xStreamBufferCreate() fail.", error_type::OS_EFAULT);
+        OSAL_ERROR_PTR_SET_POSITION(*error);
     }
 }
 
@@ -51,8 +51,8 @@ size_t stream_buffer::send(const uint8_t *data, size_t size, uint64_t time, erro
     {
         if(error)
         {
-            *error = OS_ERROR_BUILD("xStreamBufferCreate() fail.", error_type::OS_EFAULT);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("xStreamBufferCreate() fail.", error_type::OS_EFAULT);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
         }
         return 0;
     }
@@ -66,8 +66,8 @@ size_t stream_buffer::send_from_isr(const uint8_t *data, size_t size, uint64_t t
     {
         if(error)
         {
-            *error = OS_ERROR_BUILD("xStreamBufferCreate() fail.", error_type::OS_EFAULT);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("xStreamBufferCreate() fail.", error_type::OS_EFAULT);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
         }
         return 0;
     }
@@ -84,8 +84,8 @@ size_t stream_buffer::receive(uint8_t *data, size_t size, uint64_t time, error *
     {
         if(error)
         {
-            *error = OS_ERROR_BUILD("xStreamBufferCreate() fail.", error_type::OS_EFAULT);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("xStreamBufferCreate() fail.", error_type::OS_EFAULT);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
         }
         return 0;
     }
@@ -99,8 +99,8 @@ size_t stream_buffer::receive_from_isr(uint8_t *data, size_t size, uint64_t time
     {
         if(error)
         {
-            *error = OS_ERROR_BUILD("xStreamBufferCreate() fail.", error_type::OS_EFAULT);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("xStreamBufferCreate() fail.", error_type::OS_EFAULT);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
         }
         return 0;
     }

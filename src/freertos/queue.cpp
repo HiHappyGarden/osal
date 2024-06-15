@@ -35,8 +35,8 @@ queue::queue(size_t size, size_t message_size, error** error) OSAL_NOEXCEPT
 {
     if(q.handle == nullptr && error)
     {
-        *error = OS_ERROR_BUILD("xQueueCreate() fail.", error_type::OS_EFAULT);
-        OS_ERROR_PTR_SET_POSITION(*error);
+        *error = OSAL_ERROR_BUILD("xQueueCreate() fail.", error_type::OS_EFAULT);
+        OSAL_ERROR_PTR_SET_POSITION(*error);
     }
 }
 
@@ -55,8 +55,8 @@ osal::exit queue::fetch(void* msg, uint64_t time, error** error) OSAL_NOEXCEPT
     {
         if(error)
         {
-            *error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
         }
         return exit::KO;
     }
@@ -76,8 +76,8 @@ exit queue::fetch_from_isr(void* msg, uint64_t, error** error) OSAL_NOEXCEPT
     {
         if(error)
         {
-            *error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
         }
         return exit::KO;
     }
@@ -99,8 +99,8 @@ osal::exit queue::post(const uint8_t* msg, uint64_t time, error** error) OSAL_NO
     {
         if(error)
         {
-            *error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
         }
         return exit::KO;
     }
@@ -120,8 +120,8 @@ exit queue::post_from_isr(const uint8_t* msg, uint64_t, error** error) OSAL_NOEX
     {
         if(error)
         {
-            *error = OS_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
-            OS_ERROR_PTR_SET_POSITION(*error);
+            *error = OSAL_ERROR_BUILD("xEventGroupCreate() fail.", error_type::OS_EFAULT);
+            OSAL_ERROR_PTR_SET_POSITION(*error);
         }
         return exit::KO;
     }
