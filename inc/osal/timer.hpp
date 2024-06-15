@@ -51,9 +51,9 @@ public:
      *
      * @param us The time interval for the timer (in microseconds).
      * @param fn The handler function to be called when the timer expires.
-     * @param oneshot Flag indicating whether the timer is a one-shot timer (default: false).
+     * @param one_shot Flag indicating whether the timer is a one-shot timer (default: false).
      */
-    timer(uint64_t us, handler fn, bool oneshot = false) OSAL_NOEXCEPT;
+    timer(uint64_t us, handler fn, bool one_shot = false) OSAL_NOEXCEPT;
 
     /**
      * @brief Deleted copy constructor.
