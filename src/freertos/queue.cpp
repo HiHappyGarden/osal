@@ -26,7 +26,7 @@ namespace osal
 inline namespace v1
 {
 
-queue::queue(size_t size, size_t message_size, error** error) OS_NOEXCEPT
+queue::queue(size_t size, size_t message_size, error** error) OSAL_NOEXCEPT
     : q {
        size,
        0,
@@ -40,7 +40,7 @@ queue::queue(size_t size, size_t message_size, error** error) OS_NOEXCEPT
     }
 }
 
-queue::~queue() OS_NOEXCEPT
+queue::~queue() OSAL_NOEXCEPT
 {
     if(q.handle)
     {
@@ -49,7 +49,7 @@ queue::~queue() OS_NOEXCEPT
     }
 }
 
-osal::exit queue::fetch(void* msg, uint64_t time, error** error) OS_NOEXCEPT
+osal::exit queue::fetch(void* msg, uint64_t time, error** error) OSAL_NOEXCEPT
 {
     if(q.handle == nullptr)
     {
@@ -70,7 +70,7 @@ osal::exit queue::fetch(void* msg, uint64_t time, error** error) OS_NOEXCEPT
     return exit::KO;
 }
 
-exit queue::fetch_from_isr(void* msg, uint64_t, error** error) OS_NOEXCEPT
+exit queue::fetch_from_isr(void* msg, uint64_t, error** error) OSAL_NOEXCEPT
 {
     if(q.handle == nullptr)
     {
@@ -93,7 +93,7 @@ exit queue::fetch_from_isr(void* msg, uint64_t, error** error) OS_NOEXCEPT
     return exit::KO;
 }
 
-osal::exit queue::post(const uint8_t* msg, uint64_t time, error** error) OS_NOEXCEPT
+osal::exit queue::post(const uint8_t* msg, uint64_t time, error** error) OSAL_NOEXCEPT
 {
     if(q.handle == nullptr)
     {
@@ -114,7 +114,7 @@ osal::exit queue::post(const uint8_t* msg, uint64_t time, error** error) OS_NOEX
     return exit::KO;
 }
 
-exit queue::post_from_isr(const uint8_t* msg, uint64_t, error** error) OS_NOEXCEPT
+exit queue::post_from_isr(const uint8_t* msg, uint64_t, error** error) OSAL_NOEXCEPT
 {
     if(q.handle == nullptr)
     {
@@ -138,7 +138,7 @@ exit queue::post_from_isr(const uint8_t* msg, uint64_t, error** error) OS_NOEXCE
     return exit::KO;
 }
 
-size_t queue::size() const OS_NOEXCEPT
+size_t queue::size() const OSAL_NOEXCEPT
 {
     return q.size;
 }

@@ -55,13 +55,13 @@ public:
     /**
       * @brief Destructor for the array class.
       */
-    inline ~array() OS_NOEXCEPT { memset(&data, 0, sizeof(data)); }
+    inline ~array() OSAL_NOEXCEPT { memset(&data, 0, sizeof(data)); }
 
     /**
       * @brief Retrieves a pointer to the data in the array.
       * @return A pointer to the data.
       */
-    constexpr inline const T* get_data() const OS_NOEXCEPT
+    constexpr inline const T* get_data() const OSAL_NOEXCEPT
     {
         return &data[0];
     }
@@ -70,7 +70,7 @@ public:
       * @brief Retrieves a pointer to the data in the array.
       * @return A pointer to the data.
       */
-    constexpr inline T* get_data() OS_NOEXCEPT
+    constexpr inline T* get_data() OSAL_NOEXCEPT
     {
         return &data[0];
     }
@@ -80,7 +80,7 @@ public:
       * @brief Retrieves the size of the array.
       * @return The size of the array.
       */
-    [[nodiscard]] constexpr inline size_t get_size() const OS_NOEXCEPT
+    [[nodiscard]] constexpr inline size_t get_size() const OSAL_NOEXCEPT
     {
         return Size;
     }
@@ -89,7 +89,7 @@ public:
       * @brief Retrieves the length of the data in the array.
       * @return The length of the data in the array.
       */
-    [[nodiscard]] constexpr inline size_t get_length() const OS_NOEXCEPT
+    [[nodiscard]] constexpr inline size_t get_length() const OSAL_NOEXCEPT
     {
         return data_length;
     }
@@ -99,7 +99,7 @@ public:
       * @param other The element to add.
       * @return A reference to the modified array.
       */
-    constexpr array<T, Size> & operator<<(const T& other) OS_NOEXCEPT
+    constexpr array<T, Size> & operator<<(const T& other) OSAL_NOEXCEPT
     {
         if(data_length + 1 <= get_size())
         {
@@ -114,7 +114,7 @@ public:
       * @param other The element to add.
       * @return A reference to the modified array.
       */
-    constexpr inline array<T, Size>& operator<<(T&& other) OS_NOEXCEPT
+    constexpr inline array<T, Size>& operator<<(T&& other) OSAL_NOEXCEPT
     {
         return (*this) << other;
     }
@@ -124,7 +124,7 @@ public:
       * @param other The element to add.
       * @return A reference to the modified array.
       */
-    constexpr T& operator[](size_t idx) OS_NOEXCEPT
+    constexpr T& operator[](size_t idx) OSAL_NOEXCEPT
     {
         if(idx >= data_length)
         {
@@ -138,7 +138,7 @@ public:
       * @param other The element to add.
       * @return A reference to the modified array.
       */
-    constexpr const T& operator[](size_t idx) const OS_NOEXCEPT
+    constexpr const T& operator[](size_t idx) const OSAL_NOEXCEPT
     {
         if(idx >= data_length)
         {
@@ -147,11 +147,11 @@ public:
         return data[idx];
     }
 
-    constexpr inline auto begin() OS_NOEXCEPT { return data; }
-    constexpr inline auto end() OS_NOEXCEPT { return data + data_length; }
+    constexpr inline auto begin() OSAL_NOEXCEPT { return data; }
+    constexpr inline auto end() OSAL_NOEXCEPT { return data + data_length; }
 
-    constexpr inline auto begin() const OS_NOEXCEPT { return data; }
-    constexpr inline auto end() const OS_NOEXCEPT { return data + data_length; }
+    constexpr inline auto begin() const OSAL_NOEXCEPT { return data; }
+    constexpr inline auto end() const OSAL_NOEXCEPT { return data + data_length; }
 };
 
 /**
@@ -173,7 +173,7 @@ class array_init final
      * @param last The last element to add to the array.
      */
     template <typename TP>
-    constexpr void fill(const TP& last) OS_NOEXCEPT
+    constexpr void fill(const TP& last) OSAL_NOEXCEPT
     {
         memcpy(&data[data_length], &last, sizeof (last));
         data_length++;
@@ -188,7 +188,7 @@ class array_init final
             @param args The additional elements to add to the array.
          */
     template <typename TP, typename... ArgsP>
-    constexpr void fill(const TP& first, ArgsP... args) OS_NOEXCEPT
+    constexpr void fill(const TP& first, ArgsP... args) OSAL_NOEXCEPT
     {
         memcpy(&data[data_length], &first, sizeof (first));
         data_length++;
@@ -218,12 +218,12 @@ public:
       * @param first The first element to add to the array.
       * @param args The additional elements to add to the array.
       */
-    constexpr explicit array_init(const T& first, Args... args) OS_NOEXCEPT
+    constexpr explicit array_init(const T& first, Args... args) OSAL_NOEXCEPT
     {
         fill(first, args...);
     }
 
-    inline void set_default_value(const T& default_value) OS_NOEXCEPT
+    inline void set_default_value(const T& default_value) OSAL_NOEXCEPT
     {
         this->default_value = default_value;
     }
@@ -233,7 +233,7 @@ public:
       * @param first The first element to add to the array.
       * @param args The additional elements to add to the array.
       */
-    constexpr inline const T* get_data() const OS_NOEXCEPT
+    constexpr inline const T* get_data() const OSAL_NOEXCEPT
     {
         return &data[0];
     }
@@ -243,7 +243,7 @@ public:
       * @param first The first element to add to the array.
       * @param args The additional elements to add to the array.
       */
-    constexpr inline T* get_data() OS_NOEXCEPT
+    constexpr inline T* get_data() OSAL_NOEXCEPT
     {
         return &data[0];
     }
@@ -253,7 +253,7 @@ public:
       * @param first The first element to add to the array.
       * @param args The additional elements to add to the array.
       */
-    [[nodiscard]] constexpr inline size_t size() const OS_NOEXCEPT
+    [[nodiscard]] constexpr inline size_t size() const OSAL_NOEXCEPT
     {
         return sizeof(data) / sizeof (data[0]);
     }
@@ -263,7 +263,7 @@ public:
       * @param first The first element to add to the array.
       * @param args The additional elements to add to the array.
       */
-    [[nodiscard]] constexpr inline size_t length() const OS_NOEXCEPT
+    [[nodiscard]] constexpr inline size_t length() const OSAL_NOEXCEPT
     {
         return data_length;
     }
@@ -273,7 +273,7 @@ public:
       * @param first The first element to add to the array.
       * @param args The additional elements to add to the array.
       */
-    constexpr array_init<T, Args...>& operator<<(const T& other) OS_NOEXCEPT
+    constexpr array_init<T, Args...>& operator<<(const T& other) OSAL_NOEXCEPT
     {
         if(data_length + 1 <= size())
         {
@@ -288,7 +288,7 @@ public:
       * @param first The first element to add to the array.
       * @param args The additional elements to add to the array.
       */
-    constexpr array_init<T, Args...>& operator<<(T&& other) OS_NOEXCEPT
+    constexpr array_init<T, Args...>& operator<<(T&& other) OSAL_NOEXCEPT
     {
         return (*this) << other;
     }
@@ -298,7 +298,7 @@ public:
       * @param other The element to add.
       * @return A reference to the modified array.
       */
-    constexpr T& operator[](size_t idx) OS_NOEXCEPT
+    constexpr T& operator[](size_t idx) OSAL_NOEXCEPT
     {
         if(idx >= data_length)
         {
@@ -312,7 +312,7 @@ public:
       * @param other The element to add.
       * @return A reference to the modified array.
       */
-    constexpr const T& operator[](size_t idx) const OS_NOEXCEPT
+    constexpr const T& operator[](size_t idx) const OSAL_NOEXCEPT
     {
         if(idx >= data_length)
         {
@@ -321,11 +321,11 @@ public:
         return data[idx];
     }
 
-    constexpr inline auto begin() OS_NOEXCEPT { return data; }
-    constexpr inline auto end() OS_NOEXCEPT { return data + data_length; }
+    constexpr inline auto begin() OSAL_NOEXCEPT { return data; }
+    constexpr inline auto end() OSAL_NOEXCEPT { return data + data_length; }
 
-    constexpr inline auto begin() const OS_NOEXCEPT { return data; }
-    constexpr inline auto end() const OS_NOEXCEPT { return data + data_length; }
+    constexpr inline auto begin() const OSAL_NOEXCEPT { return data; }
+    constexpr inline auto end() const OSAL_NOEXCEPT { return data + data_length; }
 };
 
 

@@ -28,7 +28,7 @@ namespace osal
     inline namespace v1
     {
 
-        extern void us_sleep(uint64_t us) OS_NOEXCEPT;
+        extern void us_sleep(uint64_t us) OSAL_NOEXCEPT;
 
         extern uint8_t log_level;
 
@@ -37,7 +37,7 @@ namespace osal
             bool busy = false;
         }
 
-        void sys_log(const char* tag, uint8_t type, const char* fmt, ...) OS_NOEXCEPT
+        void sys_log(const char* tag, uint8_t type, const char* fmt, ...) OSAL_NOEXCEPT
         {
             if(busy)
             {
@@ -75,35 +75,35 @@ namespace osal
                     if(log_level & FLAG_DEBUG)
                     {
                         enable_print = true;
-                        OS_LOG_PRINTF (OS_ANSI_COLOR_CYAN "%s.%03d %s - DEBUG: ", timestamp, milli_sec, tag);
+                        OSAL_LOG_PRINTF (OSAL_ANSI_COLOR_CYAN "%s.%03d %s - DEBUG: ", timestamp, milli_sec, tag);
                     }
                     break;
                 case FLAG_INFO:
                     if(log_level & FLAG_INFO)
                     {
                         enable_print = true;
-                        OS_LOG_PRINTF (OS_ANSI_COLOR_GREEN "%s.%03d %s - INFO : ", timestamp, milli_sec, tag);
+                        OSAL_LOG_PRINTF (OSAL_ANSI_COLOR_GREEN "%s.%03d %s - INFO : ", timestamp, milli_sec, tag);
                     }
                     break;
                 case FLAG_WARNING:
                     if(log_level & FLAG_WARNING)
                     {
                         enable_print = true;
-                        OS_LOG_PRINTF (OS_ANSI_COLOR_YELLOW "%s.%03d %s - WARN : ", timestamp, milli_sec, tag);
+                        OSAL_LOG_PRINTF (OSAL_ANSI_COLOR_YELLOW "%s.%03d %s - WARN : ", timestamp, milli_sec, tag);
                     }
                     break;
                 case FLAG_ERROR:
                     if(log_level & FLAG_ERROR)
                     {
                         enable_print = true;
-                        OS_LOG_PRINTF (OS_ANSI_COLOR_RED "%s.%03d %s - ERROR: ", timestamp, milli_sec, tag);
+                        OSAL_LOG_PRINTF (OSAL_ANSI_COLOR_RED "%s.%03d %s - ERROR: ", timestamp, milli_sec, tag);
                     }
                     break;
                 case FLAG_FATAL:
                     if(log_level & FLAG_FATAL)
                     {
                         enable_print = true;
-                        OS_LOG_PRINTF (OS_ANSI_COLOR_MAGENTA "%s.%03d %s - FATAL: ", timestamp, milli_sec, tag);
+                        OSAL_LOG_PRINTF (OSAL_ANSI_COLOR_MAGENTA "%s.%03d %s - FATAL: ", timestamp, milli_sec, tag);
                     }
                     break;
                 default:
@@ -117,7 +117,7 @@ namespace osal
             va_end (list);
             if(enable_print)
             {
-            	OS_LOG_PRINTF(OS_ANSI_COLOR_RESET OS_LOG_NEW_LINE);
+            	OSAL_LOG_PRINTF(OSAL_ANSI_COLOR_RESET OSAL_LOG_NEW_LINE);
                 fflush (stdout);
             }
             busy = false;

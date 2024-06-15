@@ -38,13 +38,13 @@ void* thread_runtime(void * arg)
 
     //wait
     sem->wait(10'000);
-    OS_LOG_DEBUG(APP_TAG, "Entered...");
+    OSAL_LOG_DEBUG(APP_TAG, "Entered...");
 
     //critical section
     for(uint32_t i = 0; i < 0xFFF; i++);
 
     //signal
-    OS_LOG_DEBUG(APP_TAG, "Just Exiting...");
+    OSAL_LOG_DEBUG(APP_TAG, "Just Exiting...");
     sem->signal();
 
     SUCCEED();
@@ -63,7 +63,7 @@ TEST(sem_test, two_thread_sync)
     sem = new os::semaphore(2);
     if(sem == nullptr)
     {
-        OS_LOG_ERROR(APP_TAG, "mutex init failed");
+        OSAL_LOG_ERROR(APP_TAG, "mutex init failed");
         FAIL();
     }
 

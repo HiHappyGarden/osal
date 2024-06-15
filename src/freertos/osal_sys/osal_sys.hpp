@@ -46,7 +46,7 @@ namespace osal
 inline namespace v1
 {
 
-uint64_t tmo_to_ticks(uint64_t ms) OS_NOEXCEPT;
+uint64_t tmo_to_ticks(uint64_t ms) OSAL_NOEXCEPT;
 
 class timer;
 

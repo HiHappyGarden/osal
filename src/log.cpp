@@ -24,12 +24,12 @@ inline namespace v1
 {
     uint8_t log_level = FLAG_STATE_ON | LEVEL_DEBUG;
 
-    void set_level_log(uint8_t t) OS_NOEXCEPT
+    void set_level_log(uint8_t t) OSAL_NOEXCEPT
     {
         log_level = (log_level &  FLAG_STATE_ON) | (t & LEVEL_MASK);
     }
 
-    void set_enable_log(bool t) OS_NOEXCEPT
+    void set_enable_log(bool t) OSAL_NOEXCEPT
     {
         if(t)
         {
@@ -41,12 +41,12 @@ inline namespace v1
         }
     }
 
-    bool get_enable_log() OS_NOEXCEPT
+    bool get_enable_log() OSAL_NOEXCEPT
     {
         return (log_level & FLAG_STATE_ON) > 0;
     }
 
-    bool is_enabled_log(uint8_t type) OS_NOEXCEPT
+    bool is_enabled_log(uint8_t type) OSAL_NOEXCEPT
     {
         return (get_level_log(type) >= log_level) && (type & FLAG_STATE_ON);
     }

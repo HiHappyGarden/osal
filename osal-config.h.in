@@ -17,15 +17,15 @@
  *
  ***************************************************************************/
 
-#ifndef OS_CONFIG_H
-#define OS_CONFIG_H
+#ifndef OSAL_CONFIG_H
+#define OSAL_CONFIG_H
 
-#define OS_NAME "@PROJECT_NAME@"
-#define OS_VER "@PROJECT_VERSION@"
-#define OS_VER_MAJOR (@PROJECT_VERSION_MAJOR@)
-#define OS_VER_MINOR (@PROJECT_VERSION_MINOR@)
-#define OS_VER_PATCH (@PROJECT_VERSION_PATCH@)
-#define OS_LOG_NEW_LINE "@LOG_NEW_LINE@"
-#define OS_MEM_LAYER (@MEM_LAYER@)
+#define OSAL_NAME "@PROJECT_NAME@"
+#define OSAL_VER "@PROJECT_VERSION@"
+#define OSAL_VER_MAJOR (@PROJECT_VERSION_MAJOR@)
+#define OSAL_VER_MINOR (@PROJECT_VERSION_MINOR@)
+#define OSAL_VER_PATCH (@PROJECT_VERSION_PATCH@)
+#define OSAL_LOG_NEW_LINE "@LOG_NEW_LINE@"
+#define OSAL_MEM_LAYER (@MEM_LAYER@)
 
 #endif // OS_CONFIG_H

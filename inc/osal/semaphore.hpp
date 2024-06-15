@@ -44,7 +44,7 @@ public:
      *
      * @param count The initial count for the semaphore.
      */
-    explicit semaphore(size_t count, error** error = nullptr) OS_NOEXCEPT;
+    explicit semaphore(size_t count, error** error = nullptr) OSAL_NOEXCEPT;
 
     /**
      * @brief Deleted copy constructor.
@@ -69,7 +69,7 @@ public:
     /**
      * @brief Virtual destructor.
      */
-    ~semaphore() OS_NOEXCEPT;
+    ~semaphore() OSAL_NOEXCEPT;
 
     /**
      * @brief Waits for the semaphore to become available.
@@ -80,7 +80,7 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return OK if the semaphore became available, KO if the wait timed out or encountered an error.
      */
-    osal::exit wait(uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    osal::exit wait(uint64_t time, error** error = nullptr) OSAL_NOEXCEPT;
 
     /**
      * @brief Waits for the semaphore to become available from an ISR.
@@ -92,14 +92,14 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return OK if the semaphore became available, KO if the wait timed out or encountered an error.
      */
-    osal::exit wait_from_isr(uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    osal::exit wait_from_isr(uint64_t time, error** error = nullptr) OSAL_NOEXCEPT;
 
     /**
      * @brief Signals the semaphore.
      *
      * This function increments the count of the semaphore, allowing waiting threads to proceed.
      */
-    void signal() OS_NOEXCEPT;
+    void signal() OSAL_NOEXCEPT;
 
     /**
      * @brief Signals the semaphore from an ISR.
@@ -107,7 +107,7 @@ public:
      * This function is an ISR (Interrupt Service Routine) version of the signal() function.
      * It has the same behavior as signal(), but it is meant to be called from an ISR context.
      */
-    void signal_from_isr() OS_NOEXCEPT;
+    void signal_from_isr() OSAL_NOEXCEPT;
 
 private:
     semaphore_data sem{}; ///< Internal data for the semaphore.

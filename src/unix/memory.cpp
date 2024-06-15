@@ -56,7 +56,7 @@ void free(void* ptr)
 }
 }
 
-#ifdef OS_MEM_LAYER
+#ifdef OSAL_MEM_LAYER
 void* operator new(size_t size)
 {
     return osal::malloc(size);

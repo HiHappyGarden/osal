@@ -30,12 +30,12 @@
 #endif
 
 #ifdef __cpp_exceptions
-    #ifndef OS_NOEXCEPT
-        #define OS_NOEXCEPT noexcept
+    #ifndef OSAL_NOEXCEPT
+        #define OSAL_NOEXCEPT noexcept
     #endif
 #else
-    #ifndef OS_NOEXCEPT
-        #define OS_NOEXCEPT
+    #ifndef OSAL_NOEXCEPT
+        #define OSAL_NOEXCEPT
     #endif
 #endif
 

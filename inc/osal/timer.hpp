@@ -53,7 +53,7 @@ public:
      * @param fn The handler function to be called when the timer expires.
      * @param oneshot Flag indicating whether the timer is a one-shot timer (default: false).
      */
-    timer(uint64_t us, handler fn, bool oneshot = false) OS_NOEXCEPT;
+    timer(uint64_t us, handler fn, bool oneshot = false) OSAL_NOEXCEPT;
 
     /**
      * @brief Deleted copy constructor.
@@ -78,7 +78,7 @@ public:
     /**
      * @brief Destructor.
      */
-    ~timer() OS_NOEXCEPT;
+    ~timer() OSAL_NOEXCEPT;
 
     /**
      * @brief Creates the timer.
@@ -87,26 +87,26 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return `true` if the timer was created successfully, `false` otherwise.
      */
-    osal::exit create(void* arg = nullptr, error** error = nullptr) OS_NOEXCEPT;
+    osal::exit create(void* arg = nullptr, error** error = nullptr) OSAL_NOEXCEPT;
 
     /**
      * @brief Sets the time interval for the timer.
      *
      * @param us The time interval for the timer (in microseconds).
      */
-    void set(uint64_t us) OS_NOEXCEPT;
+    void set(uint64_t us) OSAL_NOEXCEPT;
 
     /**
      * @brief Sets the time interval for the timer from an ISR.
      *
      * @param us The time interval for the timer (in microseconds).
      */
-    void set_from_isr(uint64_t us) OS_NOEXCEPT;
+    void set_from_isr(uint64_t us) OSAL_NOEXCEPT;
 
     /**
      * @brief Starts the timer.
      */
-    void start() const OS_NOEXCEPT;
+    void start() const OSAL_NOEXCEPT;
 
     /**
      * @brief Starts the timer from an ISR.
@@ -114,12 +114,12 @@ public:
      * This function is an ISR (Interrupt Service Routine) version of the start() function.
      * It has the same behavior as start(), but it is meant to be called from an ISR context.
      */
-    void start_from_isr() const OS_NOEXCEPT;
+    void start_from_isr() const OSAL_NOEXCEPT;
 
     /**
      * @brief Stops the timer.
      */
-    void stop() const OS_NOEXCEPT;
+    void stop() const OSAL_NOEXCEPT;
 
     /**
      * @brief Stops the timer from an ISR.
@@ -127,9 +127,9 @@ public:
      * This function is an ISR (Interrupt Service Routine) version of the stop() function.
      * It has the same behavior as stop(), but it is meant to be called from an ISR context.
      */
-    void stop_from_isr() const OS_NOEXCEPT;
+    void stop_from_isr() const OSAL_NOEXCEPT;
 
-    bool is_active() const OS_NOEXCEPT;
+    bool is_active() const OSAL_NOEXCEPT;
 
 private:
     uint64_t us;    ///< The time interval for the timer (in microseconds).

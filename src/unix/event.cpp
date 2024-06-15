@@ -24,7 +24,7 @@ namespace osal
 inline namespace v1
 {
 
-event::event(error**) OS_NOEXCEPT
+event::event(error**) OSAL_NOEXCEPT
 {
     pthread_mutexattr_t mattr{0};
     pthread_condattr_t cattr{0};
@@ -38,13 +38,13 @@ event::event(error**) OS_NOEXCEPT
     e.flags = 0;
 }
 
-event::~event() OS_NOEXCEPT
+event::~event() OSAL_NOEXCEPT
 {
     pthread_cond_destroy (&e.cond);
     pthread_mutex_destroy (&e.mutex);
 }
 
-osal::exit event::wait(uint32_t mask, uint32_t& value, uint64_t time, error** _error) OS_NOEXCEPT
+osal::exit event::wait(uint32_t mask, uint32_t& value, uint64_t time, error** _error) OSAL_NOEXCEPT
 {
     struct timespec ts{0};
     uint8_t error     = 0;
@@ -146,7 +146,7 @@ inline void event::set_from_isr(uint32_t value)
     return set(value);
 }
 
-uint32_t event::get() OS_NOEXCEPT
+uint32_t event::get() OSAL_NOEXCEPT
 {
     uint32_t ret = 0;
     pthread_mutex_lock (&e.mutex);
@@ -156,7 +156,7 @@ uint32_t event::get() OS_NOEXCEPT
     return ret;
 }
 
-inline uint32_t event::get_from_isr() OS_NOEXCEPT
+inline uint32_t event::get_from_isr() OSAL_NOEXCEPT
 {
     return get();
 }

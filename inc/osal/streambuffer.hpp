@@ -46,7 +46,7 @@ public:
      * @param trigger_size The minimum number of bytes required to trigger sending or receiving.
      * @param _error Optional pointer to an error object to be populated in case of failure.
      */
-    stream_buffer(size_t size, size_t trigger_size, error** _error = nullptr) OS_NOEXCEPT;
+    stream_buffer(size_t size, size_t trigger_size, error** _error = nullptr) OSAL_NOEXCEPT;
 
     /**
      * @brief Deleted copy constructor.
@@ -71,7 +71,7 @@ public:
     /**
      * @brief Virtual destructor.
      */
-    ~stream_buffer() OS_NOEXCEPT;
+    ~stream_buffer() OSAL_NOEXCEPT;
 
     /**
      * @brief Sends data to the stream buffer.
@@ -85,7 +85,7 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return The number of bytes sent.
      */
-    size_t send(const uint8_t* data, size_t size, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    size_t send(const uint8_t* data, size_t size, uint64_t time, error** error = nullptr) OSAL_NOEXCEPT;
 
     /**
      * @brief Sends data to the stream buffer from an ISR.
@@ -99,7 +99,7 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return The number of bytes sent.
      */
-    size_t send_from_isr(const uint8_t* data, size_t size, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    size_t send_from_isr(const uint8_t* data, size_t size, uint64_t time, error** error = nullptr) OSAL_NOEXCEPT;
 
     /**
      * @brief Receives data from the stream buffer.
@@ -113,7 +113,7 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return The number of bytes received.
      */
-    size_t receive(uint8_t* data, size_t size, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    size_t receive(uint8_t* data, size_t size, uint64_t time, error** error = nullptr) OSAL_NOEXCEPT;
 
     /**
      * @brief Receives data from the stream buffer from an ISR.
@@ -127,35 +127,35 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return The number of bytes received.
      */
-    size_t receive_from_isr(uint8_t* data, size_t size, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    size_t receive_from_isr(uint8_t* data, size_t size, uint64_t time, error** error = nullptr) OSAL_NOEXCEPT;
 
     /**
      * @brief Resets the stream buffer.
      *
      * This function resets the stream buffer, discarding all the data it contains.
      */
-    void reset() OS_NOEXCEPT;
+    void reset() OSAL_NOEXCEPT;
 
     /**
      * @brief Checks if the stream buffer is empty.
      *
      * @return `true` if the stream buffer is empty, `false` otherwise.
      */
-    bool is_empty() const OS_NOEXCEPT;
+    bool is_empty() const OSAL_NOEXCEPT;
 
     /**
      * @brief Checks if the stream buffer is full.
      *
      * @return `true` if the stream buffer is full, `false` otherwise.
      */
-    bool is_full() const OS_NOEXCEPT;
+    bool is_full() const OSAL_NOEXCEPT;
 
     /**
      * @brief Returns the size of the stream buffer.
      *
      * @return The size of the stream buffer in bytes.
      */
-    size_t size() const OS_NOEXCEPT;
+    size_t size() const OSAL_NOEXCEPT;
 
     /**
      * @brief Returns the number of bytes available in the stream buffer.

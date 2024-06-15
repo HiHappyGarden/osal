@@ -59,7 +59,7 @@ public:
      *
      * @param str The input string.
      */
-    constexpr string(const char(&str)[Size]) OS_NOEXCEPT //keep not explicit
+    constexpr string(const char(&str)[Size]) OSAL_NOEXCEPT //keep not explicit
             : string(str, Size - 1)
     {}
 
@@ -69,7 +69,7 @@ public:
      * @param str The input string.
      */
     template <size_t SizeB>
-    constexpr string(const char(&str)[SizeB]) OS_NOEXCEPT //keep not explicit
+    constexpr string(const char(&str)[SizeB]) OSAL_NOEXCEPT //keep not explicit
             : string(str, SizeB - 1)
     {}
 
@@ -79,7 +79,7 @@ public:
  * @param str The input string.
  */
     template <size_t SizeB>
-    constexpr string(char(&str)[SizeB]) OS_NOEXCEPT //keep not explicit
+    constexpr string(char(&str)[SizeB]) OSAL_NOEXCEPT //keep not explicit
             : string(str, SizeB - 1)
     {}
 
@@ -88,7 +88,7 @@ public:
  *
  * @param str The input string.
  */
-    constexpr string(const string<Size>& str) OS_NOEXCEPT //keep not explicit
+    constexpr string(const string<Size>& str) OSAL_NOEXCEPT //keep not explicit
             : string(str.c_str(), str.length())
     {}
 
@@ -98,7 +98,7 @@ public:
      * @param str The input string.
      */
     template <size_t SizeB>
-    constexpr string(string<SizeB>& str) OS_NOEXCEPT //keep not explicit
+    constexpr string(string<SizeB>& str) OSAL_NOEXCEPT //keep not explicit
             : string(str.c_str(), str.length())
     {}
 
@@ -108,7 +108,7 @@ public:
  * @param str The input string.
  */
     template <size_t SizeB>
-    constexpr string(const string<SizeB>& str) OS_NOEXCEPT //keep not explicit
+    constexpr string(const string<SizeB>& str) OSAL_NOEXCEPT //keep not explicit
             : string(str.c_str(), str.length())
     {}
 
@@ -118,7 +118,7 @@ public:
      * @param str The input string.
      * @param size The size of the input string.
      */
-    constexpr string(const char* str, size_t size) OS_NOEXCEPT
+    constexpr string(const char* str, size_t size) OSAL_NOEXCEPT
         : data_length(size)
     {
         if(str == nullptr)
@@ -131,14 +131,14 @@ public:
     /**
      * @brief Destructor.
      */
-    inline ~string() OS_NOEXCEPT { memset(&data, '\0', sizeof(data)); }
+    inline ~string() OSAL_NOEXCEPT { memset(&data, '\0', sizeof(data)); }
 
     /**
      * @brief Returns the maximum size of the string.
      *
      * @return The maximum size of the string, excluding the null terminator.
      */
-    constexpr inline size_t size() const OS_NOEXCEPT
+    constexpr inline size_t size() const OSAL_NOEXCEPT
     {
         return sizeof(data) - 1;
     }
@@ -148,7 +148,7 @@ public:
      *
      * @return The current length of the string.
      */
-    constexpr inline size_t length() const OS_NOEXCEPT
+    constexpr inline size_t length() const OSAL_NOEXCEPT
     {
     	data_length = strlen(data);
         return data_length;
@@ -159,7 +159,7 @@ public:
      *
      * @return A pointer to the C-style string representation of the string.
      */
-    constexpr inline const char* c_str() const OS_NOEXCEPT
+    constexpr inline const char* c_str() const OSAL_NOEXCEPT
     {
         return data;
     }
@@ -169,22 +169,22 @@ public:
      *
      * @return A pointer to the C-style string representation of the string.
      */
-    constexpr inline char* c_str() OS_NOEXCEPT
+    constexpr inline char* c_str() OSAL_NOEXCEPT
     {
         return data;
     }
 
-    constexpr inline void clear() OS_NOEXCEPT
+    constexpr inline void clear() OSAL_NOEXCEPT
     {
         memset(&data, '\0', sizeof(data));
         data_length = 0;
     }
 
-    constexpr inline auto begin() OS_NOEXCEPT { return data; }
-    constexpr inline auto end() OS_NOEXCEPT { return data + data_length; }
+    constexpr inline auto begin() OSAL_NOEXCEPT { return data; }
+    constexpr inline auto end() OSAL_NOEXCEPT { return data + data_length; }
 
-    constexpr inline auto begin() const OS_NOEXCEPT { return data; }
-    constexpr inline auto end() const OS_NOEXCEPT { return data + data_length; }
+    constexpr inline auto begin() const OSAL_NOEXCEPT { return data; }
+    constexpr inline auto end() const OSAL_NOEXCEPT { return data + data_length; }
 
     /**
      * @brief Concatenates the current string with a char.
@@ -195,7 +195,7 @@ public:
      * @param c The character to concatenate.
      * @return A reference to the modified string.
      */
-    constexpr string<Size>&operator+(char c) OS_NOEXCEPT
+    constexpr string<Size>&operator+(char c) OSAL_NOEXCEPT
     {
         string<Size> ret = *this;
         data_length = strlen(data);
@@ -217,7 +217,7 @@ public:
      * @return A reference to the modified string.
      */
     template <size_t SizeB>
-    constexpr string<Size>&operator+(const char(&b)[SizeB]) OS_NOEXCEPT
+    constexpr string<Size>&operator+(const char(&b)[SizeB]) OSAL_NOEXCEPT
     {
         string<Size> ret = *this;
         size_t size_b = strnlen(b, SizeB);
@@ -245,7 +245,7 @@ public:
      * @return A new string containing the concatenated result.
      */
     template <size_t SizeB>
-    constexpr inline string<Size> operator+(char(&&b)[SizeB]) OS_NOEXCEPT
+    constexpr inline string<Size> operator+(char(&&b)[SizeB]) OSAL_NOEXCEPT
     {
         return (string<Size>{*this} + b);
     }
@@ -260,7 +260,7 @@ public:
      * @return A new string containing the concatenated result.
      */
     template <size_t SizeB>
-    constexpr inline string<Size> operator+(const string<SizeB>& b) OS_NOEXCEPT
+    constexpr inline string<Size> operator+(const string<SizeB>& b) OSAL_NOEXCEPT
     {
         return (string<Size>{*this} + b.c_str());
     }
@@ -275,7 +275,7 @@ public:
      * @return A new string containing the concatenated result.
      */
     template <size_t SizeB>
-    constexpr inline string<Size> operator+(const string<SizeB>&& b) OS_NOEXCEPT
+    constexpr inline string<Size> operator+(const string<SizeB>&& b) OSAL_NOEXCEPT
     {
         return (string<Size>{*this} + b.c_str());
     }
@@ -287,7 +287,7 @@ public:
      * @param b The C-style string to concatenate.
      * @return A reference to the modified string.
      */
-    constexpr string<Size>& operator+(const char* b) OS_NOEXCEPT
+    constexpr string<Size>& operator+(const char* b) OSAL_NOEXCEPT
     {
         size_t size_b = strlen(b);
         data_length = strlen(data);
@@ -314,7 +314,7 @@ public:
      * @param b The C-style string to concatenate.
      * @return A reference to the modified string.
      */
-    constexpr inline string<Size>& operator+=(const char* b) OS_NOEXCEPT
+    constexpr inline string<Size>& operator+=(const char* b) OSAL_NOEXCEPT
     {
         return ((*this) + b);
     }
@@ -328,7 +328,7 @@ public:
      * @param b The character array to append.
      * @return A reference to the modified string.
      */
-    constexpr inline string<Size>& operator+=(char c) OS_NOEXCEPT
+    constexpr inline string<Size>& operator+=(char c) OSAL_NOEXCEPT
     {
     	data_length = strlen(data);
         if(data_length + 1 <= size())
@@ -349,7 +349,7 @@ public:
      * @return A reference to the modified string.
      */
     template <size_t SizeB>
-    constexpr inline string<Size>& operator+=(char(&&b)[SizeB]) OS_NOEXCEPT
+    constexpr inline string<Size>& operator+=(char(&&b)[SizeB]) OSAL_NOEXCEPT
     {
         return ((*this) + b);
     }
@@ -364,7 +364,7 @@ public:
      * @return A reference to the modified string.
      */
     template <size_t SizeB>
-    constexpr inline string<Size>& operator+=(const char(&b)[SizeB]) OS_NOEXCEPT
+    constexpr inline string<Size>& operator+=(const char(&b)[SizeB]) OSAL_NOEXCEPT
     {
         return ((*this) + b);
     }
@@ -379,7 +379,7 @@ public:
      * @return A reference to the modified string.
      */
     template <size_t SizeB>
-    constexpr inline string<Size>& operator+=(const string<SizeB>& b) OS_NOEXCEPT
+    constexpr inline string<Size>& operator+=(const string<SizeB>& b) OSAL_NOEXCEPT
     {
         return ((*this) + b.c_str());
     }
@@ -394,7 +394,7 @@ public:
      * @return A reference to the modified string.
      */
     template <size_t SizeB>
-    constexpr inline string<Size>& operator+=(const string<SizeB>&& b) OS_NOEXCEPT
+    constexpr inline string<Size>& operator+=(const string<SizeB>&& b) OSAL_NOEXCEPT
     {
         return ((*this) + b.c_str());
     }
@@ -410,7 +410,7 @@ public:
      * @return A reference to the modified string.
      */
     template <size_t SizeB>
-    constexpr inline bool operator==(const string<SizeB>& b) OS_NOEXCEPT
+    constexpr inline bool operator==(const string<SizeB>& b) OSAL_NOEXCEPT
     {
         return strncmp(data, b.c_str(), size()) == 0;
     }
@@ -425,7 +425,7 @@ public:
      * @return A reference to the modified string.
      */
     template <size_t SizeB>
-    constexpr inline bool operator==(string<SizeB>&& b) OS_NOEXCEPT
+    constexpr inline bool operator==(string<SizeB>&& b) OSAL_NOEXCEPT
     {
         return strncmp(data, b.c_str(), size()) == 0;
     }
@@ -440,7 +440,7 @@ public:
      * @return A reference to the modified string.
      */
     template <size_t SizeB>
-    constexpr inline bool operator==(char(&&b)[SizeB]) OS_NOEXCEPT
+    constexpr inline bool operator==(char(&&b)[SizeB]) OSAL_NOEXCEPT
     {
         return strncmp(data, b, size()) == 0;
     }
@@ -454,7 +454,7 @@ public:
      * @return true if the strings are not equal, false otherwise.
      */
     template <size_t SizeB>
-    constexpr inline bool operator==(const char(&b)[SizeB]) OS_NOEXCEPT
+    constexpr inline bool operator==(const char(&b)[SizeB]) OSAL_NOEXCEPT
     {
         return strncmp(data, b, size()) == 0;
     }
@@ -467,7 +467,7 @@ public:
      * @param b The C-style string to compare with.
      * @return true if the strings are equal, false otherwise.
      */
-    constexpr inline bool operator==(const char* b) OS_NOEXCEPT
+    constexpr inline bool operator==(const char* b) OSAL_NOEXCEPT
     {
         return strncmp(data, b, size()) == 0;
     }
@@ -481,7 +481,7 @@ public:
      * @return true if the strings are not equal, false otherwise.
      */
     template <size_t SizeB>
-    constexpr inline bool operator!=(const string<SizeB>& b) OS_NOEXCEPT
+    constexpr inline bool operator!=(const string<SizeB>& b) OSAL_NOEXCEPT
     {
         return strncmp(data, b.c_str(), size()) != 0;
     }
@@ -495,7 +495,7 @@ public:
      * @return true if the strings are not equal, false otherwise.
      */
     template <size_t SizeB>
-    constexpr inline bool operator!=(string<SizeB>&& b) OS_NOEXCEPT
+    constexpr inline bool operator!=(string<SizeB>&& b) OSAL_NOEXCEPT
     {
         return strncmp(data, b.c_str(), size()) != 0;
     }
@@ -509,7 +509,7 @@ public:
      * @return true if the strings are not equal, false otherwise.
      */
     template <size_t SizeB>
-    constexpr inline bool operator!=(const char(&b)[SizeB]) OS_NOEXCEPT
+    constexpr inline bool operator!=(const char(&b)[SizeB]) OSAL_NOEXCEPT
     {
         return strncmp(data, b, size()) != 0;
     }
@@ -523,7 +523,7 @@ public:
      * @return true if the strings are not equal, false otherwise.
      */
     template <size_t SizeB>
-    constexpr inline bool operator!=(char(&&b)[SizeB]) OS_NOEXCEPT
+    constexpr inline bool operator!=(char(&&b)[SizeB]) OSAL_NOEXCEPT
     {
         return strncmp(data, b, size()) != 0;
     }
@@ -536,7 +536,7 @@ public:
      * @param b The C-style string to compare with.
      * @return true if the strings are not equal, false otherwise.
      */
-    constexpr inline bool operator!=(const char* b) OS_NOEXCEPT
+    constexpr inline bool operator!=(const char* b) OSAL_NOEXCEPT
     {
         return strncmp(data, b, size()) != 0;
     }
@@ -550,7 +550,7 @@ public:
      * @param idx The index of the character to access.
      * @return A pointer to the character at the specified index, or nullptr if the index is out of bounds.
      */
-    constexpr char& operator[](size_t idx) OS_NOEXCEPT
+    constexpr char& operator[](size_t idx) OSAL_NOEXCEPT
     {
     	data_length = strlen(data);
         if(idx >= data_length)
@@ -569,7 +569,7 @@ public:
      * @param idx The index of the character to access.
      * @return A pointer to the character at the specified index, or nullptr if the index is out of bounds.
      */
-    constexpr const char& operator[](size_t idx) const OS_NOEXCEPT
+    constexpr const char& operator[](size_t idx) const OSAL_NOEXCEPT
     {
     	data_length = strlen(data);
         if(idx >= data_length)
@@ -588,7 +588,7 @@ public:
      * @param other The C-style string to assign.
      * @return A reference to the modified string.
      */
-    constexpr string<Size>& operator=(const char* other) OS_NOEXCEPT
+    constexpr string<Size>& operator=(const char* other) OSAL_NOEXCEPT
     {
         if(other == nullptr)
         {
@@ -600,12 +600,12 @@ public:
         return *this;
     }
 
-    inline char* find(char to_find[], size_t offset = 0) const OS_NOEXCEPT
+    inline char* find(char to_find[], size_t offset = 0) const OSAL_NOEXCEPT
     {
         return find(to_find, offset);
     }
 
-    inline char* find(const char to_find[], size_t offset = 0) const OS_NOEXCEPT
+    inline char* find(const char to_find[], size_t offset = 0) const OSAL_NOEXCEPT
     {
         if(to_find == nullptr)
         {
@@ -614,7 +614,7 @@ public:
         return ::strstr(const_cast<char *>(&data[offset]), to_find);
     }
 
-    inline bool start_with(const char to_start[], size_t offset = 0) const OS_NOEXCEPT
+    inline bool start_with(const char to_start[], size_t offset = 0) const OSAL_NOEXCEPT
     {
         if(to_start == nullptr)
         {
@@ -623,7 +623,7 @@ public:
         return strncmp(&data[offset], to_start, strlen(to_start)) == 0;
     }
 
-    string<Size>& ltrim() OS_NOEXCEPT
+    string<Size>& ltrim() OSAL_NOEXCEPT
     {
     	data_length = strlen(data);
         size_t count = 0;
@@ -643,7 +643,7 @@ public:
         return *this;
     }
 
-    string<Size>& rtrim() OS_NOEXCEPT
+    string<Size>& rtrim() OSAL_NOEXCEPT
     {
     	data_length = strlen(data);
         size_t count = 0;
@@ -662,7 +662,7 @@ public:
         return *this;
     }
 
-    string<Size> substr(size_t idx_start, size_t offset = SIZE_MAX) const OS_NOEXCEPT
+    string<Size> substr(size_t idx_start, size_t offset = SIZE_MAX) const OSAL_NOEXCEPT
     {
     	data_length = strlen(data);
     	if(idx_start >= data_length)
@@ -690,7 +690,7 @@ public:
     	return ret;
     }
 
-    char * replace(char const * const pattern,  char const * const replacement) const OS_NOEXCEPT
+    char * replace(char const * const pattern,  char const * const replacement) const OSAL_NOEXCEPT
     {
         if(pattern == nullptr || replacement == nullptr)
         {

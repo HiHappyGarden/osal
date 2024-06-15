@@ -29,7 +29,7 @@ inline namespace v1
 class event final
 {
 public:
-    explicit event(error** error = nullptr) OS_NOEXCEPT;
+    explicit event(error** error = nullptr) OSAL_NOEXCEPT;
 
     /**
      * @brief Deleted copy constructor.
@@ -54,7 +54,7 @@ public:
     /**
      * @brief Virtual destructor.
      */
-    ~event() OS_NOEXCEPT;
+    ~event() OSAL_NOEXCEPT;
 
     /**
      * @brief Waits for an event to be set.
@@ -67,7 +67,7 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return `OK` if the event was set, `KO` if a timeout occurred.
      */
-    osal::exit wait(uint32_t mask, uint32_t& value, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    osal::exit wait(uint32_t mask, uint32_t& value, uint64_t time, error** error = nullptr) OSAL_NOEXCEPT;
 
     /**
      * @brief Waits for an event to be set from an ISR.
@@ -81,7 +81,7 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return `true` if the event was set, `false` if a timeout occurred.
      */
-    osal::exit wait_from_isr(uint32_t mask, uint32_t& value, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    osal::exit wait_from_isr(uint32_t mask, uint32_t& value, uint64_t time, error** error = nullptr) OSAL_NOEXCEPT;
 
     /**
      * @brief Sets event bits.
@@ -90,7 +90,7 @@ public:
      *
      * @param value The event bits to set.
      */
-    void set(uint32_t value) OS_NOEXCEPT;
+    void set(uint32_t value) OSAL_NOEXCEPT;
 
     /**
      * @brief Sets event bits from an ISR.
@@ -100,7 +100,7 @@ public:
      *
      * @param value The event bits to set.
      */
-    void set_from_isr(uint32_t value) OS_NOEXCEPT;
+    void set_from_isr(uint32_t value) OSAL_NOEXCEPT;
 
     /**
      * @brief Gets the current event value.
@@ -109,7 +109,7 @@ public:
      *
      * @return The current event value.
      */
-    uint32_t get() OS_NOEXCEPT;
+    uint32_t get() OSAL_NOEXCEPT;
 
     /**
      * @brief Gets the current event value from an ISR.
@@ -119,7 +119,7 @@ public:
      *
      * @return The current event value.
      */
-    uint32_t get_from_isr() OS_NOEXCEPT;
+    uint32_t get_from_isr() OSAL_NOEXCEPT;
 
     /**
      * @brief Clears specific event bits.
@@ -128,7 +128,7 @@ public:
      *
      * @param value The event bits to clear.
      */
-    void clear(uint32_t value) OS_NOEXCEPT;
+    void clear(uint32_t value) OSAL_NOEXCEPT;
 
     /**
      * @brief Clears specific event bits from an ISR.
@@ -138,7 +138,7 @@ public:
      *
      * @param value The event bits to clear.
      */
-    void clear_from_isr(uint32_t value) OS_NOEXCEPT;
+    void clear_from_isr(uint32_t value) OSAL_NOEXCEPT;
 
 private:
     event_data e{};  ///< Internal data for the event.

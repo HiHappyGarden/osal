@@ -51,7 +51,7 @@ inline namespace v1
  * @return The offset of the file name within the path.
  */
 template <typename T, size_t S>
-inline constexpr size_t get_file_name_offset(const T (& str)[S], size_t i = S - 1) OS_NOEXCEPT
+inline constexpr size_t get_file_name_offset(const T (& str)[S], size_t i = S - 1) OSAL_NOEXCEPT
 {
     return (str[i] == '/' || str[i] == '\\') ? i + 1 : (i > 0 ? get_file_name_offset(str, i - 1) : 0);
 }
@@ -70,7 +70,7 @@ inline constexpr size_t get_file_name_offset(const T (& str)[S], size_t i = S - 
  * @return The size of the file name within the path.
  */
 template <typename T, size_t S>
-inline constexpr size_t get_file_name_size(const T (& str)[S], size_t i = S - 1) OS_NOEXCEPT
+inline constexpr size_t get_file_name_size(const T (& str)[S], size_t i = S - 1) OSAL_NOEXCEPT
 {
     return strlen(str) - get_file_name_offset(str);
 }
@@ -87,7 +87,7 @@ inline constexpr size_t get_file_name_size(const T (& str)[S], size_t i = S - 1)
      * @return A pointer to the file name within the path.
      */
 template <typename T, size_t S>
-inline constexpr const char* get_file_name(const T (& str)[S]) OS_NOEXCEPT
+inline constexpr const char* get_file_name(const T (& str)[S]) OSAL_NOEXCEPT
 {
     return str + get_file_name_offset(str);
 }
@@ -116,7 +116,7 @@ private:
     uint32_t line = 0;              ///< The line number where the error occurred.
     error::ptr old_error;           ///< Pointer to the previous error.
 
-    friend void printf_stack_error(const char* app_tag, const error &e, const char* fmt, ...) OS_NOEXCEPT;
+    friend void printf_stack_error(const char* app_tag, const error &e, const char* fmt, ...) OSAL_NOEXCEPT;
 
 public:
 
@@ -130,7 +130,7 @@ public:
      *
      * @param nullptr_t A null pointer to indicate no error.
      */
-    explicit error(nullptr_t) OS_NOEXCEPT {}
+    explicit error(nullptr_t) OSAL_NOEXCEPT {}
 
     /**
      * @brief Constructs an error object with the given message, code, file, function, and line number.
@@ -141,7 +141,7 @@ public:
      * @param func The function name where the error occurred.
      * @param line The line number where the error occurred.
      */
-    explicit error(const char* msg, uint8_t code = 0, const char* file = get_file_name(__FILE__), const char* func = "", uint32_t line = __LINE__) OS_NOEXCEPT;
+    explicit error(const char* msg, uint8_t code = 0, const char* file = get_file_name(__FILE__), const char* func = "", uint32_t line = __LINE__) OSAL_NOEXCEPT;
 
     /**
      * @brief Constructs an error object with the given message, error type, file, function, and line number.
@@ -152,7 +152,7 @@ public:
      * @param func The function name where the error occurred.
      * @param line The line number where the error occurred.
      */
-    explicit error(const char* msg, error_type code = error_type::OS_ENO, const char* file = get_file_name(__FILE__), const char* func = "", uint32_t line = __LINE__) OS_NOEXCEPT
+    explicit error(const char* msg, error_type code = error_type::OS_ENO, const char* file = get_file_name(__FILE__), const char* func = "", uint32_t line = __LINE__) OSAL_NOEXCEPT
         : error(msg, static_cast<uint8_t>(code), file, func, line) {}
 
     /**
@@ -165,7 +165,7 @@ public:
      * @param func The function name where the error occurred.
      * @param line The line number where the error occurred.
      */
-    error(error* old_error, const char* msg, uint8_t code = 0, const char* file = get_file_name(__FILE__), const char* func = "", uint32_t line = __LINE__) OS_NOEXCEPT;
+    error(error* old_error, const char* msg, uint8_t code = 0, const char* file = get_file_name(__FILE__), const char* func = "", uint32_t line = __LINE__) OSAL_NOEXCEPT;
 
     /**
      * @brief Constructs an error object with the given previous error, message, code, file, function, and line number.
@@ -177,7 +177,7 @@ public:
      * @param func The function name where the error occurred.
      * @param line The line number where the error occurred.
      */
-    error(error* old_error, const char* msg, error_type code = error_type::OS_ENO, const char* file = get_file_name(__FILE__), const char* func = "", uint32_t line = __LINE__) OS_NOEXCEPT
+    error(error* old_error, const char* msg, error_type code = error_type::OS_ENO, const char* file = get_file_name(__FILE__), const char* func = "", uint32_t line = __LINE__) OSAL_NOEXCEPT
     : error(old_error, msg, static_cast<uint8_t>(code), file, func, line)
     {
 
@@ -209,21 +209,21 @@ public:
     /**
      * @brief Destructor.
      */
-    virtual ~error() OS_NOEXCEPT;
+    virtual ~error() OSAL_NOEXCEPT;
 
     /**
      * @brief Adds the information from the old_error to the current error object.
      *
      * @param old_error The previous error object to be added.
      */
-    void add_error(error* old_error) OS_NOEXCEPT;
+    void add_error(error* old_error) OSAL_NOEXCEPT;
 
     /**
      * @brief Returns the error message.
      *
      * @return The error message.
      */
-    inline const char* get_msg() const OS_NOEXCEPT
+    inline const char* get_msg() const OSAL_NOEXCEPT
     {
         return msg;
     }
@@ -233,7 +233,7 @@ public:
      *
      * @return The error code.
      */
-    inline uint8_t get_code() const OS_NOEXCEPT
+    inline uint8_t get_code() const OSAL_NOEXCEPT
     {
         return code;
     }
@@ -243,7 +243,7 @@ public:
      *
      * @return The file name where the error occurred.
      */
-    inline const char* get_file() const OS_NOEXCEPT
+    inline const char* get_file() const OSAL_NOEXCEPT
     {
         return file;
     }
@@ -253,7 +253,7 @@ public:
      *
      * @return The function name where the error occurred.
      */
-    inline const char* get_func() const OS_NOEXCEPT
+    inline const char* get_func() const OSAL_NOEXCEPT
     {
         return func;
     }
@@ -263,7 +263,7 @@ public:
      *
      * @return The line number where the error occurred.
      */
-    inline uint32_t get_line() const OS_NOEXCEPT
+    inline uint32_t get_line() const OSAL_NOEXCEPT
     {
         return line;
     }
@@ -275,7 +275,7 @@ public:
      * @param func The function name where the error occurred.
      * @param line The line number where the error occurred.
      */
-    void set_position(const char* file = get_file_name(__FILE__), const char* func = "", uint32_t line = __LINE__) OS_NOEXCEPT;
+    void set_position(const char* file = get_file_name(__FILE__), const char* func = "", uint32_t line = __LINE__) OSAL_NOEXCEPT;
 };
 
 /**
@@ -293,7 +293,7 @@ public:
  * @param args The additional arguments for formatting the error message.
  */
 template<typename... Args>
-constexpr inline void printf_stack_error(const char* app_tag, const error* e, const char* fmt = nullptr, Args... args) OS_NOEXCEPT
+constexpr inline void printf_stack_error(const char* app_tag, const error* e, const char* fmt = nullptr, Args... args) OSAL_NOEXCEPT
 {
     printf_stack_error(app_tag, *e, fmt, args...);
 }

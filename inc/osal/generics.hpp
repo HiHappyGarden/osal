@@ -54,8 +54,8 @@ class value final
     trait_type type;
 
 public:
-    inline value() OS_NOEXCEPT : type(trait_type::_VOID_) {}
-    inline value(void* ptr, size_t ptr_size) OS_NOEXCEPT : ptr(ptr), ptr_size(ptr_size), type(trait_type::DOUBLE) {} //keep not explicit
+    inline value() OSAL_NOEXCEPT : type(trait_type::_VOID_) {}
+    inline value(void* ptr, size_t ptr_size) OSAL_NOEXCEPT : ptr(ptr), ptr_size(ptr_size), type(trait_type::DOUBLE) {} //keep not explicit
 
     template<typename T>
     constexpr value(T t) //keep not explicit
@@ -146,23 +146,23 @@ public:
         }
     }
 
-    [[nodiscard]] inline const trait_type& get_type() const OS_NOEXCEPT { return type; }
+    [[nodiscard]] inline const trait_type& get_type() const OSAL_NOEXCEPT { return type; }
 
-    [[nodiscard]] inline char get_char() const OS_NOEXCEPT { return value_char; }
-    [[nodiscard]] inline bool get_bool() const OS_NOEXCEPT { return value_bool != 0; }
-    [[nodiscard]] inline const char* get_str() const OS_NOEXCEPT { return value_str; }
-    [[nodiscard]] inline int8_t get_int8() const OS_NOEXCEPT { return value_int8; }
-    [[nodiscard]] inline uint8_t get_uint8() const OS_NOEXCEPT { return value_uint8; }
-    [[nodiscard]] inline int16_t get_int16() const OS_NOEXCEPT { return value_int16; }
-    [[nodiscard]] inline uint16_t get_uint16() const OS_NOEXCEPT { return value_uint16; }
-    [[nodiscard]] inline int32_t get_int32() const OS_NOEXCEPT { return value_int32; }
-    [[nodiscard]] inline uint32_t get_uint32() const OS_NOEXCEPT { return value_uint32; }
-    [[nodiscard]] inline int64_t get_int64() const OS_NOEXCEPT { return value_int64; }
-    [[nodiscard]] inline uint64_t get_uint64() const OS_NOEXCEPT { return value_uint64; }
-    [[nodiscard]] inline float get_float() const OS_NOEXCEPT { return value_float; }
-    [[nodiscard]] inline double get_double() const OS_NOEXCEPT { return value_double; }
-    [[nodiscard]] inline osal::exit get_exit() const OS_NOEXCEPT { return value_exit; }
-    [[nodiscard]] inline const void*  get_ptr(size_t* size) const OS_NOEXCEPT { *size = ptr_size; return ptr; }
+    [[nodiscard]] inline char get_char() const OSAL_NOEXCEPT { return value_char; }
+    [[nodiscard]] inline bool get_bool() const OSAL_NOEXCEPT { return value_bool != 0; }
+    [[nodiscard]] inline const char* get_str() const OSAL_NOEXCEPT { return value_str; }
+    [[nodiscard]] inline int8_t get_int8() const OSAL_NOEXCEPT { return value_int8; }
+    [[nodiscard]] inline uint8_t get_uint8() const OSAL_NOEXCEPT { return value_uint8; }
+    [[nodiscard]] inline int16_t get_int16() const OSAL_NOEXCEPT { return value_int16; }
+    [[nodiscard]] inline uint16_t get_uint16() const OSAL_NOEXCEPT { return value_uint16; }
+    [[nodiscard]] inline int32_t get_int32() const OSAL_NOEXCEPT { return value_int32; }
+    [[nodiscard]] inline uint32_t get_uint32() const OSAL_NOEXCEPT { return value_uint32; }
+    [[nodiscard]] inline int64_t get_int64() const OSAL_NOEXCEPT { return value_int64; }
+    [[nodiscard]] inline uint64_t get_uint64() const OSAL_NOEXCEPT { return value_uint64; }
+    [[nodiscard]] inline float get_float() const OSAL_NOEXCEPT { return value_float; }
+    [[nodiscard]] inline double get_double() const OSAL_NOEXCEPT { return value_double; }
+    [[nodiscard]] inline osal::exit get_exit() const OSAL_NOEXCEPT { return value_exit; }
+    [[nodiscard]] inline const void*  get_ptr(size_t* size) const OSAL_NOEXCEPT { *size = ptr_size; return ptr; }
 
 };
 
@@ -180,33 +180,33 @@ struct function_base
     function_base() = default;
     virtual ~function_base() = default;
 
-    [[nodiscard]] inline uint8_t get_args_count() const OS_NOEXCEPT
+    [[nodiscard]] inline uint8_t get_args_count() const OSAL_NOEXCEPT
     {
         return args_count;
     }
 
-    [[nodiscard]] inline const trait_type* get_args_type() const OS_NOEXCEPT
+    [[nodiscard]] inline const trait_type* get_args_type() const OSAL_NOEXCEPT
     {
         return args_type;
     }
 
-    [[nodiscard]] inline trait_type get_ret_type() const OS_NOEXCEPT
+    [[nodiscard]] inline trait_type get_ret_type() const OSAL_NOEXCEPT
     {
         return ret_type;
     }
 
-    [[nodiscard]] inline type get_type() const OS_NOEXCEPT
+    [[nodiscard]] inline type get_type() const OSAL_NOEXCEPT
     {
         return type;
     }
 
-    virtual osal::exit execute(value* ret) const OS_NOEXCEPT = 0;
+    virtual osal::exit execute(value* ret) const OSAL_NOEXCEPT = 0;
 
-    virtual osal::exit execute(value* ret, void* a0) const OS_NOEXCEPT = 0;
+    virtual osal::exit execute(value* ret, void* a0) const OSAL_NOEXCEPT = 0;
 
-    virtual osal::exit execute(value* ret, void* a0, void* a1) const OS_NOEXCEPT = 0;
+    virtual osal::exit execute(value* ret, void* a0, void* a1) const OSAL_NOEXCEPT = 0;
 
-    virtual osal::exit execute(value* ret, void* a0, void* a1, void* a2) const OS_NOEXCEPT = 0;
+    virtual osal::exit execute(value* ret, void* a0, void* a1, void* a2) const OSAL_NOEXCEPT = 0;
 
 protected:
     enum type type = NONE;
@@ -215,7 +215,7 @@ protected:
     const uint8_t args_count   = 0;
     trait_type ret_type    = trait_type::_VOID_;
 
-    inline explicit function_base(enum type type, const uint8_t args_count = 0, trait_type ret_type = trait_type::_VOID_) OS_NOEXCEPT
+    inline explicit function_base(enum type type, const uint8_t args_count = 0, trait_type ret_type = trait_type::_VOID_) OSAL_NOEXCEPT
     : type(type), args_count(args_count), ret_type(ret_type)
     {
         memcpy(this->args_type, args_type, sizeof(this->args_type));
@@ -256,21 +256,21 @@ public:
 
     using ptr = unique_ptr<method>;
 
-    method(T* target, R (T::*method)()) OS_NOEXCEPT;
+    method(T* target, R (T::*method)()) OSAL_NOEXCEPT;
 
-    method(T* target, R (T::*method)(A0)) OS_NOEXCEPT;
+    method(T* target, R (T::*method)(A0)) OSAL_NOEXCEPT;
 
-    method(T* target, R (T::*method)(A0, A1)) OS_NOEXCEPT;
+    method(T* target, R (T::*method)(A0, A1)) OSAL_NOEXCEPT;
 
-    method(T* target, R (T::*method)(A0, A1, A2)) OS_NOEXCEPT;
+    method(T* target, R (T::*method)(A0, A1, A2)) OSAL_NOEXCEPT;
 
-    method(T* target, R (T::*method)() const) OS_NOEXCEPT;
+    method(T* target, R (T::*method)() const) OSAL_NOEXCEPT;
 
-    method(T* target, R (T::*method)(A0) const) OS_NOEXCEPT;
+    method(T* target, R (T::*method)(A0) const) OSAL_NOEXCEPT;
 
-    method(T* target, R (T::*method)(A0, A1) const) OS_NOEXCEPT;
+    method(T* target, R (T::*method)(A0, A1) const) OSAL_NOEXCEPT;
 
-    method(T* target, R (T::*method)(A0, A1, A2) const) OS_NOEXCEPT;
+    method(T* target, R (T::*method)(A0, A1, A2) const) OSAL_NOEXCEPT;
 
     method(const method&) = default;
 
@@ -280,34 +280,34 @@ public:
 
     method& operator=(method&&) = delete;
 
-    [[nodiscard]] inline T* get_target() const OS_NOEXCEPT
+    [[nodiscard]] inline T* get_target() const OSAL_NOEXCEPT
     {
         return target;
     }
 
-    [[nodiscard]] inline const union method_prt& get_method() const OS_NOEXCEPT
+    [[nodiscard]] inline const union method_prt& get_method() const OSAL_NOEXCEPT
     {
         return method_prt;
     }
 
-    osal::exit execute(value* ret) const OS_NOEXCEPT override;
+    osal::exit execute(value* ret) const OSAL_NOEXCEPT override;
 
-    osal::exit execute(value* ret, void* a0) const OS_NOEXCEPT override;
+    osal::exit execute(value* ret, void* a0) const OSAL_NOEXCEPT override;
 
-    osal::exit execute(value* ret, void* a0, void* a1) const OS_NOEXCEPT override;
+    osal::exit execute(value* ret, void* a0, void* a1) const OSAL_NOEXCEPT override;
 
-    osal::exit execute(value* ret, void* a0, void* a1, void* a2) const OS_NOEXCEPT override;
+    osal::exit execute(value* ret, void* a0, void* a1, void* a2) const OSAL_NOEXCEPT override;
 };
 
 template<typename T, typename R, typename A0, typename A1, typename A2>
-method<T, R, A0, A1, A2>::method(T* target, R (T::*method)()) OS_NOEXCEPT
+method<T, R, A0, A1, A2>::method(T* target, R (T::*method)()) OSAL_NOEXCEPT
 : function_base(METHOD, 0, osal::get_type<R>::type), target(target)
 {
     method_prt.method_no_arg = method;
 }
 
 template<typename T, typename R, typename A0, typename A1, typename A2>
-method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0)) OS_NOEXCEPT
+method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0)) OSAL_NOEXCEPT
 : function_base(METHOD, 1, osal::get_type<R>::type), target(target)
 {
     args_type[0] = osal::get_type<A0>::type;
@@ -315,7 +315,7 @@ method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0)) OS_NOEXCEPT
 }
 
 template<typename T, typename R, typename A0, typename A1, typename A2>
-method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0, A1)) OS_NOEXCEPT
+method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0, A1)) OSAL_NOEXCEPT
         : function_base(METHOD, 2, osal::get_type<R>::type), target(target)
 {
     args_type[0] = osal::get_type<A0>::type;
@@ -324,7 +324,7 @@ method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0, A1)) OS_NOEXCEPT
 }
 
 template<typename T, typename R, typename A0, typename A1, typename A2>
-method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0, A1, A2)) OS_NOEXCEPT
+method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0, A1, A2)) OSAL_NOEXCEPT
 : function_base(METHOD, 3, osal::get_type<R>::type), target(target)
 {
     args_type[0] = osal::get_type<A0>::type;
@@ -334,7 +334,7 @@ method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0, A1, A2)) OS_NOEXC
 }
 
 template<typename T, typename R, typename A0, typename A1, typename A2>
-method<T, R, A0, A1, A2>::method(T* target, R (T::*method)() const) OS_NOEXCEPT
+method<T, R, A0, A1, A2>::method(T* target, R (T::*method)() const) OSAL_NOEXCEPT
 : function_base(METHOD, 0, osal::get_type<R>::type), target(target), is_const(true)
 {
     method_prt.method_no_arg_const = method;
@@ -342,7 +342,7 @@ method<T, R, A0, A1, A2>::method(T* target, R (T::*method)() const) OS_NOEXCEPT
 
 
 template<typename T, typename R, typename A0, typename A1, typename A2>
-method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0) const) OS_NOEXCEPT
+method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0) const) OSAL_NOEXCEPT
 : function_base(METHOD, 1, osal::get_type<R>::type), target(target), is_const(true)
 {
     args_type[0] = osal::get_type<A0>::type;
@@ -350,7 +350,7 @@ method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0) const) OS_NOEXCEP
 }
 
 template<typename T, typename R, typename A0, typename A1, typename A2>
-method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0, A1) const) OS_NOEXCEPT
+method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0, A1) const) OSAL_NOEXCEPT
         : function_base(METHOD, 2, osal::get_type<R>::type), target(target), is_const(true)
 {
     args_type[0] = osal::get_type<A0>::type;
@@ -359,7 +359,7 @@ method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0, A1) const) OS_NOE
 }
 
 template<typename T, typename R, typename A0, typename A1, typename A2>
-method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0, A1, A2) const) OS_NOEXCEPT
+method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0, A1, A2) const) OSAL_NOEXCEPT
 : function_base(METHOD, 3, osal::get_type<R>::type), target(target), is_const(true)
 {
     args_type[0] = osal::get_type<A0>::type;
@@ -369,7 +369,7 @@ method<T, R, A0, A1, A2>::method(T* target, R (T::*method)(A0, A1, A2) const) OS
 }
 
 template<typename T, typename R, typename A0, typename A1, typename A2>
-osal::exit method<T, R, A0, A1, A2>::execute(value* ret) const OS_NOEXCEPT
+osal::exit method<T, R, A0, A1, A2>::execute(value* ret) const OSAL_NOEXCEPT
 {
 	if constexpr (is_same<void, R> ::value)
 	{
@@ -394,7 +394,7 @@ osal::exit method<T, R, A0, A1, A2>::execute(value* ret) const OS_NOEXCEPT
 }
 
 template<typename T, typename R, typename A0, typename A1, typename A2>
-osal::exit method<T, R, A0, A1, A2>::execute(value* ret, void* a0) const OS_NOEXCEPT
+osal::exit method<T, R, A0, A1, A2>::execute(value* ret, void* a0) const OSAL_NOEXCEPT
 {
 	if constexpr (is_same<void, R> ::value)
 	{
@@ -419,7 +419,7 @@ osal::exit method<T, R, A0, A1, A2>::execute(value* ret, void* a0) const OS_NOEX
 }
 
 template<typename T, typename R, typename A0, typename A1, typename A2>
-osal::exit method<T, R, A0, A1, A2>::execute(value* ret, void* a0, void* a1) const OS_NOEXCEPT
+osal::exit method<T, R, A0, A1, A2>::execute(value* ret, void* a0, void* a1) const OSAL_NOEXCEPT
 {
     if constexpr (is_same<void, R> ::value)
     {
@@ -445,7 +445,7 @@ osal::exit method<T, R, A0, A1, A2>::execute(value* ret, void* a0, void* a1) con
 }
 
 template<typename T, typename R, typename A0, typename A1, typename A2>
-osal::exit method<T, R, A0, A1, A2>::execute(value* ret, void* a0, void* a1, void* a2) const OS_NOEXCEPT
+osal::exit method<T, R, A0, A1, A2>::execute(value* ret, void* a0, void* a1, void* a2) const OSAL_NOEXCEPT
 {
     if constexpr (is_same<void, R> ::value)
     {
@@ -486,13 +486,13 @@ class function final : public function_base
 public:
     using ptr = unique_ptr<function>;
 
-    explicit function(R (* function)()) OS_NOEXCEPT;
+    explicit function(R (* function)()) OSAL_NOEXCEPT;
 
-    explicit function(R (* function)(A0)) OS_NOEXCEPT;
+    explicit function(R (* function)(A0)) OSAL_NOEXCEPT;
 
-    explicit function(R (* function)(A0, A1)) OS_NOEXCEPT;
+    explicit function(R (* function)(A0, A1)) OSAL_NOEXCEPT;
 
-    explicit function(R (* function)(A0, A1, A2)) OS_NOEXCEPT;
+    explicit function(R (* function)(A0, A1, A2)) OSAL_NOEXCEPT;
 
     function(const function&) = delete;
 
@@ -502,29 +502,29 @@ public:
 
     function& operator=(function&&) = delete;
 
-    [[nodiscard]] inline const union function_prt& get_function() const OS_NOEXCEPT
+    [[nodiscard]] inline const union function_prt& get_function() const OSAL_NOEXCEPT
     {
         return function_prt;
     }
 
-    osal::exit execute(value* ret) const OS_NOEXCEPT override;
+    osal::exit execute(value* ret) const OSAL_NOEXCEPT override;
 
-    osal::exit execute(value* ret, void* a0) const OS_NOEXCEPT override;
+    osal::exit execute(value* ret, void* a0) const OSAL_NOEXCEPT override;
 
-    osal::exit execute(value* ret, void* a0, void* a1) const OS_NOEXCEPT override;
+    osal::exit execute(value* ret, void* a0, void* a1) const OSAL_NOEXCEPT override;
 
-    osal::exit execute(value* ret, void* a0, void* a1, void* a2) const OS_NOEXCEPT override;
+    osal::exit execute(value* ret, void* a0, void* a1, void* a2) const OSAL_NOEXCEPT override;
 };
 
 template<typename R, typename A0, typename A1, typename A2>
-function<R, A0, A1, A2>::function(R (* function)()) OS_NOEXCEPT
+function<R, A0, A1, A2>::function(R (* function)()) OSAL_NOEXCEPT
 : function_base(FUNCTION, 0, osal::get_type<R>::type)
 {
     function_prt.function_no_arg = function;
 }
 
 template<typename R, typename A0, typename A1, typename A2>
-function<R, A0, A1, A2>::function(R (* function)(A0)) OS_NOEXCEPT
+function<R, A0, A1, A2>::function(R (* function)(A0)) OSAL_NOEXCEPT
 : function_base(FUNCTION, 1, osal::get_type<R>::type)
 {
     args_type[0] = osal::get_type<A0>::type;
@@ -533,7 +533,7 @@ function<R, A0, A1, A2>::function(R (* function)(A0)) OS_NOEXCEPT
 
 
 template<typename R, typename A0, typename A1, typename A2>
-function<R, A0, A1, A2>::function(R (* function)(A0, A1)) OS_NOEXCEPT
+function<R, A0, A1, A2>::function(R (* function)(A0, A1)) OSAL_NOEXCEPT
 : function_base(FUNCTION, 2, osal::get_type<R>::type)
 {
     args_type[0] = osal::get_type<A0>::type;
@@ -542,7 +542,7 @@ function<R, A0, A1, A2>::function(R (* function)(A0, A1)) OS_NOEXCEPT
 }
 
 template<typename R, typename A0, typename A1, typename A2>
-function<R, A0, A1, A2>::function(R (* function)(A0, A1, A2)) OS_NOEXCEPT
+function<R, A0, A1, A2>::function(R (* function)(A0, A1, A2)) OSAL_NOEXCEPT
 : function_base(FUNCTION, 3, osal::get_type<R>::type)
 {
     args_type[0] = osal::get_type<A0>::type;
@@ -552,7 +552,7 @@ function<R, A0, A1, A2>::function(R (* function)(A0, A1, A2)) OS_NOEXCEPT
 }
 
 template<typename R, typename A0, typename A1, typename A2>
-osal::exit function<R, A0, A1, A2>::execute(value* ret) const OS_NOEXCEPT
+osal::exit function<R, A0, A1, A2>::execute(value* ret) const OSAL_NOEXCEPT
 {
     if constexpr (is_same<void, R> ::value)
     {
@@ -570,7 +570,7 @@ osal::exit function<R, A0, A1, A2>::execute(value* ret) const OS_NOEXCEPT
 }
 
 template<typename R, typename A0, typename A1, typename A2>
-osal::exit function<R, A0, A1, A2>::execute(value* ret, void* a0) const OS_NOEXCEPT
+osal::exit function<R, A0, A1, A2>::execute(value* ret, void* a0) const OSAL_NOEXCEPT
 {
     if constexpr (is_same<void, R> ::value)
     {
@@ -587,7 +587,7 @@ osal::exit function<R, A0, A1, A2>::execute(value* ret, void* a0) const OS_NOEXC
 }
 
 template<typename R, typename A0, typename A1, typename A2>
-osal::exit function<R, A0, A1, A2>::execute(value* ret, void* a0, void* a1) const OS_NOEXCEPT
+osal::exit function<R, A0, A1, A2>::execute(value* ret, void* a0, void* a1) const OSAL_NOEXCEPT
 {
 
     if constexpr (is_same<void, R> ::value)
@@ -605,7 +605,7 @@ osal::exit function<R, A0, A1, A2>::execute(value* ret, void* a0, void* a1) cons
 }
 
 template<typename R, typename A0, typename A1, typename A2>
-osal::exit function<R, A0, A1, A2>::execute(value* ret, void* a0, void* a1, void* a2) const OS_NOEXCEPT
+osal::exit function<R, A0, A1, A2>::execute(value* ret, void* a0, void* a1, void* a2) const OSAL_NOEXCEPT
 {
     if constexpr (is_same<void, R> ::value)
     {

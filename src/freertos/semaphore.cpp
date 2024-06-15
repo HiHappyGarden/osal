@@ -26,7 +26,7 @@ namespace osal
 inline namespace v1
 {
 
-semaphore::semaphore(size_t count, error** error) OS_NOEXCEPT : sem { xSemaphoreCreateCounting (UINT32_MAX, count) }
+semaphore::semaphore(size_t count, error** error) OSAL_NOEXCEPT : sem { xSemaphoreCreateCounting (UINT32_MAX, count) }
 {
     if(sem.handle == nullptr && error)
     {
@@ -44,7 +44,7 @@ semaphore::~semaphore()
     }
 }
 
-osal::exit semaphore::wait(uint64_t time, error** error) OS_NOEXCEPT
+osal::exit semaphore::wait(uint64_t time, error** error) OSAL_NOEXCEPT
 {
     if(sem.handle == nullptr)
     {
@@ -63,7 +63,7 @@ osal::exit semaphore::wait(uint64_t time, error** error) OS_NOEXCEPT
     return exit::KO;
 }
 
-osal::exit semaphore::wait_from_isr(uint64_t time, error **error) OS_NOEXCEPT
+osal::exit semaphore::wait_from_isr(uint64_t time, error **error) OSAL_NOEXCEPT
 {
     if(sem.handle == nullptr)
     {
@@ -82,7 +82,7 @@ osal::exit semaphore::wait_from_isr(uint64_t time, error **error) OS_NOEXCEPT
     return exit::KO;
 }
 
-void semaphore::signal() OS_NOEXCEPT
+void semaphore::signal() OSAL_NOEXCEPT
 {
     if(sem.handle)
     {
@@ -90,7 +90,7 @@ void semaphore::signal() OS_NOEXCEPT
     }
 }
 
-void semaphore::signal_from_isr() OS_NOEXCEPT
+void semaphore::signal_from_isr() OSAL_NOEXCEPT
 {
     if(sem.handle)
     {

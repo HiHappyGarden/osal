@@ -27,7 +27,7 @@ inline namespace v1
 {
 
 
-mutex::mutex(class error** error) OS_NOEXCEPT : m { xSemaphoreCreateRecursiveMutex() }
+mutex::mutex(class error** error) OSAL_NOEXCEPT : m { xSemaphoreCreateRecursiveMutex() }
 {
     if(m.handle == nullptr && error)
     {
@@ -36,7 +36,7 @@ mutex::mutex(class error** error) OS_NOEXCEPT : m { xSemaphoreCreateRecursiveMut
     }
 }
 
-mutex::~mutex() OS_NOEXCEPT
+mutex::~mutex() OSAL_NOEXCEPT
 {
     if(m.handle)
     {
@@ -45,7 +45,7 @@ mutex::~mutex() OS_NOEXCEPT
     }
 }
 
-void mutex::lock() OS_NOEXCEPT
+void mutex::lock() OSAL_NOEXCEPT
 {
     if(m.handle)
     {
@@ -53,7 +53,7 @@ void mutex::lock() OS_NOEXCEPT
     }
 }
 
-void mutex::lock_from_isr() OS_NOEXCEPT
+void mutex::lock_from_isr() OSAL_NOEXCEPT
 {
     if(m.handle)
     {
@@ -61,7 +61,7 @@ void mutex::lock_from_isr() OS_NOEXCEPT
     }
 }
 
-void mutex::unlock() OS_NOEXCEPT
+void mutex::unlock() OSAL_NOEXCEPT
 {
     if(m.handle)
     {
@@ -69,7 +69,7 @@ void mutex::unlock() OS_NOEXCEPT
     }
 }
 
-void mutex::unlock_from_isr() OS_NOEXCEPT
+void mutex::unlock_from_isr() OSAL_NOEXCEPT
 {
     if(m.handle)
     {

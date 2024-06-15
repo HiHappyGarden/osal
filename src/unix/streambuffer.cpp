@@ -25,7 +25,7 @@ namespace osal
 inline namespace v1
 {
 
-stream_buffer::stream_buffer(size_t size, size_t trigger_size, error** error) OS_NOEXCEPT
+stream_buffer::stream_buffer(size_t size, size_t trigger_size, error** error) OSAL_NOEXCEPT
 {
     pthread_mutexattr_t mattr;
     pthread_condattr_t cattr;
@@ -76,7 +76,7 @@ stream_buffer::~stream_buffer()
     }
 }
 
-size_t stream_buffer::send(const uint8_t *data, size_t size, uint64_t time, error** _error) OS_NOEXCEPT
+size_t stream_buffer::send(const uint8_t *data, size_t size, uint64_t time, error** _error) OSAL_NOEXCEPT
 {
     timespec ts{0};
     uint8_t error     = 0;
@@ -264,12 +264,12 @@ timeout:
     return error ? 0 : sb.count - ret;
 }
 
-inline size_t stream_buffer::send_from_isr(const uint8_t *data, size_t size, uint64_t time, error **error) OS_NOEXCEPT
+inline size_t stream_buffer::send_from_isr(const uint8_t *data, size_t size, uint64_t time, error **error) OSAL_NOEXCEPT
 {
     return send(data, size, time, error);
 }
 
-size_t stream_buffer::receive(uint8_t *data, size_t size, uint64_t time, error **_error) OS_NOEXCEPT
+size_t stream_buffer::receive(uint8_t *data, size_t size, uint64_t time, error **_error) OSAL_NOEXCEPT
 {
     timespec ts{0};
     uint8_t error     = 0;
@@ -477,12 +477,12 @@ timeout:
     return error ? 0 : already_received;
 }
 
-size_t stream_buffer::receive_from_isr(uint8_t *data, size_t size, uint64_t time, error **error) OS_NOEXCEPT
+size_t stream_buffer::receive_from_isr(uint8_t *data, size_t size, uint64_t time, error **error) OSAL_NOEXCEPT
 {
     return receive(data, size, time, error);
 }
 
-void stream_buffer::reset() OS_NOEXCEPT
+void stream_buffer::reset() OSAL_NOEXCEPT
 {
     sb.r = 0;
     sb.w = 0;
@@ -490,17 +490,17 @@ void stream_buffer::reset() OS_NOEXCEPT
     memset(sb.buffer, '\0', sb.size);
 }
 
-bool stream_buffer::is_empty() const OS_NOEXCEPT
+bool stream_buffer::is_empty() const OSAL_NOEXCEPT
 {
     return sb.count == 0;
 }
 
-bool stream_buffer::is_full() const OS_NOEXCEPT
+bool stream_buffer::is_full() const OSAL_NOEXCEPT
 {
     return (sb.size - sb.count) == 0;
 }
 
-size_t stream_buffer::size() const OS_NOEXCEPT
+size_t stream_buffer::size() const OSAL_NOEXCEPT
 {
     return sb.count;
 }

@@ -28,7 +28,7 @@ inline namespace v1
 {
 
 
-thread::thread(const char *name, uint32_t priority, size_t stack_size, thread::handler handler) OS_NOEXCEPT
+thread::thread(const char *name, uint32_t priority, size_t stack_size, thread::handler handler) OSAL_NOEXCEPT
     : priority(priority)
     , stack_size(stack_size)
     , h(handler)
@@ -39,7 +39,7 @@ thread::thread(const char *name, uint32_t priority, size_t stack_size, thread::h
     }
 }
 
-osal::exit thread::create(void* arg, class error** error) OS_NOEXCEPT
+osal::exit thread::create(void* arg, class error** error) OSAL_NOEXCEPT
 {
     pthread_attr_t attr{0};
 
@@ -87,13 +87,13 @@ osal::exit thread::create(void* arg, class error** error) OS_NOEXCEPT
     return (result == 0) ? exit::OK : exit::KO;
 }
 
-osal::exit thread::exit() OS_NOEXCEPT
+osal::exit thread::exit() OSAL_NOEXCEPT
 {
     pthread_exit(&t);
     return exit::OK;
 }
 
-osal::exit thread::join(error** error) const OS_NOEXCEPT
+osal::exit thread::join(error** error) const OSAL_NOEXCEPT
 {
     uint32_t result = pthread_join(t, nullptr);
     if(result && error)

@@ -41,7 +41,7 @@ public:
     /**
      * @brief Default constructor.
      */
-    explicit mutex(class error** error = nullptr) OS_NOEXCEPT;
+    explicit mutex(class error** error = nullptr) OSAL_NOEXCEPT;
 
     /**
      * @brief Deleted copy constructor.
@@ -66,35 +66,35 @@ public:
     /**
      * @brief Virtual destructor.
      */
-    ~mutex() OS_NOEXCEPT;
+    ~mutex() OSAL_NOEXCEPT;
 
     /**
      * @brief Locks the mutex.
      *
      * This function is pure virtual and should be implemented by derived classes to lock the mutex.
      */
-    void lock() OS_NOEXCEPT;
+    void lock() OSAL_NOEXCEPT;
 
     /**
      * @brief Locks the mutex frm ISR.
      *
      * This function is pure virtual and should be implemented by derived classes to lock the mutex.
      */
-    void lock_from_isr() OS_NOEXCEPT;
+    void lock_from_isr() OSAL_NOEXCEPT;
 
     /**
      * @brief Unlocks the mutex.
      *
      * This function is pure virtual and should be implemented by derived classes to unlock the mutex.
      */
-    void unlock() OS_NOEXCEPT;
+    void unlock() OSAL_NOEXCEPT;
 
     /**
      * @brief Unlocks the mutex from ISR.
      *
      * This function is pure virtual and should be implemented by derived classes to unlock the mutex.
      */
-    void unlock_from_isr() OS_NOEXCEPT;
+    void unlock_from_isr() OSAL_NOEXCEPT;
 private:
     mutex_data m{};
 };

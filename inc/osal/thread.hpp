@@ -59,9 +59,9 @@ public:
      * @param stack_size The stack size of the thread.
      * @param handler The function pointer to the thread handler.
      */
-    thread(const char* name, uint32_t priority, size_t stack_size, handler handler) OS_NOEXCEPT;
+    thread(const char* name, uint32_t priority, size_t stack_size, handler handler) OSAL_NOEXCEPT;
 
-    inline thread(const char* name, uint32_t priority, size_t stack_size, handler handler, void* arg, class error** error = nullptr) OS_NOEXCEPT
+    inline thread(const char* name, uint32_t priority, size_t stack_size, handler handler, void* arg, class error** error = nullptr) OSAL_NOEXCEPT
     : thread(name, priority, stack_size, handler)
     {
         create(arg, error);
@@ -90,7 +90,7 @@ public:
     /**
      * @brief Default destructor for the thread class.
      */
-    ~thread() OS_NOEXCEPT = default;
+    ~thread() OSAL_NOEXCEPT = default;
 
     /**
      * @brief Creates a new thread.
@@ -99,14 +99,14 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return `true` if the thread was created successfully, `false` otherwise.
      */
-    osal::exit create(void* arg = nullptr, class error** error = nullptr) OS_NOEXCEPT;
+    osal::exit create(void* arg = nullptr, class error** error = nullptr) OSAL_NOEXCEPT;
 
     /**
      * @brief Exits from the thread.
      *
      * @return `true` if the thread was successfully exited, `false` otherwise.
      */
-    osal::exit exit() OS_NOEXCEPT;
+    osal::exit exit() OSAL_NOEXCEPT;
 
     /**
      * @brief Joins the thread.
@@ -116,7 +116,7 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return `true` if the thread was successfully joined, `false` otherwise.
      */
-    osal::exit join(error** error = nullptr) const OS_NOEXCEPT;
+    osal::exit join(error** error = nullptr) const OSAL_NOEXCEPT;
 
 private:
     char name[33]{};                  ///< The name of the thread.

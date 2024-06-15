@@ -23,7 +23,7 @@ namespace osal
 inline namespace v1
 {
 
-queue::queue(size_t size, size_t message_size, error** error) OS_NOEXCEPT
+queue::queue(size_t size, size_t message_size, error** error) OSAL_NOEXCEPT
 {
     q.buffer_size = size * message_size;
 
@@ -57,7 +57,7 @@ queue::queue(size_t size, size_t message_size, error** error) OS_NOEXCEPT
 
 }
 
-queue::~queue() OS_NOEXCEPT
+queue::~queue() OSAL_NOEXCEPT
 {
     pthread_cond_destroy (&q.cond);
     pthread_mutex_destroy (&q.mutex);
@@ -73,7 +73,7 @@ queue::~queue() OS_NOEXCEPT
     }
 }
 
-osal::exit queue::fetch(void* msg, uint64_t time, error** _error) OS_NOEXCEPT
+osal::exit queue::fetch(void* msg, uint64_t time, error** _error) OSAL_NOEXCEPT
 {
     timespec ts{0};
     uint8_t error     = 0;
@@ -188,12 +188,12 @@ timeout:
     return (error == 0) ? exit::OK : exit::KO;
 }
 
-inline exit queue::fetch_from_isr(void* msg, uint64_t time, error** error) OS_NOEXCEPT
+inline exit queue::fetch_from_isr(void* msg, uint64_t time, error** error) OSAL_NOEXCEPT
 {
     return fetch(msg, time, error);
 }
 
-osal::exit queue::post(const uint8_t* msg, uint64_t time, error** _error) OS_NOEXCEPT
+osal::exit queue::post(const uint8_t* msg, uint64_t time, error** _error) OSAL_NOEXCEPT
 {
     timespec ts{0};
     uint8_t error     = 0;
@@ -287,12 +287,12 @@ timeout:
     return (error == 0) ? exit::OK : exit::KO;
 }
 
-inline exit queue::post_from_isr(const uint8_t* msg, uint64_t time, error** error) OS_NOEXCEPT
+inline exit queue::post_from_isr(const uint8_t* msg, uint64_t time, error** error) OSAL_NOEXCEPT
 {
     return post(msg, time, error);
 }
 
-size_t queue::size() const OS_NOEXCEPT
+size_t queue::size() const OSAL_NOEXCEPT
 {
 
     return q.count;

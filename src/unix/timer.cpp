@@ -67,7 +67,7 @@ void* timer_thread (void * arg)
 
 
 
-timer::timer(uint64_t us, handler fn, bool one_shot) OS_NOEXCEPT
+timer::timer(uint64_t us, handler fn, bool one_shot) OSAL_NOEXCEPT
     : us(us)
     , fn(fn)
     , one_shot(one_shot)
@@ -75,7 +75,7 @@ timer::timer(uint64_t us, handler fn, bool one_shot) OS_NOEXCEPT
 
 }
 
-timer::~timer() OS_NOEXCEPT
+timer::~timer() OSAL_NOEXCEPT
 {
     t.exit = true;
     //pthread_join (timer->thread, nullptr);
@@ -145,17 +145,17 @@ exit timer::create(void *arg, error** error)
     return exit::OK;
 }
 
-inline void timer::set(uint64_t us) OS_NOEXCEPT
+inline void timer::set(uint64_t us) OSAL_NOEXCEPT
 {
     t.us = us;
 }
 
-inline void timer::set_from_isr(uint64_t us) OS_NOEXCEPT
+inline void timer::set_from_isr(uint64_t us) OSAL_NOEXCEPT
 {
     timer::us = us;
 }
 
-void timer::start() const OS_NOEXCEPT
+void timer::start() const OSAL_NOEXCEPT
 {
     itimerspec its{0};
 
@@ -168,12 +168,12 @@ void timer::start() const OS_NOEXCEPT
     timer_settime (t.timer_id, 0, &its, nullptr);
 }
 
-inline  void timer::start_from_isr() const OS_NOEXCEPT
+inline  void timer::start_from_isr() const OSAL_NOEXCEPT
 {
     start();
 }
 
-void timer::stop() const OS_NOEXCEPT
+void timer::stop() const OSAL_NOEXCEPT
 {
     itimerspec its {0};
 
@@ -185,12 +185,12 @@ void timer::stop() const OS_NOEXCEPT
     timer_settime (t.timer_id, 0, &its, nullptr);
 }
 
-inline void timer::stop_from_isr() const OS_NOEXCEPT
+inline void timer::stop_from_isr() const OSAL_NOEXCEPT
 {
     stop();
 }
 
-inline bool timer::is_active() const OS_NOEXCEPT
+inline bool timer::is_active() const OSAL_NOEXCEPT
 {
     return !t.exit;
 }

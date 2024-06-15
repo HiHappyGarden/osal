@@ -108,7 +108,7 @@ if(UNIX)
         include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/include)
         include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/portable/ThirdParty/GCC/Posix)
 
-        set(OS_MEM_LAYER 1)
+        set(OSAL_MEM_LAYER 1)
         set(PLATFORM_LIB "freertos_kernel")
         FetchContent_MakeAvailable(freertos_kernel)
         set(PLATFORM_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/freertos ${CMAKE_CURRENT_SOURCE_DIR}/src/freertos/config)
@@ -129,7 +129,7 @@ if(UNIX)
 elseif (WIN32)
     message(STATUS "OSAL for FreeRTOS win32 emulation")
 
-    option(OS_MEM_LAYER "Enable FreeRTOS wrapping memory management in C++" 0)
+    option(OSAL_MEM_LAYER "Enable FreeRTOS wrapping memory management in C++" 0)
 
     message(STATUS "Start freertos download")
     FetchContent_Declare( freertos_kernel
@@ -190,7 +190,7 @@ elseif(ENABLE_FREERTOS)
 #    include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/include)
 #    include_directories(${CMAKE_BINARY_DIR}/_deps/freertos_kernel-src/portable/ThirdParty/GCC/RP2040/include)
 #
-#    set(OS_MEM_LAYER 1)
+#    set(OSAL_MEM_LAYER 1)
 #    set(PLATFORM_LIB "freertos_kernel")
 #    FetchContent_MakeAvailable(freertos_kernel)
 #

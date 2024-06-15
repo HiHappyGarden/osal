@@ -69,32 +69,32 @@ constexpr inline uint64_t operator""_s( unsigned long long secs ) {  return sec_
   * @brief Suspends the execution of the current thread for a specified number of microseconds.
   * @param us The number of microseconds to sleep.
   **/
-[[maybe_unused]] void us_sleep(uint64_t us) OS_NOEXCEPT;
+[[maybe_unused]] void us_sleep(uint64_t us) OSAL_NOEXCEPT;
 
 /**
   * @brief Retrieves the current time in microseconds.
   * @return The current time in microseconds.
   **/
-[[maybe_unused]] uint64_t get_current_time_us() OS_NOEXCEPT;
+[[maybe_unused]] uint64_t get_current_time_us() OSAL_NOEXCEPT;
 
 /**
   * @brief Retrieves the current tick value.
   * @return The current tick value.
   **/
-[[maybe_unused]] tick tick_current() OS_NOEXCEPT;
+[[maybe_unused]] tick tick_current() OSAL_NOEXCEPT;
 
 /**
   * @brief Converts a time value in microseconds to a tick value.
   * @param us The time value in microseconds.
   * @return The corresponding tick value.
   **/
-[[maybe_unused]] tick tick_from_us(uint64_t us) OS_NOEXCEPT;
+[[maybe_unused]] tick tick_from_us(uint64_t us) OSAL_NOEXCEPT;
 
 /**
   * @brief Suspends the execution of the current thread for the specified tick duration.
   * @param tick The tick duration to sleep.
   **/
-[[maybe_unused]] void tick_sleep(tick tick) OS_NOEXCEPT;
+[[maybe_unused]] void tick_sleep(tick tick) OSAL_NOEXCEPT;
 
 /**
  * @brief Sets the main loop to sleep mode.
@@ -104,7 +104,7 @@ constexpr inline uint64_t operator""_s( unsigned long long secs ) {  return sec_
  *
  * @param sleep_timing The time duration (in milliseconds) for the main loop to remain in sleep mode.
  */
-[[maybe_unused]] void set_sleep_main_loop(uint16_t sleep_timing) OS_NOEXCEPT;
+[[maybe_unused]] void set_sleep_main_loop(uint16_t sleep_timing) OSAL_NOEXCEPT;
 
 /**
  * @brief Gets the sleep mode timing of the main loop.
@@ -113,13 +113,13 @@ constexpr inline uint64_t operator""_s( unsigned long long secs ) {  return sec_
  *
  * @return The time duration (in milliseconds) for the main loop to remain in sleep mode.
  */
-[[maybe_unused]] uint16_t get_sleep_main_loop() OS_NOEXCEPT;
+[[maybe_unused]] uint16_t get_sleep_main_loop() OSAL_NOEXCEPT;
 
 /**
  * @brief Set this valie permit to exape onlyone temporization in main loop
  * @param check
  */
-[[maybe_unused]] void set_check_main_loop(bool check) OS_NOEXCEPT;
+[[maybe_unused]] void set_check_main_loop(bool check) OSAL_NOEXCEPT;
 
 /**
  * @brief Starts the main loop.
@@ -127,7 +127,7 @@ constexpr inline uint64_t operator""_s( unsigned long long secs ) {  return sec_
  * This function starts the main loop, which is responsible for the continuous execution of the main application logic.
  * The main loop will run until it is explicitly stopped or an exception occurs.
  */
-[[maybe_unused]] void start_main_loop() OS_NOEXCEPT;
+[[maybe_unused]] void start_main_loop() OSAL_NOEXCEPT;
 
 /**
  * @brief Stops the main loop.
@@ -135,7 +135,7 @@ constexpr inline uint64_t operator""_s( unsigned long long secs ) {  return sec_
  * This function stops the main loop, which terminates the continuous execution of the main application logic.
  * After calling this function, the main loop will exit and the application will be in a stopped state.
  */
-[[maybe_unused]] void stop_main_loop() OS_NOEXCEPT;
+[[maybe_unused]] void stop_main_loop() OSAL_NOEXCEPT;
 
 }
 }

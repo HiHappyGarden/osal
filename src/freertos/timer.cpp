@@ -38,7 +38,7 @@ void timer_data::args_wrapper::wrap_func( TimerHandle_t timer )
     wrapper->fn(wrapper->timer, wrapper->arg);
 }
 
-timer::timer(uint64_t us, handler fn, bool one_shot) OS_NOEXCEPT
+timer::timer(uint64_t us, handler fn, bool one_shot) OSAL_NOEXCEPT
     : us(us)
     , fn(fn)
     , one_shot(one_shot)
@@ -47,7 +47,7 @@ timer::timer(uint64_t us, handler fn, bool one_shot) OS_NOEXCEPT
     t.args_wrp.timer = this;
 }
 
-timer::~timer() OS_NOEXCEPT
+timer::~timer() OSAL_NOEXCEPT
 {
     if(t.handler)
     {
@@ -56,7 +56,7 @@ timer::~timer() OS_NOEXCEPT
     }
 }
 
-exit timer::create(void *arg, error** error) OS_NOEXCEPT
+exit timer::create(void *arg, error** error) OSAL_NOEXCEPT
 {
     t.args_wrp.arg = arg;
     t.handler = xTimerCreate (
@@ -78,7 +78,7 @@ exit timer::create(void *arg, error** error) OS_NOEXCEPT
     return exit::OK;
 }
 
-void timer::set(uint64_t us) OS_NOEXCEPT
+void timer::set(uint64_t us) OSAL_NOEXCEPT
 {
     timer::us = us;
     if(t.handler && xTimerIsTimerActive( t.handler ))
@@ -87,7 +87,7 @@ void timer::set(uint64_t us) OS_NOEXCEPT
     }
 }
 
-void timer::set_from_isr(uint64_t us) OS_NOEXCEPT
+void timer::set_from_isr(uint64_t us) OSAL_NOEXCEPT
 {
     timer::us = us;
     if(t.handler && xTimerIsTimerActive( t.handler ))
@@ -96,7 +96,7 @@ void timer::set_from_isr(uint64_t us) OS_NOEXCEPT
     }
 }
 
-void timer::start() const OS_NOEXCEPT
+void timer::start() const OSAL_NOEXCEPT
 {
     if(t.handler)
     {
@@ -104,7 +104,7 @@ void timer::start() const OS_NOEXCEPT
     }
 }
 
-void timer::start_from_isr() const OS_NOEXCEPT
+void timer::start_from_isr() const OSAL_NOEXCEPT
 {
     if(t.handler)
     {
@@ -112,7 +112,7 @@ void timer::start_from_isr() const OS_NOEXCEPT
     }
 }
 
-void timer::stop() const OS_NOEXCEPT
+void timer::stop() const OSAL_NOEXCEPT
 {
     if(t.handler && xTimerIsTimerActive( t.handler ))
     {
@@ -120,7 +120,7 @@ void timer::stop() const OS_NOEXCEPT
     }
 }
 
-void timer::stop_from_isr() const OS_NOEXCEPT
+void timer::stop_from_isr() const OSAL_NOEXCEPT
 {
     if(t.handler && xTimerIsTimerActive( t.handler ))
     {
@@ -128,7 +128,7 @@ void timer::stop_from_isr() const OS_NOEXCEPT
     }
 }
 
-bool timer::is_active() const OS_NOEXCEPT
+bool timer::is_active() const OSAL_NOEXCEPT
 {
     return t.handler && xTimerIsTimerActive( t.handler );
 }

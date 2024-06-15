@@ -17,15 +17,15 @@
  *
  ***************************************************************************/
 
-#ifndef OS_CONFIG_H
-#define OS_CONFIG_H
+#ifndef OSAL_CONFIG_H
+#define OSAL_CONFIG_H
 
-#define OS_NAME "osal"
-#define OS_VER "1.1.2"
-#define OS_VER_MAJOR (1)
-#define OS_VER_MINOR (1)
-#define OS_VER_PATCH (2)
-#define OS_LOG_NEW_LINE "\n"
-#define OS_MEM_LAYER ()
+#define OSAL_NAME "osal"
+#define OSAL_VER "1.1.1"
+#define OSAL_VER_MAJOR (1)
+#define OSAL_VER_MINOR (1)
+#define OSAL_VER_PATCH (1)
+#define OSAL_LOG_NEW_LINE "\n"
+#define OSAL_MEM_LAYER ()
 
 #endif // OS_CONFIG_H

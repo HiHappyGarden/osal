@@ -38,7 +38,7 @@ TEST(timer_test, single_timer)
 
     if(timer.create(args) == osal::exit::KO)
     {
-        OS_LOG_ERROR("TIMER", "ko");
+        OSAL_LOG_ERROR("TIMER", "ko");
         FAIL();
     }
 

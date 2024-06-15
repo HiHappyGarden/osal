@@ -26,7 +26,7 @@ namespace osal
 inline namespace v1
 {
 
-stream_buffer::stream_buffer(size_t size, size_t trigger_size, error** error) OS_NOEXCEPT
+stream_buffer::stream_buffer(size_t size, size_t trigger_size, error** error) OSAL_NOEXCEPT
 : sb { xStreamBufferCreate(size, trigger_size) }
 {
     if(sb.handle == nullptr && error)
@@ -45,7 +45,7 @@ stream_buffer::~stream_buffer()
     }
 }
 
-size_t stream_buffer::send(const uint8_t *data, size_t size, uint64_t time, error** error) OS_NOEXCEPT
+size_t stream_buffer::send(const uint8_t *data, size_t size, uint64_t time, error** error) OSAL_NOEXCEPT
 {
     if(sb.handle == nullptr)
     {
@@ -60,7 +60,7 @@ size_t stream_buffer::send(const uint8_t *data, size_t size, uint64_t time, erro
     return xStreamBufferSend(sb.handle, data, size, tmo_to_ticks(time));
 }
 
-size_t stream_buffer::send_from_isr(const uint8_t *data, size_t size, uint64_t time, error **error) OS_NOEXCEPT
+size_t stream_buffer::send_from_isr(const uint8_t *data, size_t size, uint64_t time, error **error) OSAL_NOEXCEPT
 {
     if(sb.handle == nullptr)
     {
@@ -78,7 +78,7 @@ size_t stream_buffer::send_from_isr(const uint8_t *data, size_t size, uint64_t t
     return ret;
 }
 
-size_t stream_buffer::receive(uint8_t *data, size_t size, uint64_t time, error **error) OS_NOEXCEPT
+size_t stream_buffer::receive(uint8_t *data, size_t size, uint64_t time, error **error) OSAL_NOEXCEPT
 {
     if(sb.handle == nullptr)
     {
@@ -93,7 +93,7 @@ size_t stream_buffer::receive(uint8_t *data, size_t size, uint64_t time, error *
     return xStreamBufferReceive(sb.handle, data, size, tmo_to_ticks(time));
 }
 
-size_t stream_buffer::receive_from_isr(uint8_t *data, size_t size, uint64_t time, error **error) OS_NOEXCEPT
+size_t stream_buffer::receive_from_isr(uint8_t *data, size_t size, uint64_t time, error **error) OSAL_NOEXCEPT
 {
     if(sb.handle == nullptr)
     {
@@ -112,7 +112,7 @@ size_t stream_buffer::receive_from_isr(uint8_t *data, size_t size, uint64_t time
     return ret;
 }
 
-void stream_buffer::reset() OS_NOEXCEPT
+void stream_buffer::reset() OSAL_NOEXCEPT
 {
     if(sb.handle)
     {
@@ -120,7 +120,7 @@ void stream_buffer::reset() OS_NOEXCEPT
     }
 }
 
-bool stream_buffer::is_empty() const OS_NOEXCEPT
+bool stream_buffer::is_empty() const OSAL_NOEXCEPT
 {
     if(sb.handle)
     {
@@ -129,7 +129,7 @@ bool stream_buffer::is_empty() const OS_NOEXCEPT
     return false;
 }
 
-bool stream_buffer::is_full() const OS_NOEXCEPT
+bool stream_buffer::is_full() const OSAL_NOEXCEPT
 {
     if(sb.handle)
     {
@@ -138,7 +138,7 @@ bool stream_buffer::is_full() const OS_NOEXCEPT
     return false;
 }
 
-size_t stream_buffer::size() const OS_NOEXCEPT
+size_t stream_buffer::size() const OSAL_NOEXCEPT
 {
     if(sb.handle)
     {

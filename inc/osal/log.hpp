@@ -28,41 +28,66 @@
 #include <stdarg.h>
 
 
-#define OS_ANSI_COLOR_RED     "\x1b[31m"
-#define OS_ANSI_COLOR_GREEN   "\x1b[32m"
-#define OS_ANSI_COLOR_YELLOW  "\x1b[33m"
-#define OS_ANSI_COLOR_BLUE    "\x1b[34m"
-#define OS_ANSI_COLOR_MAGENTA "\x1b[35m"
-#define OS_ANSI_COLOR_CYAN    "\x1b[36m"
-#define OS_ANSI_COLOR_RESET   "\x1b[0m"
+#define OSAL_ANSI_COLOR_RED     "\x1b[31m"
+#define OSAL_ANSI_COLOR_GREEN   "\x1b[32m"
+#define OSAL_ANSI_COLOR_YELLOW  "\x1b[33m"
+#define OSAL_ANSI_COLOR_BLUE    "\x1b[34m"
+#define OSAL_ANSI_COLOR_MAGENTA "\x1b[35m"
+#define OSAL_ANSI_COLOR_CYAN    "\x1b[36m"
+#define OSAL_ANSI_COLOR_RESET   "\x1b[0m"
 
+
+#ifndef OSAL_LOG_DEBUG
+#define OSAL_LOG_DEBUG(tag, ...) osal::log_debug (tag, __VA_ARGS__)
+#endif
+
+#ifndef OSAL_LOG_INFO
+#define OSAL_LOG_INFO(tag, ...) osal::log_info (tag, __VA_ARGS__)
+#endif
+
+#ifndef OSAL_LOG_WARNING
+#define OSAL_LOG_WARNING(tag, ...) osal::log_warning (tag, __VA_ARGS__)
+#endif
+
+#ifndef OSAL_LOG_ERROR
+#define OSAL_LOG_ERROR(tag, ...) osal::log_error (tag, __VA_ARGS__)
+#endif
+
+#ifndef OSAL_LOG_FATAL
+#define OSAL_LOG_FATAL(tag, ...) osal::log_fatal (tag, __VA_ARGS__)
+#endif
+
+#ifndef OSAL_LOG_PRINTF
+#define OSAL_LOG_PRINTF(...) printf (__VA_ARGS__)
+#endif
 
 #ifndef OS_LOG_DEBUG
-#define OS_LOG_DEBUG(tag, ...) osal::log_debug (tag, __VA_ARGS__)
+#define OS_LOG_DEBUG OSAL_LOG_DEBUG
 #endif
 
 #ifndef OS_LOG_INFO
-#define OS_LOG_INFO(tag, ...) osal::log_info (tag, __VA_ARGS__)
+#define OS_LOG_INFO OSAL_LOG_INFO
 #endif
 
 #ifndef OS_LOG_WARNING
-#define OS_LOG_WARNING(tag, ...) osal::log_warning (tag, __VA_ARGS__)
+#define OS_LOG_WARNING OSAL_LOG_WARNING
 #endif
 
 #ifndef OS_LOG_ERROR
-#define OS_LOG_ERROR(tag, ...) osal::log_error (tag, __VA_ARGS__)
+#define OS_LOG_ERROR OSAL_LOG_ERROR
 #endif
 
 #ifndef OS_LOG_FATAL
-#define OS_LOG_FATAL(tag, ...) osal::log_fatal (tag, __VA_ARGS__)
+#define OS_LOG_FATAL OSAL_LOG_FATAL
 #endif
 
 #ifndef OS_LOG_PRINTF
-#define OS_LOG_PRINTF(...) printf (__VA_ARGS__)
+#define OS_LOG_PRINTF OSAL_LOG_PRINTF
 #endif
 
+
 #ifndef OS_LOG_NEW_LINE
-#define OS_LOG_NEW_LINE "\r\n"
+#define OS_LOG_NEW_LINE OSAL_LOG_NEW_LINE
 #endif
 
 namespace osal
@@ -100,28 +125,28 @@ constexpr inline const uint8_t FLAG_STATE_ON  = (1 << 7);
  * @param t The value containing the log level.
  * @return The log level extracted from the value.
  */
-constexpr inline uint8_t get_level_log(uint8_t t) OS_NOEXCEPT { return t & LEVEL_MASK; }
+constexpr inline uint8_t get_level_log(uint8_t t) OSAL_NOEXCEPT { return t & LEVEL_MASK; }
 
 /**
  * @brief Sets the log level.
  *
  * @param t The log level to set.
  */
-void set_level_log(uint8_t t) OS_NOEXCEPT;
+void set_level_log(uint8_t t) OSAL_NOEXCEPT;
 
 /**
  * @brief Sets the log enable state.
  *
  * @param t The enable state of the log.
  */
-void set_enable_log(bool t) OS_NOEXCEPT;
+void set_enable_log(bool t) OSAL_NOEXCEPT;
 
 /**
  * @brief Gets the log enable state.
  *
  * @return The enable state of the log.
  */
-bool get_enable_log() OS_NOEXCEPT;
+bool get_enable_log() OSAL_NOEXCEPT;
 
 /**
  * @brief Checks if a specific log level is enabled.
@@ -129,7 +154,7 @@ bool get_enable_log() OS_NOEXCEPT;
  * @param type The log level to check.
  * @return True if the log level is enabled, false otherwise.
  */
-bool is_enabled_log(uint8_t type) OS_NOEXCEPT;
+bool is_enabled_log(uint8_t type) OSAL_NOEXCEPT;
 
 /**
  * @brief Writes a log message with the given tag, log level, and formatted message.
@@ -139,7 +164,7 @@ bool is_enabled_log(uint8_t type) OS_NOEXCEPT;
  * @param fmt The format string for the log message.
  * @param ... The variadic arguments for formatting the log message.
  */
-void sys_log(const char* tag, uint8_t type, const char* fmt, ...) OS_NOEXCEPT;
+void sys_log(const char* tag, uint8_t type, const char* fmt, ...) OSAL_NOEXCEPT;
 
 /**
  * @brief Writes a debug log message with the given tag and formatted message.
@@ -150,7 +175,7 @@ void sys_log(const char* tag, uint8_t type, const char* fmt, ...) OS_NOEXCEPT;
  * @param args The additional arguments for formatting the log message.
  */
 template<typename... Args>
-constexpr inline void log_debug(const char* tag, const char* fmt, Args... args) OS_NOEXCEPT
+constexpr inline void log_debug(const char* tag, const char* fmt, Args... args) OSAL_NOEXCEPT
 {
     sys_log(tag, FLAG_DEBUG, fmt, args...);
 }
@@ -164,7 +189,7 @@ constexpr inline void log_debug(const char* tag, const char* fmt, Args... args) 
  * @param args The additional arguments for formatting the log message.
  */
 template<typename... Args>
-constexpr inline void log_info(const char* tag, const char* fmt, Args... args) OS_NOEXCEPT
+constexpr inline void log_info(const char* tag, const char* fmt, Args... args) OSAL_NOEXCEPT
 {
     sys_log(tag, FLAG_INFO, fmt, args...);
 }
@@ -178,7 +203,7 @@ constexpr inline void log_info(const char* tag, const char* fmt, Args... args) O
  * @param args The additional arguments for formatting the log message.
  */
 template<typename... Args>
-constexpr inline void log_warning(const char* tag, const char* fmt, Args... args) OS_NOEXCEPT
+constexpr inline void log_warning(const char* tag, const char* fmt, Args... args) OSAL_NOEXCEPT
 {
     sys_log(tag, FLAG_WARNING, fmt, args...);
 }
@@ -192,7 +217,7 @@ constexpr inline void log_warning(const char* tag, const char* fmt, Args... args
  * @param args The additional arguments for formatting the log message.
  */
 template<typename... Args>
-constexpr inline void log_error(const char* tag, const char* fmt, Args... args) OS_NOEXCEPT
+constexpr inline void log_error(const char* tag, const char* fmt, Args... args) OSAL_NOEXCEPT
 {
     sys_log(tag, FLAG_ERROR, fmt, args...);
 }
@@ -206,7 +231,7 @@ constexpr inline void log_error(const char* tag, const char* fmt, Args... args) 
  * @param args The additional arguments for formatting the log message.
  */
 template<typename... Args>
-constexpr inline void log_fatal(const char* tag, const char* fmt, Args... args) OS_NOEXCEPT
+constexpr inline void log_fatal(const char* tag, const char* fmt, Args... args) OSAL_NOEXCEPT
 {
     sys_log(tag, FLAG_FATAL, fmt, args...);
 }
@@ -214,9 +239,9 @@ constexpr inline void log_fatal(const char* tag, const char* fmt, Args... args) 
 /**
  * @brief Resets the log color settings.
  */
-inline void reset_color_log() OS_NOEXCEPT
+inline void reset_color_log() OSAL_NOEXCEPT
 {
-    printf(OS_ANSI_COLOR_RESET "");
+    printf(OSAL_ANSI_COLOR_RESET "");
     fflush(stdout);
 }
 

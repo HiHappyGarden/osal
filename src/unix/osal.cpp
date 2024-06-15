@@ -45,7 +45,7 @@ void ctrl_c_handler(int n)
 
 }
 
-void us_sleep (uint64_t usec) OS_NOEXCEPT
+void us_sleep (uint64_t usec) OSAL_NOEXCEPT
 {
     timespec ts{0};
     timespec remain{0};
@@ -58,7 +58,7 @@ void us_sleep (uint64_t usec) OS_NOEXCEPT
     }
 }
 
-    [[maybe_unused]] uint64_t get_current_time_us () OS_NOEXCEPT
+    [[maybe_unused]] uint64_t get_current_time_us () OSAL_NOEXCEPT
 {
     timespec ts{0};
 
@@ -66,7 +66,7 @@ void us_sleep (uint64_t usec) OS_NOEXCEPT
     return ts.tv_sec * 1'000'000 + ts.tv_nsec / 1'000;
 }
 
-tick tick_current () OS_NOEXCEPT
+tick tick_current () OSAL_NOEXCEPT
 {
     timespec ts{0};
     tick       tick;
@@ -78,12 +78,12 @@ tick tick_current () OS_NOEXCEPT
     return tick;
 }
 
-tick tick_from_us (uint64_t us) OS_NOEXCEPT
+tick tick_from_us (uint64_t us) OSAL_NOEXCEPT
 {
     return static_cast<tick>(us) * 1'000;
 }
 
-void tick_sleep (tick tick) OS_NOEXCEPT
+void tick_sleep (tick tick) OSAL_NOEXCEPT
 {
     if(!main_loop_started)
     {
@@ -117,22 +117,22 @@ void tick_sleep (tick tick) OS_NOEXCEPT
 
 }
 
-void set_sleep_main_loop(uint16_t sleep_timing) OS_NOEXCEPT
+void set_sleep_main_loop(uint16_t sleep_timing) OSAL_NOEXCEPT
 {
     main_loop_sleep = sleep_timing;
 }
 
-uint16_t get_sleep_main_loop() OS_NOEXCEPT
+uint16_t get_sleep_main_loop() OSAL_NOEXCEPT
 {
     return main_loop_sleep;
 }
 
-void set_check_main_loop(bool check) OS_NOEXCEPT
+void set_check_main_loop(bool check) OSAL_NOEXCEPT
 {
     osal::check = check;
 }
 
-void start_main_loop() OS_NOEXCEPT
+void start_main_loop() OSAL_NOEXCEPT
 {
     main_loop_started = true;
     signal(SIGINT, ctrl_c_handler);
@@ -150,7 +150,7 @@ void start_main_loop() OS_NOEXCEPT
     done = false;
 }
 
-void stop_main_loop() OS_NOEXCEPT
+void stop_main_loop() OSAL_NOEXCEPT
 {
     done = true;
 }

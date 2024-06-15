@@ -26,7 +26,7 @@ namespace osal
 inline namespace v1
 {
 
-semaphore::semaphore(size_t count, error**) OS_NOEXCEPT
+semaphore::semaphore(size_t count, error**) OSAL_NOEXCEPT
 {
 
     pthread_mutexattr_t mattr{0};
@@ -47,7 +47,7 @@ semaphore::~semaphore()
     pthread_mutex_destroy (&sem.mutex);
 }
 
-osal::exit semaphore::wait(uint64_t time, error** _error) OS_NOEXCEPT
+osal::exit semaphore::wait(uint64_t time, error** _error) OSAL_NOEXCEPT
 {
     timespec ts{0};
     uint8_t error     = 0;
@@ -131,7 +131,7 @@ timeout:
     return (error == 0) ? exit::OK : exit::KO;
 }
 
-osal::exit semaphore::wait_from_isr(uint64_t time, error **error) OS_NOEXCEPT
+osal::exit semaphore::wait_from_isr(uint64_t time, error **error) OSAL_NOEXCEPT
 {
     return wait(time, error);
 }
@@ -144,7 +144,7 @@ void semaphore::signal()
     pthread_cond_signal (&sem.cond);
 }
 
-void semaphore::signal_from_isr() OS_NOEXCEPT
+void semaphore::signal_from_isr() OSAL_NOEXCEPT
 {
     signal();
 }

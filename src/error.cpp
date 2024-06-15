@@ -26,7 +26,7 @@ namespace osal
 inline namespace v1
 {
 
-    error::error(const char* msg, uint8_t code, const char* file, const char* func, uint32_t line) OS_NOEXCEPT
+    error::error(const char* msg, uint8_t code, const char* file, const char* func, uint32_t line) OSAL_NOEXCEPT
         : code(code)
         , line(line)
     {
@@ -44,7 +44,7 @@ inline namespace v1
         }
     }
 
-    error::error(error* old_error, const char* msg, uint8_t code, const char* file, const char* func, uint32_t line) OS_NOEXCEPT
+    error::error(error* old_error, const char* msg, uint8_t code, const char* file, const char* func, uint32_t line) OSAL_NOEXCEPT
         : error(msg, code, file, func, line)
     {
         if(this->old_error)
@@ -54,7 +54,7 @@ inline namespace v1
         this->old_error = old_error;
     }
 
-    error::~error() OS_NOEXCEPT
+    error::~error() OSAL_NOEXCEPT
     {
         if(old_error)
         {
@@ -62,12 +62,12 @@ inline namespace v1
         }
     }
 
-    void error::add_error(error* old_error) OS_NOEXCEPT
+    void error::add_error(error* old_error) OSAL_NOEXCEPT
     {
         this->old_error = old_error;
     }
 
-    void error::set_position(const char* file, const char* func, uint32_t line) OS_NOEXCEPT
+    void error::set_position(const char* file, const char* func, uint32_t line) OSAL_NOEXCEPT
     {
         if(file)
         {
@@ -81,7 +81,7 @@ inline namespace v1
     }
 
 
-    void printf_stack_error(const char* app_tag, const error &e, const char* fmt, ...) OS_NOEXCEPT
+    void printf_stack_error(const char* app_tag, const error &e, const char* fmt, ...) OSAL_NOEXCEPT
     {
         if(fmt && strlen(fmt))
         {
@@ -101,7 +101,7 @@ inline namespace v1
         {
             count++;
             snprintf(row, sizeof(row), "%u. msg:%s code:%d (%s::%s line:%u)", count, ptr->msg, ptr->code, ptr->file, ptr->func, ptr->line);
-            OS_LOG_ERROR(app_tag, "%s", row);
+            OSAL_LOG_ERROR(app_tag, "%s", row);
             ptr = ptr->old_error.get();
         }
         fflush(stdout);

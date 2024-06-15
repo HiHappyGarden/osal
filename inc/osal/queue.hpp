@@ -45,7 +45,7 @@ public:
      * @param message_size The size (in bytes) of each message in the queue.
      * @param error Optional pointer to an error object to be populated in case of failure.
      */
-    queue(size_t size, size_t message_size, error** error = nullptr) OS_NOEXCEPT;
+    queue(size_t size, size_t message_size, error** error = nullptr) OSAL_NOEXCEPT;
 
     /**
      * @brief Deleted copy constructor.
@@ -70,7 +70,7 @@ public:
     /**
      * @brief Virtual destructor.
      */
-    ~queue() OS_NOEXCEPT;
+    ~queue() OSAL_NOEXCEPT;
 
     /**
      * @brief Fetches a message from the queue.
@@ -83,7 +83,7 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return OK if a message was fetched successfully, KO if the fetch timed out or encountered an error.
      */
-    osal::exit fetch (void* msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    osal::exit fetch (void* msg, uint64_t time, error** error = nullptr) OSAL_NOEXCEPT;
 
     /**
      * @brief Fetches a message from the queue from an ISR.
@@ -96,7 +96,7 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return OK if a message was fetched successfully, KO if the fetch timed out or encountered an error.
      */
-    osal::exit fetch_from_isr (void* msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    osal::exit fetch_from_isr (void* msg, uint64_t time, error** error = nullptr) OSAL_NOEXCEPT;
 
     /**
      * @brief Posts a message to the queue.
@@ -109,7 +109,7 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return OK if the message was posted successfully, KO if the post timed out or encountered an error.
      */
-    osal::exit post (const uint8_t* msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    osal::exit post (const uint8_t* msg, uint64_t time, error** error = nullptr) OSAL_NOEXCEPT;
 
     /**
      * @brief Posts a message to the queue from an ISR.
@@ -122,13 +122,13 @@ public:
      * @param error Optional pointer to an error object to be populated in case of failure.
      * @return OK if the message was posted successfully, KO if the post timed out or encountered an error.
      */
-    osal::exit post_from_isr (const uint8_t* msg, uint64_t time, error** error = nullptr) OS_NOEXCEPT;
+    osal::exit post_from_isr (const uint8_t* msg, uint64_t time, error** error = nullptr) OSAL_NOEXCEPT;
 
     /**
      * @brief Return size of element insert
      * @return number of element
      */
-    size_t size () const OS_NOEXCEPT;
+    size_t size () const OSAL_NOEXCEPT;
 
 private:
     queue_data q{}; ///< Internal data for the queue.

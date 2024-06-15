@@ -26,51 +26,51 @@ namespace osal
 inline namespace v1
 {
 
-uint64_t tmo_to_ticks(uint64_t ms) OS_NOEXCEPT
+uint64_t tmo_to_ticks(uint64_t ms) OSAL_NOEXCEPT
 {
     return ((ms == WAIT_FOREVER) ? portMAX_DELAY : (((ms) / portTICK_PERIOD_MS)) / 1000);
 }
 
-void us_sleep (uint64_t us) OS_NOEXCEPT
+void us_sleep (uint64_t us) OSAL_NOEXCEPT
 {
     vTaskDelay ((us / portTICK_PERIOD_MS) / 1'000);
 }
 
-[[maybe_unused]] uint64_t get_current_time_us () OS_NOEXCEPT
+[[maybe_unused]] uint64_t get_current_time_us () OSAL_NOEXCEPT
 {
     return 1'000 * (xTaskGetTickCount() / portTICK_PERIOD_MS);
 }
 
-tick tick_current () OS_NOEXCEPT
+tick tick_current () OSAL_NOEXCEPT
 {
     return xTaskGetTickCount();
 }
 
-tick tick_from_us (uint64_t us) OS_NOEXCEPT
+tick tick_from_us (uint64_t us) OSAL_NOEXCEPT
 {
     return us / (1'000u * portTICK_PERIOD_MS);
 }
 
-void tick_sleep (tick tick) OS_NOEXCEPT
+void tick_sleep (tick tick) OSAL_NOEXCEPT
 {
     vTaskDelay (tick);
 }
 
-void set_sleep_main_loop(uint16_t sleep_timing) OS_NOEXCEPT { }
+void set_sleep_main_loop(uint16_t sleep_timing) OSAL_NOEXCEPT { }
 
-uint16_t get_sleep_main_loop() OS_NOEXCEPT
+uint16_t get_sleep_main_loop() OSAL_NOEXCEPT
 {
     return 0;
 }
 
-void set_check_main_loop(bool check) OS_NOEXCEPT { }
+void set_check_main_loop(bool check) OSAL_NOEXCEPT { }
 
-void start_main_loop() OS_NOEXCEPT
+void start_main_loop() OSAL_NOEXCEPT
 {
     vTaskStartScheduler();
 }
 
-void stop_main_loop() OS_NOEXCEPT
+void stop_main_loop() OSAL_NOEXCEPT
 {
     vTaskEndScheduler();
 }

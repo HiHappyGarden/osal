@@ -39,7 +39,7 @@ void thread_data::args_wrapper::wrap_func(void* arg)
 }
 
 
-thread::thread(const char *name, uint32_t priority, size_t stack_size, thread::handler handler) OS_NOEXCEPT
+thread::thread(const char *name, uint32_t priority, size_t stack_size, thread::handler handler) OSAL_NOEXCEPT
     : priority(priority)
     , stack_size(stack_size)
     , h(handler)
@@ -57,7 +57,7 @@ thread::thread(const char *name, uint32_t priority, size_t stack_size, thread::h
 
 
 
-osal::exit thread::create(void* arg, class error** error) OS_NOEXCEPT
+osal::exit thread::create(void* arg, class error** error) OSAL_NOEXCEPT
 {
     if(t.args_wrp.fn == nullptr)
     {
@@ -80,7 +80,7 @@ osal::exit thread::create(void* arg, class error** error) OS_NOEXCEPT
     return exit::KO;
 }
 
-osal::exit thread::exit() OS_NOEXCEPT
+osal::exit thread::exit() OSAL_NOEXCEPT
 {
     if(t.handler)
     {
@@ -91,7 +91,7 @@ osal::exit thread::exit() OS_NOEXCEPT
     return exit::KO;
 }
 
-osal::exit thread::join(error** error) const OS_NOEXCEPT
+osal::exit thread::join(error** error) const OSAL_NOEXCEPT
 {
     return exit::OK;
 }

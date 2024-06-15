@@ -41,19 +41,19 @@ template <class T>
 struct remove_reference<T&&> { typedef T type; };
 
 template <typename T>
-typename remove_reference<T>::type&& move(T&& arg) OS_NOEXCEPT
+typename remove_reference<T>::type&& move(T&& arg) OSAL_NOEXCEPT
 {
     return static_cast<typename remove_reference<T>::type&&>(arg);
 }
 
 template <class T>
-constexpr T&& forward(remove_reference<T>& t) OS_NOEXCEPT
+constexpr T&& forward(remove_reference<T>& t) OSAL_NOEXCEPT
 {
     return static_cast<T&&>(t);
 }
 
 template <class T>
-constexpr T&& forward(remove_reference<T>&& t) OS_NOEXCEPT
+constexpr T&& forward(remove_reference<T>&& t) OSAL_NOEXCEPT
 {
     static_assert(!is_lvalue_reference_v<T>);
     return static_cast<T&&>(t);
@@ -64,7 +64,7 @@ template <typename T>
 struct default_delete
 {
     default_delete() = default;
-    inline void operator()(T* ptr) const OS_NOEXCEPT
+    inline void operator()(T* ptr) const OSAL_NOEXCEPT
     {
         if(ptr)
             delete ptr;
@@ -74,7 +74,7 @@ struct default_delete
 template<typename T>
 struct array_deleter
 {
-    void operator()(T* ptr) const OS_NOEXCEPT
+    void operator()(T* ptr) const OSAL_NOEXCEPT
     {
         if(ptr)
             delete [] ptr;
@@ -90,8 +90,8 @@ class unique_ptr
 
 public:
     unique_ptr() = default;
-    unique_ptr(T* ptr) OS_NOEXCEPT : ptr(ptr) {} //keep mot explicit
-    unique_ptr(T* ptr, const Deleter& deleter) OS_NOEXCEPT : ptr(ptr), deleter(deleter) {}
+    unique_ptr(T* ptr) OSAL_NOEXCEPT : ptr(ptr) {} //keep mot explicit
+    unique_ptr(T* ptr, const Deleter& deleter) OSAL_NOEXCEPT : ptr(ptr), deleter(deleter) {}
 
     inline ~unique_ptr()
     {
@@ -102,56 +102,56 @@ public:
 
     unique_ptr(const unique_ptr& other) = delete;
 
-    inline unique_ptr(unique_ptr&& other) OS_NOEXCEPT
+    inline unique_ptr(unique_ptr&& other) OSAL_NOEXCEPT
         : ptr(other.release()),
         deleter(other.deleter)
     {}
 
     // generalized move ctor
     template <typename U, typename E>
-    unique_ptr(unique_ptr<U, E>&& other) OS_NOEXCEPT //keep mot explicit
+    unique_ptr(unique_ptr<U, E>&& other) OSAL_NOEXCEPT //keep mot explicit
         : ptr(other.release())
         , deleter(forward<E>(other.get_deleter()))
     {}
 
     unique_ptr& operator=(const unique_ptr& other) = delete;
 
-    unique_ptr& operator=(unique_ptr&& other) OS_NOEXCEPT
+    unique_ptr& operator=(unique_ptr&& other) OSAL_NOEXCEPT
     {
         unique_ptr(move(other)).swap(*this);
         return *this;
     }
 
-    void reset(T* ptr) OS_NOEXCEPT
+    void reset(T* ptr) OSAL_NOEXCEPT
     {
     	if(this->ptr)
     		deleter(this->ptr);
         this->ptr = ptr;
     }
 
-    T* release() OS_NOEXCEPT
+    T* release() OSAL_NOEXCEPT
     {
         auto old_ptr = ptr;
         ptr = nullptr;
         return old_ptr;
     }
 
-    inline void swap(unique_ptr& other) OS_NOEXCEPT
+    inline void swap(unique_ptr& other) OSAL_NOEXCEPT
     {
         T* temp = ptr;
         ptr = other.ptr;
         other.ptr = temp;
     }
 
-    inline bool is_null() OS_NOEXCEPT { return ptr == nullptr; }
-    //inline ssize_t size() OS_NOEXCEPT { return sizeof(T); }
-    inline T& operator[](size_t idx) OS_NOEXCEPT { return ptr[idx]; }
-    inline const T& operator[](size_t idx) const OS_NOEXCEPT { return ptr[idx]; }
-    inline T& operator*() const OS_NOEXCEPT { return *ptr; }
-    inline T* operator->() const OS_NOEXCEPT { return ptr; }
-    inline T* get() const OS_NOEXCEPT { return ptr; }
-    inline Deleter get_deleter() const OS_NOEXCEPT { return deleter; }
-    inline explicit operator bool() OS_NOEXCEPT { return ptr != nullptr; }
+    inline bool is_null() OSAL_NOEXCEPT { return ptr == nullptr; }
+    //inline ssize_t size() OSAL_NOEXCEPT { return sizeof(T); }
+    inline T& operator[](size_t idx) OSAL_NOEXCEPT { return ptr[idx]; }
+    inline const T& operator[](size_t idx) const OSAL_NOEXCEPT { return ptr[idx]; }
+    inline T& operator*() const OSAL_NOEXCEPT { return *ptr; }
+    inline T* operator->() const OSAL_NOEXCEPT { return ptr; }
+    inline T* get() const OSAL_NOEXCEPT { return ptr; }
+    inline Deleter get_deleter() const OSAL_NOEXCEPT { return deleter; }
+    inline explicit operator bool() OSAL_NOEXCEPT { return ptr != nullptr; }
 
 };
 
@@ -192,7 +192,7 @@ void free( void * ptr );
 }
 }
 
-#ifdef OS_MEM_LAYER
+#ifdef OSAL_MEM_LAYER
 void* operator new( size_t size );
 void* operator new[]( size_t size );
 void operator delete( void * ptr );

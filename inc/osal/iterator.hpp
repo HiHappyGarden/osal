@@ -36,19 +36,19 @@ inline namespace v1
         using pointer           = value_type*;
         using reference         = value_type&;
 
-        constexpr inline explicit iterator(pointer ptr) OS_NOEXCEPT : ptr(ptr) {}
+        constexpr inline explicit iterator(pointer ptr) OSAL_NOEXCEPT : ptr(ptr) {}
 
-        constexpr inline reference operator*() const OS_NOEXCEPT { return *ptr; }
-        constexpr inline pointer operator->() OS_NOEXCEPT { return ptr; }
+        constexpr inline reference operator*() const OSAL_NOEXCEPT { return *ptr; }
+        constexpr inline pointer operator->() OSAL_NOEXCEPT { return ptr; }
 
         // Prefix increment
-        constexpr inline iterator& operator++() OS_NOEXCEPT { ptr++; return *this; }
+        constexpr inline iterator& operator++() OSAL_NOEXCEPT { ptr++; return *this; }
 
         // Postfix increment
-        constexpr inline iterator operator++(int) OS_NOEXCEPT { iterator tmp = *this; ++(*this); return tmp; }
+        constexpr inline iterator operator++(int) OSAL_NOEXCEPT { iterator tmp = *this; ++(*this); return tmp; }
 
-        constexpr inline friend bool operator== (const iterator& a, const iterator& b) OS_NOEXCEPT  { return a.ptr == b.ptr; };
-        constexpr inline friend bool operator!= (const iterator& a, const iterator& b) OS_NOEXCEPT  { return a.ptr != b.ptr; };
+        constexpr inline friend bool operator== (const iterator& a, const iterator& b) OSAL_NOEXCEPT  { return a.ptr == b.ptr; };
+        constexpr inline friend bool operator!= (const iterator& a, const iterator& b) OSAL_NOEXCEPT  { return a.ptr != b.ptr; };
 
     private:
         pointer ptr;

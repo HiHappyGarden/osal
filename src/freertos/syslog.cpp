@@ -28,7 +28,7 @@ namespace osal
 inline namespace v1
 {
 
-uint64_t system_current_time_millis() OS_NOEXCEPT
+uint64_t system_current_time_millis() OSAL_NOEXCEPT
 {
 #if defined(_WIN32) || defined(_WIN64)
     struct _timeb timebuffer;
@@ -42,7 +42,7 @@ uint64_t system_current_time_millis() OS_NOEXCEPT
     return 0;
 #endif
 }
-extern void us_sleep(uint64_t us) OS_NOEXCEPT;
+extern void us_sleep(uint64_t us) OSAL_NOEXCEPT;
 
 extern uint8_t log_level;
 
@@ -51,7 +51,7 @@ namespace
     bool busy = false;
 }
 
-void sys_log(const char* tag, uint8_t type, const char* fmt, ...) OS_NOEXCEPT
+void sys_log(const char* tag, uint8_t type, const char* fmt, ...) OSAL_NOEXCEPT
 {
     if(busy)
     {
@@ -87,35 +87,35 @@ void sys_log(const char* tag, uint8_t type, const char* fmt, ...) OS_NOEXCEPT
             if(log_level & FLAG_DEBUG)
 			{
 				enable_print = true;
-				OS_LOG_PRINTF (OS_ANSI_COLOR_CYAN "%lu|DEBUG|%s: ", milli_sec, tag);
+				OSAL_LOG_PRINTF (OSAL_ANSI_COLOR_CYAN "%lu|DEBUG|%s: ", milli_sec, tag);
 			}
 			break;
         case FLAG_INFO:
             if(log_level & FLAG_INFO)
 			{
 				enable_print = true;
-				OS_LOG_PRINTF (OS_ANSI_COLOR_GREEN "%lu|INFO |%s: ", milli_sec, tag);
+				OSAL_LOG_PRINTF (OSAL_ANSI_COLOR_GREEN "%lu|INFO |%s: ", milli_sec, tag);
 			}
 			break;
         case FLAG_WARNING:
             if(log_level & FLAG_WARNING)
 			{
 				enable_print = true;
-				OS_LOG_PRINTF (OS_ANSI_COLOR_YELLOW "%lu|WARN |%s: ", milli_sec, tag);
+				OSAL_LOG_PRINTF (OSAL_ANSI_COLOR_YELLOW "%lu|WARN |%s: ", milli_sec, tag);
 			}
 			break;
         case FLAG_ERROR:
             if(log_level & FLAG_ERROR)
 			{
 				enable_print = true;
-				OS_LOG_PRINTF (OS_ANSI_COLOR_RED "%lu|ERROR|%s: ", milli_sec, tag);
+				OSAL_LOG_PRINTF (OSAL_ANSI_COLOR_RED "%lu|ERROR|%s: ", milli_sec, tag);
 			}
 			break;
         case FLAG_FATAL:
             if(log_level & FLAG_FATAL)
 			{
 				enable_print = true;
-				OS_LOG_PRINTF (OS_ANSI_COLOR_MAGENTA "%lu|FATAL|%s: ", milli_sec, tag);
+				OSAL_LOG_PRINTF (OSAL_ANSI_COLOR_MAGENTA "%lu|FATAL|%s: ", milli_sec, tag);
 			}
 			break;
 		default:
@@ -129,7 +129,7 @@ void sys_log(const char* tag, uint8_t type, const char* fmt, ...) OS_NOEXCEPT
 	va_end (list);
 	if(enable_print)
 	{
-		OS_LOG_PRINTF(OS_ANSI_COLOR_RESET OS_LOG_NEW_LINE);
+		OSAL_LOG_PRINTF(OSAL_ANSI_COLOR_RESET OSAL_LOG_NEW_LINE);
 		fflush (stdout);
 	}
     busy = false;

@@ -26,7 +26,7 @@ inline namespace v1
 {
 
 
-mutex::mutex(class error** error) OS_NOEXCEPT
+mutex::mutex(class error** error) OSAL_NOEXCEPT
 {
     pthread_mutexattr_t mattr{0};
 
@@ -66,28 +66,28 @@ mutex::mutex(class error** error) OS_NOEXCEPT
     }
 }
 
-mutex::~mutex() OS_NOEXCEPT
+mutex::~mutex() OSAL_NOEXCEPT
 {
     pthread_mutex_destroy (&m);
     memset(&m, 0, sizeof(mutex));
 }
 
-void mutex::lock() OS_NOEXCEPT
+void mutex::lock() OSAL_NOEXCEPT
 {
     pthread_mutex_lock (&m);
 }
 
-inline void mutex::lock_from_isr() OS_NOEXCEPT
+inline void mutex::lock_from_isr() OSAL_NOEXCEPT
 {
     lock();
 }
 
-void mutex::unlock() OS_NOEXCEPT
+void mutex::unlock() OSAL_NOEXCEPT
 {
     pthread_mutex_unlock (&m);
 }
 
-inline void mutex::unlock_from_isr() OS_NOEXCEPT
+inline void mutex::unlock_from_isr() OSAL_NOEXCEPT
 {
     unlock();
 }

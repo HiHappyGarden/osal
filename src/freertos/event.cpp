@@ -26,7 +26,7 @@ namespace osal
 inline namespace v1
 {
 
-event::event(error** error) OS_NOEXCEPT : e{ xEventGroupCreate() }
+event::event(error** error) OSAL_NOEXCEPT : e{ xEventGroupCreate() }
 {
     if(e.handle == nullptr && error)
     {
@@ -35,7 +35,7 @@ event::event(error** error) OS_NOEXCEPT : e{ xEventGroupCreate() }
     }
 }
 
-event::~event() OS_NOEXCEPT
+event::~event() OSAL_NOEXCEPT
 {
     if(e.handle)
     {
@@ -45,7 +45,7 @@ event::~event() OS_NOEXCEPT
 }
 
 
-osal::exit event::wait(uint32_t mask, uint32_t& value, uint64_t time, error** error) OS_NOEXCEPT
+osal::exit event::wait(uint32_t mask, uint32_t& value, uint64_t time, error** error) OSAL_NOEXCEPT
 {
     if(e.handle == nullptr)
     {
@@ -67,12 +67,12 @@ osal::exit event::wait(uint32_t mask, uint32_t& value, uint64_t time, error** er
     return (value == 0) ? exit::OK : exit::KO;
 }
 
-osal::exit event::wait_from_isr(uint32_t mask, uint32_t& value, uint64_t time, error **error) OS_NOEXCEPT
+osal::exit event::wait_from_isr(uint32_t mask, uint32_t& value, uint64_t time, error **error) OSAL_NOEXCEPT
 {
     return wait(mask, value, time, error);
 }
 
-void event::set(uint32_t value) OS_NOEXCEPT
+void event::set(uint32_t value) OSAL_NOEXCEPT
 {
     if(e.handle)
     {
@@ -80,7 +80,7 @@ void event::set(uint32_t value) OS_NOEXCEPT
     }
 }
 
-void event::set_from_isr(uint32_t value) OS_NOEXCEPT
+void event::set_from_isr(uint32_t value) OSAL_NOEXCEPT
 {
     if(e.handle)
     {
@@ -88,7 +88,7 @@ void event::set_from_isr(uint32_t value) OS_NOEXCEPT
     }
 }
 
-uint32_t event::get() OS_NOEXCEPT
+uint32_t event::get() OSAL_NOEXCEPT
 {
     if(e.handle)
     {
@@ -97,7 +97,7 @@ uint32_t event::get() OS_NOEXCEPT
     return 0;
 }
 
-uint32_t event::get_from_isr() OS_NOEXCEPT
+uint32_t event::get_from_isr() OSAL_NOEXCEPT
 {
     if(e.handle)
     {
@@ -108,7 +108,7 @@ uint32_t event::get_from_isr() OS_NOEXCEPT
     return 0;
 }
 
-void event::clear(uint32_t value) OS_NOEXCEPT
+void event::clear(uint32_t value) OSAL_NOEXCEPT
 {
     if(e.handle)
     {
@@ -116,7 +116,7 @@ void event::clear(uint32_t value) OS_NOEXCEPT
     }
 }
 
-void event::clear_from_isr(uint32_t value) OS_NOEXCEPT
+void event::clear_from_isr(uint32_t value) OSAL_NOEXCEPT
 {
     if(e.handle)
     {
