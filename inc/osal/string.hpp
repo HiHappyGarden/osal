@@ -251,6 +251,37 @@ public:
     }
 
     /**
+     * @brief Concatenates the current string with a character array rvalue.
+     *
+     * This function concatenates the current string with the provided character array.
+     *
+     * @tparam SizeB The size of the character array to be concatenated.
+     * @param b The character array to concatenate.
+     * @return A new string containing the concatenated result.
+     */
+    template <size_t SizeB>
+    constexpr inline string<Size> operator+(const string<SizeB>& b) OS_NOEXCEPT
+    {
+        return (string<Size>{*this} + b.c_str());
+    }
+
+    /**
+     * @brief Concatenates the current string with a character array rvalue.
+     *
+     * This function concatenates the current string with the provided character array.
+     *
+     * @tparam SizeB The size of the character array to be concatenated.
+     * @param b The character array to concatenate.
+     * @return A new string containing the concatenated result.
+     */
+    template <size_t SizeB>
+    constexpr inline string<Size> operator+(const string<SizeB>&& b) OS_NOEXCEPT
+    {
+        return (string<Size>{*this} + b.c_str());
+    }
+
+
+    /**
      * @brief Operator to concatenate a C-style string to the string.
      *
      * @param b The C-style string to concatenate.
@@ -337,6 +368,37 @@ public:
     {
         return ((*this) + b);
     }
+
+    /**
+     * @brief Appends a character array to the current string.
+     *
+     * This function appends the provided character array to the current string.
+     *
+     * @tparam SizeB The size of the character array to be appended.
+     * @param b The character array to append.
+     * @return A reference to the modified string.
+     */
+    template <size_t SizeB>
+    constexpr inline string<Size>& operator+=(const string<SizeB>& b) OS_NOEXCEPT
+    {
+        return ((*this) + b.c_str());
+    }
+
+    /**
+     * @brief Appends a character array to the current string.
+     *
+     * This function appends the provided character array to the current string.
+     *
+     * @tparam SizeB The size of the character array to be appended.
+     * @param b The character array to append.
+     * @return A reference to the modified string.
+     */
+    template <size_t SizeB>
+    constexpr inline string<Size>& operator+=(const string<SizeB>&& b) OS_NOEXCEPT
+    {
+        return ((*this) + b.c_str());
+    }
+
 
     /**
      * @brief Appends a character array to the current string.
