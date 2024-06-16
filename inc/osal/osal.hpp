@@ -42,13 +42,13 @@
 
 #include <stdint.h>
 
-#define OS_NO_COPY_NO_MOVE(clazz) \
+#define OSAL_NO_COPY_NO_MOVE(clazz) \
 clazz(const clazz&) = delete; \
 clazz& operator=(const clazz&) = delete; \
 clazz(clazz&&) = delete; \
 clazz& operator=(clazz&&) = delete;
 
-#define OS_UNUSED(expr) do { (void)(expr); } while (0)
+#define OSAL_UNUSED(expr) do { (void)(expr); } while (0)
 
 
 namespace osal
