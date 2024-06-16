@@ -39,7 +39,7 @@
     #endif
 #endif
 
-#define OS_TO_STR(str) #str
+#define OSAL_TO_STR(str) #str
 
 namespace osal
 {
