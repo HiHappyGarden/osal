@@ -155,13 +155,13 @@ public:
 };
 
 /**
-   * @class array_init
+   * @class range
    * @brief Represents a statically initialized array with additional functionality.
    * @tparam T The type of elements in the array.
    * @tparam Args The variadic template parameter pack for additional elements.
   */
 template <typename T, typename... Args>
-class array_init final
+class range final
 {
     size_t data_length{0};
     T data[sizeof... (Args) + 1];
@@ -206,19 +206,19 @@ public:
             @param args The additional elements to add to the array.
          */
 
-    constexpr array_init() = default;
+    constexpr range() = default;
 
     /**
-      * @brief Destructor for the array_init class.
+      * @brief Destructor for the range class.
       */
-    inline ~array_init() { memset(&data, 0, sizeof(data)); }
+    inline ~range() { memset(&data, 0, sizeof(data)); }
 
     /**
       * @brief Explicit constructor to initialize the array with elements.
       * @param first The first element to add to the array.
       * @param args The additional elements to add to the array.
       */
-    constexpr explicit array_init(const T& first, Args... args) OSAL_NOEXCEPT
+    constexpr explicit range(const T& first, Args... args) OSAL_NOEXCEPT
     {
         fill(first, args...);
     }
@@ -273,7 +273,7 @@ public:
       * @param first The first element to add to the array.
       * @param args The additional elements to add to the array.
       */
-    constexpr array_init<T, Args...>& operator<<(const T& other) OSAL_NOEXCEPT
+    constexpr range<T, Args...>& operator<<(const T& other) OSAL_NOEXCEPT
     {
         if(data_length + 1 <= size())
         {
@@ -288,7 +288,7 @@ public:
       * @param first The first element to add to the array.
       * @param args The additional elements to add to the array.
       */
-    constexpr array_init<T, Args...>& operator<<(T&& other) OSAL_NOEXCEPT
+    constexpr range<T, Args...>& operator<<(T&& other) OSAL_NOEXCEPT
     {
         return (*this) << other;
     }
