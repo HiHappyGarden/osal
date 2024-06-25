@@ -60,7 +60,7 @@ struct false_type { static constexpr inline const bool value = false; };
 using nullptr_t = decltype(nullptr);
 
 
-enum class error_type : uint8_t
+enum class error_type : int32_t
 {
     OS_ENO =  0, /* No error */
     OS_EPERM =  1, /* Operation not permitted */

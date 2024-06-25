@@ -26,7 +26,7 @@ namespace osal
 inline namespace v1
 {
 
-    error::error(const char* msg, uint8_t code, const char* file, const char* func, uint32_t line) OSAL_NOEXCEPT
+    error::error(const char* msg, int32_t code, const char* file, const char* func, uint32_t line) OSAL_NOEXCEPT
         : code(code)
         , line(line)
     {
@@ -44,7 +44,7 @@ inline namespace v1
         }
     }
 
-    error::error(error* old_error, const char* msg, uint8_t code, const char* file, const char* func, uint32_t line) OSAL_NOEXCEPT
+    error::error(error* old_error, const char* msg, int32_t code, const char* file, const char* func, uint32_t line) OSAL_NOEXCEPT
         : error(msg, code, file, func, line)
     {
         if(this->old_error)
