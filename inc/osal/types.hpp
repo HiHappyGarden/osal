@@ -235,8 +235,8 @@ enum class exit : uint8_t
 template<typename T, typename V>
 struct pair final
 {
-	T t;
-	V v;
+	T first;
+	V second;
 };
 
 }
