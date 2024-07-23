@@ -22,6 +22,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <limits.h>
+#include <ctype.h>
 
 namespace osal
 {
