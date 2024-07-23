@@ -40,7 +40,7 @@ TEST(string_test, size)
 TEST(string_test, char_array)
 {
 
-    os::string<128> str;
+    os::string<127> str;
    ASSERT_EQ(str.size(), 127);
 
     str += "hello world";
@@ -62,11 +62,23 @@ TEST(string_test, char_array)
     }
 }
 
+TEST(string_test, add)
+{
+
+    os::string<127> str = "hello world";
+    ASSERT_EQ(str.size(), 127);
+
+
+    char s[] = " by me";
+    os::string<127>&& t = str + s;
+
+    ASSERT_EQ(strcmp(t.c_str(), "hello world by me"), 0);
+}
 
 TEST(string_test, char_ptr)
 {
 
-    os::string<128> str;
+    os::string<127> str;
     ASSERT_EQ(str.size(), 127);
 
 
@@ -132,6 +144,13 @@ TEST(string_test, start)
 
     ASSERT_TRUE(s.start_with("test"));
 
+}
+
+TEST(string_test, ltrim)
+{
+    os::string s = "\r\n sono antonio";
+
+    ASSERT_TRUE(strcmp(s.ltrim().c_str(), "sono antonio") == 0);
 }
 
 TEST(string_test, rtrim)

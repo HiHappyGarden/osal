@@ -21,10 +21,10 @@
 #define OSAL_CONFIG_H
 
 #define OSAL_NAME "osal"
-#define OSAL_VER "1.1.1"
+#define OSAL_VER "1.1.2"
 #define OSAL_VER_MAJOR (1)
 #define OSAL_VER_MINOR (1)
-#define OSAL_VER_PATCH (1)
+#define OSAL_VER_PATCH (2)
 #define OSAL_LOG_NEW_LINE "\n"
 #define OSAL_MEM_LAYER ()
 

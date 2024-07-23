@@ -38,7 +38,8 @@ inline namespace v1
 template <size_t Size = 33>
 class string final
 {
-    char data[Size]{};          ///< The character data storage.
+    bool static_assign = false;
+    char data[Size + 1]{};          ///< The character data storage.
     mutable size_t data_length{0};      ///< The current length of the string.
 
     static inline char terminator = '\0'; //keep non constexpr
@@ -52,7 +53,9 @@ public:
     /**
      * @brief Default constructor.
      */
-    string() = default;
+    constexpr string()
+    : static_assign(true)
+    {}
 
     /**
      * @brief Constructor from a C-style string literal.
@@ -60,7 +63,7 @@ public:
      * @param str The input string.
      */
     constexpr string(const char(&str)[Size]) OSAL_NOEXCEPT //keep not explicit
-            : string(str, Size - 1)
+            : string(str, Size)
     {}
 
     /**
@@ -70,7 +73,7 @@ public:
      */
     template <size_t SizeB>
     constexpr string(const char(&str)[SizeB]) OSAL_NOEXCEPT //keep not explicit
-            : string(str, SizeB - 1)
+            : string(str, SizeB)
     {}
 
     /**
@@ -80,7 +83,7 @@ public:
  */
     template <size_t SizeB>
     constexpr string(char(&str)[SizeB]) OSAL_NOEXCEPT //keep not explicit
-            : string(str, SizeB - 1)
+            : string(str, SizeB)
     {}
 
     /**
@@ -140,7 +143,22 @@ public:
      */
     constexpr inline size_t size() const OSAL_NOEXCEPT
     {
-        return sizeof(data) - 1;
+        if (static_assign)
+        {
+            return sizeof(data) - 1;
+        }
+        else
+        {
+            if(sizeof(data) - length() != 2)
+            {
+                return sizeof(data) - 1;
+            }
+            else
+            {
+                return sizeof(data) - 2;
+            }
+        }
+
     }
 
     /**
@@ -195,7 +213,7 @@ public:
      * @param c The character to concatenate.
      * @return A reference to the modified string.
      */
-    constexpr string<Size>&operator+(char c) OSAL_NOEXCEPT
+    constexpr string<Size> operator+(char c) OSAL_NOEXCEPT
     {
         string<Size> ret = *this;
         data_length = strlen(data);
@@ -217,7 +235,7 @@ public:
      * @return A reference to the modified string.
      */
     template <size_t SizeB>
-    constexpr string<Size>&operator+(const char(&b)[SizeB]) OSAL_NOEXCEPT
+    constexpr string<Size> operator+(const char(&b)[SizeB]) OSAL_NOEXCEPT
     {
         string<Size> ret = *this;
         size_t size_b = strnlen(b, SizeB);
@@ -623,11 +641,12 @@ public:
         return strncmp(&data[offset], to_start, strlen(to_start)) == 0;
     }
 
-    string<Size>& ltrim() OSAL_NOEXCEPT
+    string<Size> ltrim() OSAL_NOEXCEPT
     {
+        string<Size> ret = *this;
     	data_length = strlen(data);
         size_t count = 0;
-        for(auto ch : data)
+        for(auto ch : ret.data)
         {
             if(!isspace(ch))
             {
@@ -636,30 +655,31 @@ public:
             count++;
         }
 
-        memmove(data, data + count, data_length - count);
+        memmove(ret.data, ret.data + count, data_length - count);
         data_length -= count;
-        memset(data + data_length, '\0', sizeof(data) - data_length);
+        memset(ret.data + data_length, '\0', sizeof(ret.data) - data_length);
 
-        return *this;
+        return ret;
     }
 
-    string<Size>& rtrim() OSAL_NOEXCEPT
+    string<Size> rtrim() OSAL_NOEXCEPT
     {
-    	data_length = strlen(data);
+        string<Size> ret = *this;
+        data_length = strlen(data);
         size_t count = 0;
         for(size_t i = data_length - 1; i != 0; i--)
         {
-            if(!isspace(data[i]))
+            if(!isspace(ret.data[i]))
             {
                 break;
             }
             count++;
         }
 
-        data[data_length - count] = '\0';
-        data_length -= count;
-        memset(data + data_length, '\0', sizeof(data) - data_length);
-        return *this;
+        ret.data[data_length - count] = '\0';
+        ret.data_length -= count;
+        memset(ret.data + data_length, '\0', sizeof(ret.data) - data_length);
+        return ret;
     }
 
     string<Size> substr(size_t idx_start, size_t offset = SIZE_MAX) const OSAL_NOEXCEPT
