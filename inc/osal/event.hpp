@@ -109,7 +109,7 @@ public:
      *
      * @return The current event value.
      */
-    uint32_t get() OSAL_NOEXCEPT;
+    uint32_t get() const OSAL_NOEXCEPT;
 
     /**
      * @brief Gets the current event value from an ISR.
