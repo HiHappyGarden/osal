@@ -146,7 +146,7 @@ inline void event::set_from_isr(uint32_t value)
     return set(value);
 }
 
-uint32_t event::get() const OSAL_NOEXCEPT
+uint32_t event::get() OSAL_NOEXCEPT
 {
     uint32_t ret = 0;
     pthread_mutex_lock (&e.mutex);

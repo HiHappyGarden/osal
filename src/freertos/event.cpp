@@ -88,7 +88,7 @@ void event::set_from_isr(uint32_t value) OSAL_NOEXCEPT
     }
 }
 
-uint32_t event::get() const OSAL_NOEXCEPT
+uint32_t event::get() OSAL_NOEXCEPT
 {
     if(e.handle)
     {
