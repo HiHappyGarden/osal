@@ -58,10 +58,32 @@ namespace osal
 inline namespace v1
 {
 
+/**
+ * Convert from milli ro micro sec
+ * @param millis sec
+ * @return microseconds
+ */
 constexpr inline uint64_t ms_to_us(uint32_t millis) { return millis * 1'000ul; }
+
+/**
+ * Convert from seconds ro micro sec
+ * @param sec
+ * @return microseconds
+ */
 constexpr inline uint64_t sec_to_us(uint32_t sec) { return sec * 1'000'000ul; }
 
+/**
+ * Convert from milli ro micro sec
+ * @param millis sec
+ * @return microseconds
+ */
 constexpr inline uint64_t operator""_ms( unsigned long long ms ) {  return ms_to_us(ms); }
+
+/**
+ * Convert from seconds ro micro sec
+ * @param sec
+ * @return microseconds
+ */
 constexpr inline uint64_t operator""_s( unsigned long long secs ) {  return sec_to_us(secs); }
 
 
