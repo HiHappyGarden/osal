@@ -33,7 +33,7 @@ inline namespace v1
 namespace
 {
 constexpr inline const uint8_t TIMER_PRIO = 30;
-constexpr inline const uint32_t TIMER_HEAP = 1024;
+constexpr inline const uint32_t TIMER_HEAP = 1'024;
 }
 
 void* timer_thread (void * arg)
